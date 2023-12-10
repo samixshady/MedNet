@@ -57,8 +57,8 @@
     <script src="{{ asset('frontend/js/main.js') }}"></script>
     <script src="{{ asset('js/app.js') }}"></script>
       <!-- Add Test Button Here -->
-  <div>
-  <a href="Payment.php" class="btn btn-primary">Proceed to payment</a>
+        <div>
+  <a href="{{ route('payment') }}" class="btn btn-primary">Proceed to Payment</a>
       </div>
   </body>
 </html>

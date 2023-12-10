@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Models\User; // Import the User model
+
 
 use Illuminate\Http\Request;
 
@@ -24,7 +26,15 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
+    public function allProfiles(Request $request)
+    {
+    $search = $request->input('search');
+    $profiles = User::when($search, function ($query) use ($search) {
+        $query->where('full_name', 'like', '%' . $search . '%');
+    })->get();
 
+    return view('profile.all', compact('profiles', 'search'));
+    }
     public function update(Request $request)
     {
         $user = auth()->user();

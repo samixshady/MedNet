@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PaymentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,6 +16,14 @@ use App\Http\Controllers\ProfileController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+///All profile
+Route::get('/user-profiles', [ProfileController::class, 'allProfiles'])->name('profile.all');
+
+
+Route::post('/process-bkash-payment', [PaymentController::class, 'processBkashPayment'])->name('process_bkash_payment');
+
+Route::get('/payment', function () {return view('payment');})->name('payment');
+Route::get('/bkash', function () {return view('bkash');})->name('bkash');
 
 Route::get('/', [\App\Http\Controllers\HomeController::class, 'index'])->name('homepage');
 Route::get('/shop/{slug?}', [\App\Http\Controllers\ShopController::class, 'index'])->name('shop.index');
