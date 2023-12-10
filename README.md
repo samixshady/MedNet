@@ -1,4 +1,4 @@
-# Laravel 9 & React js - Ecommerce application
+# CSE 471 Laravel Project
 
 ## Screenshots
 
@@ -8,9 +8,6 @@
 
 Clone the project
 
-```bash
-  git clone https://github.com/abdulaziz-m5u/ecommerce-youtube.git project-name
-```
 
 Go to the project directory
 
@@ -18,7 +15,6 @@ Go to the project directory
   cd project-name
 ```
 
--   Copy .env.example file to .env and edit database credentials there
 
 ```bash
     composer install
