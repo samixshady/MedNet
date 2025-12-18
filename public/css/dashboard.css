@@ -1,0 +1,9 @@
+.mednet-text {
+  position: absolute;
+  top: 19px;
+  left: 24px;
+  font-size: 48px;
+  font-style: italic;
+  text-align: left;
+  font-weight: 900;
+}
