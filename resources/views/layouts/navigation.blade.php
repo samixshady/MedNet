@@ -1,25 +1,22 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
-                </div>
-
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
+        <div class="flex justify-between items-center h-16">
+            <!-- Center Section - Delivery Location -->
+            <div class="flex-1 flex justify-center">
+                <div class="delivery-info">
+                    <span class="delivery-label">Delivering To</span>
+                    <span class="delivery-location" id="current-location">Dhaka</span>
+                    <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
+            <div class="hidden sm:flex sm:items-center">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -67,9 +64,18 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
+            <!-- Mobile Delivery Location -->
+            <div class="px-4 py-2">
+                <div class="delivery-info">
+                    <span class="delivery-label">Delivering To</span>
+                    <span class="delivery-location" id="current-location-mobile">Dhaka</span>
+                    <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
         </div>
 
         <!-- Responsive Settings Options -->
@@ -97,4 +103,87 @@
             </div>
         </div>
     </div>
+
+    <!-- Delivery Location Styles -->
+    <style>
+        
+        .delivery-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .delivery-label {
+            font-size: 30px;
+            font-style: italic;
+            font-weight: 900;
+            color: #191818;
+        }
+        
+        .delivery-location {
+            font-size: 30px;
+            font-style: italic;
+            font-weight: 900;
+            color: #BF4408;
+            display: inline-block;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 300px;
+        }
+        
+        .map-toggle-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #BF4408;
+            padding: 6px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .map-toggle-btn:hover {
+            background-color: #BF4408;
+            color: white;
+        }
+        
+        #delivery-map-root {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 100;
+        }
+    </style>
+
+    <!-- React root for map -->
+    <div id="delivery-map-root"></div>
+    
+    <script>
+        function toggleMap() {
+            const mapRoot = document.getElementById('delivery-map-root');
+            if (mapRoot.style.display === 'none') {
+                mapRoot.style.display = 'block';
+            } else {
+                mapRoot.style.display = 'none';
+            }
+        }
+        
+        // Update location from React component
+        window.updateDeliveryLocation = function(location) {
+            document.getElementById('current-location').textContent = location;
+            document.getElementById('current-location-mobile').textContent = location;
+        };
+        
+        // Load saved location
+        document.addEventListener('DOMContentLoaded', function() {
+            const savedLocation = localStorage.getItem('mednet_delivery_location');
+            if (savedLocation) {
+                document.getElementById('current-location').textContent = savedLocation;
+                document.getElementById('current-location-mobile').textContent = savedLocation;
+            }
+        });
+    </script>
 </nav>

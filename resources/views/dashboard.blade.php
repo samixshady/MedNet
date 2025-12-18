@@ -1,9 +1,22 @@
 <x-app-layout>
     <x-slot name="header">
         <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight mednet-text">
-            {{ __('MedNet') }}
-        </h2>
+        <style>
+            .mednet-text {
+                font-size: 48px !important;
+                font-style: italic;
+                font-weight: 900;
+                margin: 0;
+            }
+        </style>
+        
+        <div class="header-container">
+            <div class="header-left">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight mednet-text">
+                    {{ __('MedNet') }}
+                </h2>
+            </div>
+        </div>
     </x-slot>
 
     <div class="py-12">
