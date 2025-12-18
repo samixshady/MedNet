@@ -2,21 +2,32 @@
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
+            <!-- Left Section - MedNet Logo -->
+            <div class="flex-shrink-0">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight mednet-text">
+                    {{ __('MedNet') }}
+                </h2>
+            </div>
+
             <!-- Center Section - Delivery Location -->
-            <div class="flex-1 flex justify-center">
+            <div class="flex-1 flex items-center" style="margin-left: 40px;">
                 <div class="delivery-info">
-                    <span class="delivery-label">Delivering To</span>
-                    <span class="delivery-location" id="current-location">Dhaka</span>
-                    <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
-                        </svg>
-                    </button>
+                    <div class="delivery-text">
+                        <div class="delivery-row">
+                            <span class="delivery-label">Delivering To</span>
+                            <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                                </svg>
+                            </button>
+                        </div>
+                        <span class="delivery-location" id="current-location" onclick="toggleMap()" style="cursor: pointer;">Dhaka</span>
+                    </div>
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center">
+            <!-- Right Section - Settings Dropdown -->
+            <div class="hidden sm:flex sm:items-center flex-shrink-0">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
                         <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
@@ -68,7 +79,7 @@
             <div class="px-4 py-2">
                 <div class="delivery-info">
                     <span class="delivery-label">Delivering To</span>
-                    <span class="delivery-location" id="current-location-mobile">Dhaka</span>
+                    <span class="delivery-location" id="current-location-mobile" onclick="toggleMap()" style="cursor: pointer;">Dhaka</span>
                     <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
@@ -106,23 +117,32 @@
 
     <!-- Delivery Location Styles -->
     <style>
-        
         .delivery-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .delivery-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        
+        .delivery-row {
             display: flex;
             align-items: center;
-            gap: 16px;
+            gap: 8px;
         }
         
         .delivery-label {
-            font-size: 30px;
-            font-style: italic;
-            font-weight: 900;
+            font-size: 20px;
+            font-weight: 600;
             color: #191818;
         }
         
         .delivery-location {
-            font-size: 30px;
-            font-style: italic;
+            font-size: 20px;
             font-weight: 900;
             color: #BF4408;
             display: inline-block;
@@ -137,7 +157,7 @@
             border: none;
             cursor: pointer;
             color: #BF4408;
-            padding: 6px;
+            padding: 4px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -148,6 +168,12 @@
         .map-toggle-btn:hover {
             background-color: #BF4408;
             color: white;
+        }
+        
+        /* Profile name styling */
+        .text-gray-500 {
+            font-size: 20px !important;
+            font-weight: 600;
         }
         
         #delivery-map-root {
