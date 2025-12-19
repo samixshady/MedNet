@@ -3,7 +3,7 @@
   position: fixed;
   top: 100px;
   right: 24px;
-  width: 350px;
+  width: 480px; /* ##increase map box here - change this value to make the map wider (e.g., 500px for wider) */
   background: white;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
@@ -12,8 +12,39 @@
   overflow: hidden;
 }
 
+/* Close button */
+.map-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 8px;
+  background: #fb9d6e;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 101;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.map-close-btn:hover {
+  background: rgba(255, 255, 255, 1);
+  transform: scale(1.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.map-close-btn svg {
+  width: 16px;
+  height: 16px;
+  color: #374151;
+}
+
 .map-header {
-  padding: 16px;
+  padding: 16px 50px 16px 16px;
   background: linear-gradient(135deg, var(--dl-color-theme-primary1, #BF4408) 0%, var(--dl-color-theme-primary2, #E65103) 100%);
   color: white;
   display: flex;
@@ -37,7 +68,7 @@
 }
 
 .location-display {
-  max-width: 200px;
+  max-width: 320px;
 }
 
 .current-location {
@@ -47,7 +78,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 140px; /* Approximately 20 characters at 14px font size */
+  max-width: 240px;
   background: rgba(255, 255, 255, 0.2);
   padding: 4px 8px;
   border-radius: 4px;
@@ -102,6 +133,40 @@
 .search-btn:hover {
   background-color: var(--dl-color-theme-primary2, #E65103);
   transform: translateY(-1px);
+}
+
+.set-location-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(16, 185, 129, 0.2);
+}
+
+.set-location-btn:hover {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+}
+
+.set-location-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(16, 185, 129, 0.2);
+}
+
+.set-location-icon {
+  width: 16px;
+  height: 16px;
 }
 
 .quick-locations-label {
@@ -188,4 +253,52 @@
 
 .leaflet-control-zoom a:hover {
   background-color: #f9fafb !important;
+}
+
+/* Success message styles */
+.success-message {
+  margin-top: 12px;
+  padding: 10px 12px;
+  background-color: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeIn 0.3s ease;
+}
+
+.success-message svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-out {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
 }

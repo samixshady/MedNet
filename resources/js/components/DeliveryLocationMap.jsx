@@ -5,9 +5,12 @@ import '../../css/DeliveryLocation.css';
 const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
   const [location, setLocation] = useState(initialLocation);
   const [selectedCoords, setSelectedCoords] = useState({ lat: 23.8103, lng: 90.4125 });
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  const successTimeoutRef = useRef(null);
 
   // Initialize OpenStreetMap
   useEffect(() => {
@@ -104,6 +107,11 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         // Store location in localStorage
         localStorage.setItem('mednet_delivery_location', newLocation);
         localStorage.setItem('mednet_delivery_coords', JSON.stringify({ lat, lng }));
+        
+        // Update navigation display
+        if (window.updateDeliveryLocation) {
+          window.updateDeliveryLocation(newLocation);
+        }
       }
     } catch (error) {
       console.error('Error updating location:', error);
@@ -168,14 +176,65 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         // Save to localStorage
         localStorage.setItem('mednet_delivery_location', result.display_name);
         localStorage.setItem('mednet_delivery_coords', JSON.stringify(newCoords));
+        
+        // Update navigation display
+        if (window.updateDeliveryLocation) {
+          window.updateDeliveryLocation(result.display_name);
+        }
       }
     } catch (error) {
       console.error('Error searching location:', error);
     }
   };
 
+  // Handle set location button click
+  const handleSetLocation = () => {
+    if (window.updateDeliveryLocation) {
+      window.updateDeliveryLocation(location);
+    }
+    
+    // Show success message
+    setSuccessMessage('Success! New delivery location has been set.');
+    setShowSuccess(true);
+    
+    // Clear any existing timeout
+    if (successTimeoutRef.current) {
+      clearTimeout(successTimeoutRef.current);
+    }
+    
+    // Auto hide after 5 seconds
+    successTimeoutRef.current = setTimeout(() => {
+      setShowSuccess(false);
+    }, 5000);
+  };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (successTimeoutRef.current) {
+        clearTimeout(successTimeoutRef.current);
+      }
+    };
+  }, []);
+
   return (
     <div className="delivery-map-container">
+      {/* Close button */}
+      <button 
+        className="map-close-btn"
+        onClick={() => {
+          const mapRoot = document.getElementById('delivery-map-root');
+          if (mapRoot) {
+            mapRoot.style.display = 'none';
+          }
+        }}
+        title="Close map"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M18 6L6 18M6 6l12 12" />
+        </svg>
+      </button>
+      
       <div className="map-header">
         <h3 className="map-title">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="map-icon">
@@ -215,6 +274,16 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
           >
             Search
           </button>
+          <button 
+            className="set-location-btn"
+            onClick={handleSetLocation}
+            title="Update delivery location in navigation"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="set-location-icon">
+              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="currentColor"/>
+            </svg>
+            Set
+          </button>
         </div>
         
         <div className="quick-locations">
@@ -237,6 +306,17 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         <p>📍 Drag the marker to set exact delivery location</p>
         <p>🗺️ Click anywhere on map to move marker</p>
         <p>🔍 Search for addresses above</p>
+        <p>✅ Click "Set" to confirm your location</p>
+        
+        {/* Success Message */}
+        {showSuccess && (
+          <div className={`success-message ${!showSuccess ? 'fade-out' : ''}`}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM10 17L5 12L6.41 10.59L10 14.17L17.59 6.58L19 8L10 17Z" fill="#10B981"/>
+            </svg>
+            <span>{successMessage}</span>
+          </div>
+        )}
       </div>
     </div>
   );

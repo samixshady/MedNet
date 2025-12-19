@@ -149,7 +149,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 300px;
+            max-width: 800px;
         }
         
         .map-toggle-btn {
