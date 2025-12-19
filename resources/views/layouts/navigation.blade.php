@@ -1,7 +1,7 @@
 <nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+        <div class="flex justify-between items-center h-5">
             <!-- Left Section - MedNet Logo -->
             <div class="flex-shrink-0">
                 <h2 class="font-semibold text-xl text-gray-800 leading-tight mednet-text">
@@ -14,8 +14,8 @@
                 <div class="delivery-info">
                     <div class="delivery-text">
                         <div class="delivery-row">
-                            <span class="delivery-label">Delivering To</span>
-                            <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
+                            <span class="delivery-label" style="margin-top: 45px;">Delivering To</span>
+                            <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map" style="margin-top: 45px;">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                                     <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
                                 </svg>
@@ -79,8 +79,8 @@
             <div class="px-4 py-2">
                 <div class="delivery-info">
                     <span class="delivery-label">Delivering To</span>
-                    <span class="delivery-location" id="current-location-mobile" onclick="toggleMap()" style="cursor: pointer;">Dhaka</span>
-                    <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map">
+                    <span class="delivery-location" id="current-location-mobile" onclick="toggleMap()" style="cursor: pointer;"> Dhaka</span>
+                    <button class="map-toggle-btn" onclick="toggleMap()" title="Toggle Map" >
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                             <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
                         </svg>
