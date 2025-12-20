@@ -31,7 +31,7 @@
         }
 
         .dropdown-menu a {
-            padding: 10px 20px !important;
+            padding: 10px 20px 10px 50px !important;
             font-size: 13px !important;
             border-radius: 0 !important;
             display: flex !important;
@@ -40,8 +40,6 @@
             color: #aaa !important;
             text-decoration: none !important;
             transition: all 0.2s ease !important;
-            position: relative;
-            padding-left: 50px !important;
         }
 
         .dropdown-menu a:hover {
@@ -57,12 +55,18 @@
             line-height: 1 !important;
         }
 
-        /* Products Toggle Button */
+        /* Products Toggle Button - Sidebar Link */
+        .sidebar li.products-menu-item {
+            position: relative;
+            margin: 8px 0;
+            padding: 0;
+            list-style: none;
+        }
+
         .products-toggle {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 16px;
             width: 100%;
             height: 50px;
             padding: 0 14px;
@@ -72,7 +76,6 @@
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
-            position: relative;
             font-family: "Poppins", sans-serif;
             font-size: 15px;
             border-radius: 12px;
@@ -80,50 +83,10 @@
 
         .products-toggle:hover {
             background: #1d1b31;
+            color: #fff;
         }
 
-        .sidebar li.products-menu-item {
-            position: relative;
-            margin: 8px 0;
-            padding: 0;
-        }
-
-        .sidebar li.products-menu-item .products-toggle {
-            padding: 0 14px;
-            border-radius: 12px;
-        }
-
-        .sidebar li.products-menu-item .products-toggle:hover {
-            background: #1d1b31;
-        }
-
-        .products-toggle-content {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            flex: 1;
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .products-toggle-content i:first-child {
-            font-size: 20px;
-            height: auto;
-            min-width: auto;
-            line-height: 1;
-            flex-shrink: 0;
-        }
-
-        .products-toggle-content .links_name {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .products-toggle i {
+        .products-toggle i:first-child {
             font-size: 20px;
             height: auto;
             line-height: 1;
@@ -132,6 +95,7 @@
 
         .products-toggle .links_name {
             flex: 1;
+            margin: 0 16px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -142,9 +106,7 @@
             font-size: 14px;
             transition: transform 0.3s ease;
             flex-shrink: 0;
-            display: inline-flex;
-            align-items: center;
-            margin-left: auto;
+            line-height: 1;
         }
 
         .products-toggle .dropdown-arrow.rotate {
@@ -159,25 +121,32 @@
             height: 50px;
             width: 100%;
             border-radius: 12px;
-            align-items: center;
             text-decoration: none;
             transition: all 0.3s ease;
             background: #11101D;
             padding: 0 14px;
+            color: #fff;
+            gap: 16px;
         }
 
         .sidebar li a:hover {
             background: #fff;
-        }
-
-        .sidebar li a .links_name,
-        .sidebar li a i {
-            transition: all 0.5s ease;
-        }
-
-        .sidebar li a:hover .links_name,
-        .sidebar li a:hover i {
             color: #11101D;
+        }
+
+        .sidebar li a i {
+            font-size: 20px;
+            height: auto;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .sidebar li a .links_name {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
         }
 
         /* Ensure tooltip text doesn't overflow */
