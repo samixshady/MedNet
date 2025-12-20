@@ -351,7 +351,7 @@
                                     </td>
                                     <td><strong>{{ $product->name }}</strong></td>
                                     <td>{{ $product->manufacturer }}</td>
-                                    <td class="price">₹{{ number_format($product->price, 2) }}</td>
+                                    <td class="price">৳{{ number_format($product->price, 2) }}</td>
                                     <td>{{ $product->quantity }}</td>
                                     <td>
                                         <span class="stock-status {{ $product->stock_status }}">

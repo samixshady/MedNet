@@ -127,7 +127,7 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>Price <span class="required">*</span></label>
+                        <label>Price (Taka) <span class="required">*</span></label>
                         <input type="number" name="price" placeholder="0.00" step="0.01" min="0" required>
                         <span class="error-message" id="price_error"></span>
                     </div>
@@ -174,10 +174,10 @@
                         <label>Prescription Required <span class="required">*</span></label>
                         <div class="radio-group">
                             <label class="radio-label">
-                                <input type="radio" name="prescription_required" value="1"> Yes
+                                <input type="radio" name="prescription_required" value="1" required> Yes
                             </label>
                             <label class="radio-label">
-                                <input type="radio" name="prescription_required" value="0" checked> No
+                                <input type="radio" name="prescription_required" value="0" required checked> No
                             </label>
                         </div>
                         <span class="error-message" id="prescription_required_error"></span>
@@ -216,129 +216,165 @@
         </div>
     </section>
 
-    <script defer>
-        // Sidebar functionality
-        let sidebar = document.querySelector(".sidebar");
-        let closeBtn = document.querySelector("#btn");
-        let searchBtn = document.querySelector(".bx-search");
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Sidebar functionality
+            let sidebar = document.querySelector(".sidebar");
+            let closeBtn = document.querySelector("#btn");
+            let searchBtn = document.querySelector(".bx-search");
 
-        closeBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("open");
+            if (closeBtn) {
+                closeBtn.addEventListener("click", () => {
+                    sidebar.classList.toggle("open");
+                    menuBtnChange();
+                });
+            }
+
+            if (searchBtn) {
+                searchBtn.addEventListener("click", () => {
+                    sidebar.classList.toggle("open");
+                    menuBtnChange();
+                });
+            }
+
+            function menuBtnChange() {
+                if (sidebar.classList.contains("open")) {
+                    closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+                } else {
+                    closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+                }
+            }
+
             menuBtnChange();
-        })
 
-        searchBtn.addEventListener("click", () => {
-            sidebar.classList.toggle("open");
-            menuBtnChange();
-        })
+            // Image upload functionality
+            const imageUploadArea = document.getElementById('imageUploadArea');
+            const imageInput = document.getElementById('imageInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const previewImage = document.getElementById('previewImage');
 
-        function menuBtnChange() {
-            if (sidebar.classList.contains("open")) {
-                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");
-            } else {
-                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-            }
-        }
+            if (imageUploadArea && imageInput) {
+                imageUploadArea.addEventListener('click', () => imageInput.click());
 
-        menuBtnChange();
+                imageUploadArea.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    imageUploadArea.classList.add('dragover');
+                });
 
-        // Image upload functionality
-        const imageUploadArea = document.getElementById('imageUploadArea');
-        const imageInput = document.getElementById('imageInput');
-        const imagePreview = document.getElementById('imagePreview');
-        const previewImage = document.getElementById('previewImage');
+                imageUploadArea.addEventListener('dragleave', () => {
+                    imageUploadArea.classList.remove('dragover');
+                });
 
-        imageUploadArea.addEventListener('click', () => imageInput.click());
-
-        imageUploadArea.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.add('dragover');
-        });
-
-        imageUploadArea.addEventListener('dragleave', () => {
-            imageUploadArea.classList.remove('dragover');
-        });
-
-        imageUploadArea.addEventListener('drop', (e) => {
-            e.preventDefault();
-            imageUploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                imageInput.files = files;
-                handleImageSelect();
-            }
-        });
-
-        imageInput.addEventListener('change', handleImageSelect);
-
-        function handleImageSelect() {
-            const file = imageInput.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewImage.src = e.target.result;
-                    imageUploadArea.style.display = 'none';
-                    imagePreview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function removeImage() {
-            imageInput.value = '';
-            imagePreview.style.display = 'none';
-            imageUploadArea.style.display = 'block';
-        }
-
-        // Form submission
-        document.getElementById('productForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            // Clear all errors
-            document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
-
-            const formData = new FormData(this);
-            const submitBtn = document.getElementById('submitBtn');
-            
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Adding Product...';
-
-            try {
-                const response = await fetch('{{ route("admin.products.store") }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+                imageUploadArea.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    imageUploadArea.classList.remove('dragover');
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        imageInput.files = files;
+                        handleImageSelect();
                     }
                 });
 
-                const data = await response.json();
+                imageInput.addEventListener('change', handleImageSelect);
+            }
 
-                if (response.ok) {
-                    document.getElementById('successMessage').textContent = data.message;
-                    document.getElementById('successModal').classList.add('show');
-                } else {
-                    if (data.errors) {
-                        Object.keys(data.errors).forEach(field => {
-                            const errorEl = document.getElementById(`${field}_error`);
-                            if (errorEl) {
-                                errorEl.textContent = data.errors[field][0];
+            function handleImageSelect() {
+                const file = imageInput.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        previewImage.src = e.target.result;
+                        imageUploadArea.style.display = 'none';
+                        imagePreview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+
+            window.removeImage = function() {
+                imageInput.value = '';
+                imagePreview.style.display = 'none';
+                imageUploadArea.style.display = 'block';
+            }
+
+            // Form submission
+            const productForm = document.getElementById('productForm');
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (productForm) {
+                productForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    console.log('Form submission started');
+
+                    // Clear all errors
+                    document.querySelectorAll('.error-message').forEach(el => el.textContent = '');
+
+                    const formData = new FormData(productForm);
+                    
+                    // Convert prescription_required to boolean
+                    const prescriptionValue = formData.get('prescription_required');
+                    console.log('Prescription value:', prescriptionValue);
+                    
+                    if (prescriptionValue !== null && prescriptionValue !== '') {
+                        formData.set('prescription_required', prescriptionValue === '1' ? 1 : 0);
+                    }
+                    
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                        submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Adding Product...';
+                    }
+
+                    try {
+                        const storeRoute = '{{ route("admin.products.store") }}';
+                        console.log('Submitting to:', storeRoute);
+                        
+                        const response = await fetch(storeRoute, {
+                            method: 'POST',
+                            body: formData,
+                            headers: {
+                                'X-Requested-With': 'XMLHttpRequest'
                             }
                         });
+
+                        console.log('Response status:', response.status);
+                        const data = await response.json();
+                        console.log('Response data:', data);
+
+                        if (response.ok) {
+                            document.getElementById('successMessage').textContent = data.message;
+                            document.getElementById('successModal').classList.add('show');
+                            setTimeout(() => {
+                                redirectToProducts();
+                            }, 2000);
+                        } else {
+                            console.log('Errors:', data.errors);
+                            if (data.errors) {
+                                Object.keys(data.errors).forEach(field => {
+                                    const errorEl = document.getElementById(`${field}_error`);
+                                    if (errorEl) {
+                                        errorEl.textContent = data.errors[field][0];
+                                    }
+                                });
+                            } else if (data.message) {
+                                alert('Error: ' + data.message);
+                            }
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('An error occurred while adding the product: ' + error.message);
+                    } finally {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<i class="bx bx-plus"></i> Add Product';
+                        }
                     }
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while adding the product');
-            } finally {
-                submitBtn.disabled = false;
-                submitBtn.innerHTML = '<i class="bx bx-plus"></i> Add Product';
+                });
+            }
+
+            window.redirectToProducts = function() {
+                window.location.href = '{{ route("admin.products.index") }}';
             }
         });
-
-        function redirectToProducts() {
-            window.location.href = '{{ route("admin.products.index") }}';
-        }
     </script>
 </body>
 </html>

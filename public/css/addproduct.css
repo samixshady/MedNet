@@ -12,9 +12,12 @@ body {
 .product-container {
     padding: 30px;
     background-color: white;
-    margin: 20px;
+    margin: 20px auto;
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    max-width: 900px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .product-header {
