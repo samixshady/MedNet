@@ -193,6 +193,51 @@
             font-size: 15px;
         }
 
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-edit, .btn-delete {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+
+        .btn-edit {
+            background: #e8f4f8;
+            color: #3498db;
+        }
+
+        .btn-edit:hover {
+            background: #3498db;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            text-decoration: none;
+        }
+
+        .btn-delete {
+            background: #fce8e8;
+            color: #e74c3c;
+        }
+
+        .btn-delete:hover {
+            background: #e74c3c;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -335,6 +380,7 @@
                                 <th>Tag</th>
                                 <th>Prescription</th>
                                 <th>Dosage</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -370,6 +416,16 @@
                                         </span>
                                     </td>
                                     <td>{{ $product->dosage }}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <a href="{{ route('admin.products.edit', $product->id) }}" class="btn-edit" title="Edit Product">
+                                                <i class='bx bx-edit'></i>
+                                            </a>
+                                            <button type="button" class="btn-delete" title="Delete Product" onclick="deleteProduct({{ $product->id }})">
+                                                <i class='bx bx-trash'></i>
+                                            </button>
+                                        </div>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -415,6 +471,20 @@
         }
 
         menuBtnChange();
+
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = `/admin/products/${productId}`;
+                form.innerHTML = `
+                    @csrf
+                    @method('DELETE')
+                `;
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
     </script>
 </body>
 </html>
