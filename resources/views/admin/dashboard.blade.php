@@ -20,11 +20,11 @@
                 <span class="tooltip">Search</span>
             </li>
             <li>
-                <a href="{{ route('dashboard') }}">
-                    <i class='bx bx-grid-alt'></i>
-                    <span class="links_name">Dashboard</span>
+                <a href="{{ route('admin.products.create') }}">
+                    <i class='bx bx-plus-circle'></i>
+                    <span class="links_name">Add Product</span>
                 </a>
-                <span class="tooltip">Dashboard</span>
+                <span class="tooltip">Add Product</span>
             </li>
             <li>
                 <a href="">
