@@ -1,79 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Product - MedNet</title>
-    <link rel="stylesheet" href="{{ asset('css/adminsidebar.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/addproduct.css') }}">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-</head>
-<body>
-    <div class="sidebar">
-        <div class="logo-details">
-            <div class="logo_name">MedNet</div>
-            <i class='bx bx-menu' id="btn"></i>
-        </div>
-        <ul class="nav-list">
-            <li>
-                <i class='bx bx-search'></i>
-                <input type="text" placeholder="Search...">
-                <span class="tooltip">Search</span>
-            </li>
-            <li>
-                <a href="{{ route('admin.dashboard') }}">
-                    <i class='bx bx-grid-alt'></i>
-                    <span class="links_name">Dashboard</span>
-                </a>
-                <span class="tooltip">Dashboard</span>
-            </li>
-            <li>
-                <a href="{{ route('admin.products.create') }}" style="background: #fff;">
-                    <i class='bx bx-plus-circle'></i>
-                    <span class="links_name">Add Product</span>
-                </a>
-                <span class="tooltip">Add Product</span>
-            </li>
-            <li>
-                <a href="{{ route('admin.products.index') }}">
-                    <i class='bx bx-list-ul'></i>
-                    <span class="links_name">Products</span>
-                </a>
-                <span class="tooltip">Products</span>
-            </li>
-            <li>
-                <a href="">
-                    <i class='bx bx-user'></i>
-                    <span class="links_name">Users</span>
-                </a>
-                <span class="tooltip">Users</span>
-            </li>
-            <li>
-                <a href="">
-                    <i class='bx bx-cog'></i>
-                    <span class="links_name">Settings</span>
-                </a>
-                <span class="tooltip">Settings</span>
-            </li>
-            <li class="profile">
-                <div class="profile-details">
-                    <img src="{{ asset('favicon.ico') }}" alt="profileImg">
-                    <div class="name_job">
-                        <div class="name">{{ Auth::user()->name }}</div>
-                        <div class="job">Administrator</div>
-                    </div>
-                </div>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class='bx bx-log-out' id="log_out"></i>
-                </a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                    @csrf
-                </form>
-            </li>
-        </ul>
-    </div>
+@extends('layouts.admin')
 
-    <section class="home-section">
+@section('title', 'Add Product')
+
+@section('extra-css')
+<link rel="stylesheet" href="{{ asset('css/addproduct.css') }}">
+@endsection
+
+@section('content')
         <div class="product-container">
             <div class="product-header">
                 <h1>Add New Medicine Product</h1>
@@ -376,5 +309,4 @@
             }
         });
     </script>
-</body>
-</html>
+@endsection
