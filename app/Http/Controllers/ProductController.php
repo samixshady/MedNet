@@ -12,10 +12,17 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('admin.products.index', compact('products'));
+        $sort = $request->get('sort', 'name'); // default sort by name
+        
+        if ($sort === 'expiry') {
+            $products = Product::orderBy('expiry_date', 'asc')->get();
+        } else {
+            $products = Product::orderBy('name', 'asc')->get();
+        }
+        
+        return view('admin.products.index', compact('products', 'sort'));
     }
 
     /**

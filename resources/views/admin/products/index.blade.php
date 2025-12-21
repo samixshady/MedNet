@@ -108,8 +108,80 @@
             font-size: 14px;
         }
 
-        .products-table tr:hover {
-            background-color: #f9f9f9;
+        .products-table tbody tr:hover {
+            background-color: #f5f5f5;
+            border: 1px solid #000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: all 0.2s ease;
+        }
+
+        .products-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .products-table tbody tr.expired-row {
+            background-color: #ffe6e6;
+        }
+
+        .products-table tbody tr.expired-row:hover {
+            background-color: #ffd9d9;
+            border: 1px solid #d32f2f;
+        }
+
+        .expired-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #d32f2f;
+            color: white;
+        }
+
+        .valid-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            background: #388e3c;
+            color: white;
+        }
+
+        .sort-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .sort-label {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .sort-btn {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: #333;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sort-btn:hover {
+            background: #f5f5f5;
+            border-color: #999;
+        }
+
+        .sort-btn.active {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border-color: #2980b9;
         }
 
         .product-image {
@@ -342,6 +414,18 @@
             </div>
 
             @if($products->count() > 0)
+                <div style="margin-bottom: 20px;">
+                    <div class="sort-controls">
+                        <span class="sort-label">Sort by:</span>
+                        <a href="{{ route('admin.products.index', ['sort' => 'name']) }}" class="sort-btn {{ $sort === 'name' ? 'active' : '' }}">
+                            <i class='bx bx-sort-alt-2'></i> Product Name
+                        </a>
+                        <a href="{{ route('admin.products.index', ['sort' => 'expiry']) }}" class="sort-btn {{ $sort === 'expiry' ? 'active' : '' }}">
+                            <i class='bx bx-calendar'></i> Expiry Date
+                        </a>
+                    </div>
+                </div>
+
                 <div class="products-table-wrapper">
                     <table class="products-table">
                         <thead>
@@ -354,6 +438,7 @@
                                 <th>Discount</th>
                                 <th>Discounted Price</th>
                                 <th>Stock Status</th>
+                                <th>Status</th>
                                 <th>Expiry Date</th>
                                 <th>Tag</th>
                                 <th>Prescription</th>
@@ -362,7 +447,10 @@
                         </thead>
                         <tbody>
                             @foreach($products as $product)
-                                <tr>
+                                @php
+                                    $isExpired = $product->expiry_date < now();
+                                @endphp
+                                <tr class="{{ $isExpired ? 'expired-row' : '' }}">
                                     <td>
                                         @if($product->image_path)
                                             <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="product-image">
@@ -395,7 +483,14 @@
                                             {{ ucfirst(str_replace('_', ' ', $product->stock_status)) }}
                                         </span>
                                     </td>
-                                    <td>{{ $product->expiry_date->format('M d, Y') }}</td>
+                                    <td>
+                                        <span class="{{ $isExpired ? 'expired-badge' : 'valid-badge' }}">
+                                            {{ $isExpired ? 'EXPIRED' : 'Valid' }}
+                                        </span>
+                                    </td>
+                                    <td style="{{ $isExpired ? 'color: #d32f2f; font-weight: 600;' : '' }}">
+                                        {{ $product->expiry_date->format('M d, Y') }}
+                                    </td>
                                     <td>
                                         <span class="tag {{ $product->tag }}">
                                             {{ ucfirst(str_replace('_', ' ', $product->tag)) }}
