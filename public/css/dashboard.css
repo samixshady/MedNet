@@ -7,3 +7,82 @@
   text-align: left;
   font-weight: 900;
 }
+
+/* ----------------------------
+   BODY
+-----------------------------*/
+body {
+  font-family: "Source Sans Pro", Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+
+/* ----------------------------
+   SIDEBAR
+-----------------------------*/
+.header { 
+  /* Sidebar container */
+  position: fixed;
+  top: 70px;       /* <<< Offset so it doesn’t overlap navbar */
+  left: 0;
+  width: 200px;    /* wider than simple example */
+  height: 100%;
+  background: #6c6b6b;
+  overflow-x: hidden;
+  padding-top: 20px;
+  z-index: 1000;
+}
+
+.header a {
+  display: block;
+  color: #DFDBD9;
+  padding: 10px 15px;
+  text-decoration: none;
+  font-size: 24px;
+  transition: 0.3s;
+}
+
+.header a:hover {
+  background-color: #fb9d6e;
+  color: #fff;
+}
+
+/* Section headings in sidebar */
+.header .section-heading {
+  color: #DF4500;
+  text-transform: uppercase;
+  padding: 10px 15px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* ----------------------------
+   MAIN CONTENT
+-----------------------------*/
+.main-content {
+  margin-left: 220px; /* space for sidebar */
+  padding: 20px;
+  margin-top: 50px; /* space for navbar */
+}
+
+/* ----------------------------
+   MOBILE RESPONSIVE
+-----------------------------*/
+@media screen and (max-width: 768px) {
+
+  .header {
+    width: 100%;
+    height: auto;
+    position: relative;
+    top: 0;
+  }
+
+  .header a { 
+    font-size: 14px; 
+    padding: 8px 10px;
+  }
+
+  .main-content {
+    margin-left: 0;
+    margin-top: 200px; /* space so it doesn't hide under header */
+  }
+}

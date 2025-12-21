@@ -43,5 +43,11 @@
                 {{ __('Log in') }}
             </x-primary-button>
         </div>
+
+        <div class="flex items-center justify-end mt-3">
+            <x-primary-button type="button" class="ms-3" onclick="window.location='{{ route('admin.login') }}'">
+                {{ __('Admin') }}
+            </x-primary-button>
+        </div>
     </form>
 </x-guest-layout>
