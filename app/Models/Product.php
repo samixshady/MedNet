@@ -14,6 +14,8 @@ class Product extends Model
         'dosage',
         'tag',
         'price',
+        'discount',
+        'updated_price',
         'prescription_required',
         'manufacturer',
         'side_effects',
@@ -26,5 +28,7 @@ class Product extends Model
         'expiry_date' => 'date',
         'prescription_required' => 'boolean',
         'price' => 'decimal:2',
+        'updated_price' => 'decimal:2',
+        'discount' => 'decimal:2',
     ];
 }

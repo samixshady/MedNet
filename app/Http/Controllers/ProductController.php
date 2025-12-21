@@ -39,6 +39,7 @@ class ProductController extends Controller
             'dosage' => 'required|string|max:255',
             'tag' => 'required|in:medicine,supplement,first_aid',
             'price' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|between:0,100',
             'prescription_required' => 'required|boolean',
             'manufacturer' => 'required|string|max:255',
             'side_effects' => 'nullable|string',
@@ -64,6 +65,17 @@ class ProductController extends Controller
             $image = $request->file('image');
             $imagePath = $image->store('products', 'public');
             $validated['image_path'] = $imagePath;
+        }
+
+        // Calculate updated_price based on discount
+        $price = (float) $validated['price'];
+        $discount = isset($validated['discount']) && $validated['discount'] ? (float) $validated['discount'] : 0;
+        
+        if ($discount > 0) {
+            $validated['updated_price'] = $price - ($price * $discount / 100);
+        } else {
+            $validated['discount'] = null;
+            $validated['updated_price'] = $price;
         }
 
         // Determine stock status
@@ -116,6 +128,7 @@ class ProductController extends Controller
             'dosage' => 'required|string|max:255',
             'tag' => 'required|in:medicine,supplement,first_aid',
             'price' => 'required|numeric|min:0',
+            'discount' => 'nullable|numeric|between:0,100',
             'prescription_required' => 'required|boolean',
             'manufacturer' => 'required|string|max:255',
             'side_effects' => 'nullable|string',
@@ -145,6 +158,17 @@ class ProductController extends Controller
             if ($product->image_path) {
                 \Storage::disk('public')->delete($product->image_path);
             }
+        }
+
+        // Calculate updated_price based on discount
+        $price = (float) $validated['price'];
+        $discount = isset($validated['discount']) && $validated['discount'] ? (float) $validated['discount'] : 0;
+        
+        if ($discount > 0) {
+            $validated['updated_price'] = $price - ($price * $discount / 100);
+        } else {
+            $validated['discount'] = null;
+            $validated['updated_price'] = $price;
         }
 
         // Determine stock status

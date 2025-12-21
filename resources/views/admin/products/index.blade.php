@@ -190,6 +190,49 @@
             font-size: 15px;
         }
 
+        .original-price {
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .discount-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-width: 45px;
+            text-align: center;
+        }
+
+        .discount-badge.no-discount {
+            background: #e0e0e0;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .discounted-price {
+            font-weight: 700;
+            color: white;
+            font-size: 15px;
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            padding: 6px 12px;
+            border-radius: 6px;
+            display: inline-block;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .price-comparison {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -305,14 +348,15 @@
                             <tr>
                                 <th>Image</th>
                                 <th>Product Name</th>
+                                <th>Dosage</th>
                                 <th>Manufacturer</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
+                                <th>Original Price</th>
+                                <th>Discount</th>
+                                <th>Discounted Price</th>
                                 <th>Stock Status</th>
                                 <th>Expiry Date</th>
                                 <th>Tag</th>
                                 <th>Prescription</th>
-                                <th>Dosage</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -329,9 +373,23 @@
                                         @endif
                                     </td>
                                     <td><strong>{{ $product->name }}</strong></td>
+                                    <td>{{ $product->dosage }}</td>
                                     <td>{{ $product->manufacturer }}</td>
-                                    <td class="price">৳{{ number_format($product->price, 2) }}</td>
-                                    <td>{{ $product->quantity }}</td>
+                                    <td class="original-price">৳{{ number_format($product->price, 2) }}</td>
+                                    <td>
+                                        @if($product->discount)
+                                            <span class="discount-badge">{{ $product->discount }}%</span>
+                                        @else
+                                            <span class="discount-badge no-discount">-</span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if($product->updated_price && $product->updated_price < $product->price)
+                                            <span class="discounted-price">৳{{ number_format($product->updated_price, 2) }}</span>
+                                        @else
+                                            <span class="original-price">৳{{ number_format($product->price, 2) }}</span>
+                                        @endif
+                                    </td>
                                     <td>
                                         <span class="stock-status {{ $product->stock_status }}">
                                             {{ ucfirst(str_replace('_', ' ', $product->stock_status)) }}
@@ -348,7 +406,6 @@
                                             {{ $product->prescription_required ? 'Yes' : 'No' }}
                                         </span>
                                     </td>
-                                    <td>{{ $product->dosage }}</td>
                                     <td>
                                         <div class="action-buttons">
                                             <a href="{{ route('admin.products.edit', $product->id) }}" class="btn-edit" title="Edit Product">

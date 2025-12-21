@@ -11,6 +11,51 @@
         margin-top: 8px;
         text-align: center;
     }
+
+    .hint-text {
+        display: block;
+        font-size: 12px;
+        color: #888;
+        margin-top: 4px;
+        font-style: italic;
+    }
+
+    .discount-preview-box {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 8px;
+        padding: 16px;
+        color: white;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .preview-item:last-child {
+        border-bottom: none;
+    }
+
+    .preview-item.highlight {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin-top: 4px;
+    }
+
+    .preview-label {
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .preview-value {
+        font-weight: 700;
+        font-size: 16px;
+    }
 </style>
 @endsection
 
@@ -86,6 +131,34 @@
                         <input type="number" name="price" placeholder="0.00" step="0.01" min="0" value="{{ $product->price }}" required>
                         <span class="error-message" id="price_error"></span>
                     </div>
+                    <div class="form-group">
+                        <label>Discount (% - Optional)</label>
+                        <input type="number" name="discount" id="discountInput" placeholder="0" step="0.01" min="0" max="100" value="{{ $product->discount ?? '' }}">
+                        <small class="hint-text">Leave empty if no discount • Shows live preview below</small>
+                        <span class="error-message" id="discount_error"></span>
+                    </div>
+                </div>
+
+                <div class="form-row" id="discountPreviewRow" style="display: none;">
+                    <div class="form-group full-width">
+                        <div class="discount-preview-box">
+                            <div class="preview-item">
+                                <span class="preview-label">Original Price:</span>
+                                <span class="preview-value" id="previewOriginalPrice">-</span>
+                            </div>
+                            <div class="preview-item">
+                                <span class="preview-label">Discount:</span>
+                                <span class="preview-value" id="previewDiscount">-</span>
+                            </div>
+                            <div class="preview-item highlight">
+                                <span class="preview-label">Final Price:</span>
+                                <span class="preview-value" id="previewFinalPrice">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
                     <div class="form-group">
                         <label>Quantity <span class="required">*</span></label>
                         <input type="number" name="quantity" placeholder="0" min="0" value="{{ $product->quantity }}" required>
@@ -173,6 +246,41 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Discount Calculator
+            const priceInput = document.querySelector('input[name="price"]');
+            const discountInput = document.getElementById('discountInput');
+            const discountPreviewRow = document.getElementById('discountPreviewRow');
+            const previewOriginalPrice = document.getElementById('previewOriginalPrice');
+            const previewDiscount = document.getElementById('previewDiscount');
+            const previewFinalPrice = document.getElementById('previewFinalPrice');
+
+            function updateDiscountPreview() {
+                const price = parseFloat(priceInput.value) || 0;
+                const discount = parseFloat(discountInput.value) || 0;
+
+                if (price > 0 && discount > 0) {
+                    const discountAmount = (price * discount) / 100;
+                    const finalPrice = price - discountAmount;
+
+                    previewOriginalPrice.textContent = '৳ ' + price.toFixed(2);
+                    previewDiscount.textContent = discount.toFixed(2) + '% (৳ ' + discountAmount.toFixed(2) + ')';
+                    previewFinalPrice.textContent = '৳ ' + finalPrice.toFixed(2);
+                    
+                    discountPreviewRow.style.display = 'block';
+                } else {
+                    discountPreviewRow.style.display = 'none';
+                }
+            }
+
+            if (priceInput) {
+                priceInput.addEventListener('input', updateDiscountPreview);
+            }
+            if (discountInput) {
+                discountInput.addEventListener('input', updateDiscountPreview);
+                // Trigger on page load if there's an existing discount
+                updateDiscountPreview();
+            }
+
             // Sidebar functionality
             let sidebar = document.querySelector(".sidebar");
             let closeBtn = document.querySelector("#btn");
@@ -287,6 +395,11 @@
                     
                     if (prescriptionValue !== null && prescriptionValue !== '') {
                         formData.set('prescription_required', prescriptionValue === '1' ? 1 : 0);
+                    }
+
+                    // If discount is empty, don't include it (will be null)
+                    if (!formData.get('discount')) {
+                        formData.delete('discount');
                     }
                     
                     if (submitBtn) {
