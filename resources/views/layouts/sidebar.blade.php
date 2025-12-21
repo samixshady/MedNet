@@ -19,7 +19,6 @@
             <i class='bx bx-grid'></i>
             <span>Categories</span>
         </div>
-        <p class="sidebar-subtitle">Browse our collection</p>
     </div>
 
     <!-- Navigation -->
@@ -56,12 +55,15 @@
 <style>
     /* Sidebar Styling */
     .sidebar-new {
-        background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%) !important;
+        background-color: #37404f !important;
         border-right: 2px solid #1a252f;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3) !important;
         display: flex !important;
         flex-direction: column !important;
-        padding-top: 70px !important;
+        position: fixed !important;
+        top: 64px !important;
+        left: 0 !important;
+        height: calc(100vh - 64px) !important;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         overflow-y: auto !important;
     }
