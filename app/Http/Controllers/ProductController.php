@@ -222,5 +222,23 @@ class ProductController extends Controller
         $products = Product::where('tag', 'medicine')->paginate(30);
         return view('products.medicine', compact('products'));
     }
+
+    /**
+     * Display supplement products with pagination
+     */
+    public function supplements()
+    {
+        $products = Product::where('tag', 'supplement')->paginate(30);
+        return view('products.supplements', compact('products'));
+    }
+
+    /**
+     * Display first aid products with pagination
+     */
+    public function firstAid()
+    {
+        $products = Product::where('tag', 'first_aid')->paginate(30);
+        return view('products.first_aid', compact('products'));
+    }
 }
 

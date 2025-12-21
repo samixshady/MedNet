@@ -37,13 +37,13 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('supplements') }}" class="sidebar-link {{ request()->routeIs('supplements') || request()->routeIs('supplements.show') ? 'active' : '' }}">
                     <i class='bx bx-leaf'></i>
                     <span>Supplements</span>
                 </a>
             </li>
             <li>
-                <a href="#" class="sidebar-link">
+                <a href="{{ route('first-aid') }}" class="sidebar-link {{ request()->routeIs('first-aid') || request()->routeIs('first-aid.show') ? 'active' : '' }}">
                     <i class='bx bx-plus-medical'></i>
                     <span>First Aid</span>
                 </a>
