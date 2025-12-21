@@ -65,8 +65,8 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
       const markerLatLng = this.getLatLng();
       setSelectedCoords({ lat: markerLatLng.lat, lng: markerLatLng.lng });
       
-      // Update location via reverse geocoding
-      await updateLocationFromCoords(markerLatLng.lat, markerLatLng.lng);
+      // Update location in map ONLY (not navbar)
+      await updateLocationFromCoords(markerLatLng.lat, markerLatLng.lng, false);
     });
 
     // Handle map click to move marker
@@ -80,12 +80,12 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         markerRef.current.openPopup();
       }
 
-      // Update location
-      await updateLocationFromCoords(lat, lng);
+      // Update location in map ONLY (not navbar)
+      await updateLocationFromCoords(lat, lng, false);
     });
   };
 
-  const updateLocationFromCoords = async (lat, lng) => {
+  const updateLocationFromCoords = async (lat, lng, updateNavbar = false) => {
     try {
       const response = await axios.get(
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`,
@@ -108,8 +108,8 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         localStorage.setItem('mednet_delivery_location', newLocation);
         localStorage.setItem('mednet_delivery_coords', JSON.stringify({ lat, lng }));
         
-        // Update navigation display
-        if (window.updateDeliveryLocation) {
+        // Only update navigation if explicitly requested (from Set button)
+        if (updateNavbar && window.updateDeliveryLocation) {
           window.updateDeliveryLocation(newLocation);
         }
       }
@@ -165,7 +165,7 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
         setSelectedCoords(newCoords);
         setLocation(result.display_name);
         
-        // Update map and marker
+        // Update map and marker ONLY (not navbar yet)
         if (mapInstanceRef.current && markerRef.current) {
           mapInstanceRef.current.setView([newCoords.lat, newCoords.lng], 14);
           markerRef.current.setLatLng([newCoords.lat, newCoords.lng]);
@@ -173,14 +173,9 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
           markerRef.current.openPopup();
         }
         
-        // Save to localStorage
+        // Save to localStorage but don't update navbar yet
         localStorage.setItem('mednet_delivery_location', result.display_name);
         localStorage.setItem('mednet_delivery_coords', JSON.stringify(newCoords));
-        
-        // Update navigation display
-        if (window.updateDeliveryLocation) {
-          window.updateDeliveryLocation(result.display_name);
-        }
       }
     } catch (error) {
       console.error('Error searching location:', error);
@@ -189,6 +184,7 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
 
   // Handle set location button click
   const handleSetLocation = () => {
+    // Update navbar ONLY when Set button is clicked
     if (window.updateDeliveryLocation) {
       window.updateDeliveryLocation(location);
     }
@@ -223,9 +219,9 @@ const DeliveryLocationMap = ({ initialLocation = 'South Kafrul, Dhaka' }) => {
       <button 
         className="map-close-btn"
         onClick={() => {
-          const mapRoot = document.getElementById('delivery-map-root');
-          if (mapRoot) {
-            mapRoot.style.display = 'none';
+          const mapContainer = document.querySelector('.delivery-map-container');
+          if (mapContainer) {
+            mapContainer.classList.remove('show');
           }
         }}
         title="Close map"
