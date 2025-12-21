@@ -19,6 +19,13 @@
                 color: #666;
             }
 
+            .product-card-link {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+                cursor: pointer;
+            }
+
             .products-grid {
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -305,7 +312,8 @@
                 @if($products->count() > 0)
                     <div class="products-grid">
                         @foreach($products as $product)
-                            <div class="product-card">
+                            <a href="{{ route('medicine.show', $product->id) }}" class="product-card-link">
+                                <div class="product-card">
                                 <!-- Product Image -->
                                 <div class="product-image-wrapper">
                                     @if($product->image_path)
@@ -357,11 +365,12 @@
                                     </div>
 
                                     <!-- Add to Cart Button -->
-                                    <button class="add-to-cart-btn" @if($product->stock_status === 'out_of_stock') disabled @endif>
+                                    <button class="add-to-cart-btn" onclick="event.preventDefault(); event.stopPropagation();" @if($product->stock_status === 'out_of_stock') disabled @endif>
                                         <i class='bx bx-cart-add'></i> Add to Cart
                                     </button>
                                 </div>
                             </div>
+                            </a>
                         @endforeach
                     </div>
 
