@@ -290,8 +290,22 @@
     <div class="main-content">
         <div class="py-12">
             <div class="max-w-5xl mx-auto sm:px-6 lg:px-8">
-                <a href="{{ route('medicine') }}" class="back-link">
-                    <i class='bx bx-chevron-left'></i> Back to Medicines
+                @php
+                    $backRoute = match($product->tag) {
+                        'medicine' => route('medicine'),
+                        'supplement' => route('supplements'),
+                        'first_aid' => route('first-aid'),
+                        default => route('dashboard'),
+                    };
+                    $backLabel = match($product->tag) {
+                        'medicine' => 'Back to Medicines',
+                        'supplement' => 'Back to Supplements',
+                        'first_aid' => 'Back to First Aid',
+                        default => 'Back',
+                    };
+                @endphp
+                <a href="{{ $backRoute }}" class="back-link">
+                    <i class='bx bx-chevron-left'></i> {{ $backLabel }}
                 </a>
 
                 <div class="product-details-container">
