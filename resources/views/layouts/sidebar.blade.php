@@ -6,7 +6,7 @@
     <div class="nav-wrap">
         <nav class="main-nav" role="navigation">
             <ul class="unstyled list-hover-slide">
-                <li><a href="#">Medicine</a></li>
+                <li><a href="{{ route('medicine') }}">Medicine</a></li>
                 <li><a href="#">Supplements</a></li>
                 <li><a href="#">First Aid</a></li>
             </ul>

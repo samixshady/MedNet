@@ -212,4 +212,14 @@ class ProductController extends Controller
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully!');
     }
+
+    /**
+     * Display medicine products with pagination
+     */
+    public function medicine()
+    {
+        $products = Product::where('tag', 'medicine')->paginate(30);
+        return view('products.medicine', compact('products'));
+    }
 }
+
