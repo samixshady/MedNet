@@ -2,7 +2,7 @@
 .delivery-map-container {
   position: fixed;
   top: 100px;
-  right: 24px;
+  right: -500px; /* Start off-screen */
   width: 480px; /* ##increase map box here - change this value to make the map wider (e.g., 500px for wider) */
   background: white;
   border-radius: 12px;
@@ -10,6 +10,15 @@
   border: 2px solid var(--dl-color-theme-primary1, #BF4408);
   z-index: 100;
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: right 0.3s ease, opacity 0.3s ease, pointer-events 0.3s ease;
+}
+
+.delivery-map-container.show {
+  right: 24px !important;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Close button */

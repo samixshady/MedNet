@@ -148,8 +148,32 @@
     <script>
         function toggleMap() {
             const mapRoot = document.getElementById('delivery-map-root');
-            mapRoot.style.display = (mapRoot.style.display === 'none' || mapRoot.style.display === '') ? 'block' : 'none';
+            const mapContainer = mapRoot.querySelector('.delivery-map-container');
+            
+            if (mapContainer) {
+                const isShowing = mapContainer.classList.toggle('show');
+                
+                // Trigger map resize when becoming visible
+                if (isShowing) {
+                    setTimeout(function() {
+                        const leafletMap = document.querySelector('.openstreetmap-embed');
+                        if (leafletMap && leafletMap._leaflet_map) {
+                            leafletMap._leaflet_map.invalidateSize();
+                        }
+                    }, 100);
+                }
+            }
         }
+        
+        // Ensure map starts hidden on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapRoot = document.getElementById('delivery-map-root');
+            const mapContainer = mapRoot.querySelector('.delivery-map-container');
+            
+            if (mapContainer) {
+                mapContainer.classList.remove('show');
+            }
+        });
 
         window.updateDeliveryLocation = function(location) {
             document.getElementById('current-location').textContent = location;

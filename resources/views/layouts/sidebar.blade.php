@@ -25,6 +25,12 @@
     <nav class="sidebar-nav">
         <ul class="sidebar-menu">
             <li>
+                <a href="{{ route('dashboard') }}" class="sidebar-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
+                    <i class='bx bx-home'></i>
+                    <span>Homepage</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('medicine') }}" class="sidebar-link {{ request()->routeIs('medicine') || request()->routeIs('medicine.show') ? 'active' : '' }}">
                     <i class='bx bx-capsule'></i>
                     <span>Medicine</span>
