@@ -1,4 +1,4 @@
-<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: 250px; top: 100px; z-index: 10;">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: -110px; top: -80px; z-index: 10;">
     <!-- Header with Edit Button -->
     <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 flex justify-between items-center flex-shrink-0 gap-2">
         <div>

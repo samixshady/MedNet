@@ -15,7 +15,11 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    $promotions = \App\Models\Promotion::where('is_active', true)
+        ->orderBy('display_order')
+        ->take(6)
+        ->get();
+    return view('dashboard', ['promotions' => $promotions]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
