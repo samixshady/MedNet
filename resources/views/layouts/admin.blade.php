@@ -113,6 +113,64 @@
             transform: rotate(180deg);
         }
 
+        /* Marketing Toggle Button - Sidebar Link */
+        .sidebar li.marketing-menu-item {
+            position: relative;
+            margin: 8px 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .marketing-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 50px;
+            padding: 0 14px;
+            background: #11101D;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: "Poppins", sans-serif;
+            font-size: 15px;
+            border-radius: 12px;
+        }
+
+        .marketing-toggle:hover {
+            background: #1d1b31;
+            color: #fff;
+        }
+
+        .marketing-toggle i:first-child {
+            font-size: 20px;
+            height: auto;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+
+        .marketing-toggle .links_name {
+            flex: 1;
+            margin: 0 16px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            text-align: left;
+        }
+
+        .marketing-toggle .dropdown-arrow {
+            font-size: 14px;
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            line-height: 1;
+        }
+
+        .marketing-toggle .dropdown-arrow.rotate {
+            transform: rotate(180deg);
+        }
+
         /* Sidebar link styling for consistency */
         .sidebar li a {
             display: flex;
@@ -202,6 +260,24 @@
                 </ul>
             </li>
 
+            <!-- Marketing Dropdown Menu -->
+            <li class="marketing-menu-item">
+                <button class="marketing-toggle" onclick="adminToggleMarketingMenu(event)" type="button" id="marketingToggleBtn">
+                    <i class='bx bx-megaphone'></i>
+                    <span class="links_name">Marketing</span>
+                    <i class='bx bx-chevron-down dropdown-arrow' id="marketingArrow"></i>
+                </button>
+                <span class="tooltip">Marketing</span>
+                <ul class="dropdown-menu" id="marketingDropdown">
+                    <li>
+                        <a href="{{ route('admin.promotions.index') }}">
+                            <i class='bx bx-images'></i>
+                            <span class="links_name">Manage Promotions</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+
             <li>
                 <a href="">
                     <i class='bx bx-user'></i>
@@ -264,9 +340,11 @@
             // Initialize sidebar state from localStorage
             const sidebarState = localStorage.getItem('adminSidebarOpen') === 'true';
             const productsDropdownState = localStorage.getItem('productsDropdownOpen') === 'true';
+            const marketingDropdownState = localStorage.getItem('marketingDropdownOpen') === 'true';
             
             const sidebar = document.getElementById('adminSidebar');
             const productsDropdown = document.getElementById('productsDropdown');
+            const marketingDropdown = document.getElementById('marketingDropdown');
             
             // Restore sidebar state
             if (sidebarState) {
@@ -282,6 +360,16 @@
                 // Always open dropdown on product pages
                 productsDropdown.classList.add('active');
                 document.getElementById('productsArrow').classList.add('rotate');
+            }
+
+            // Restore dropdown state on promotions pages
+            if (currentPath.includes('/admin/promotions') && marketingDropdownState) {
+                marketingDropdown.classList.add('active');
+                document.getElementById('marketingArrow').classList.add('rotate');
+            } else if (currentPath.includes('/admin/promotions')) {
+                // Always open dropdown on promotions pages
+                marketingDropdown.classList.add('active');
+                document.getElementById('marketingArrow').classList.add('rotate');
             }
 
             // Sidebar toggle
@@ -327,6 +415,21 @@
                 localStorage.setItem('productsDropdownOpen', dropdown.classList.contains('active'));
             };
 
+            // Marketing dropdown toggle
+            window.adminToggleMarketingMenu = function(event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const dropdown = document.getElementById('marketingDropdown');
+                const arrow = document.getElementById('marketingArrow');
+                
+                dropdown.classList.toggle('active');
+                arrow.classList.toggle('rotate');
+                
+                // Save state
+                localStorage.setItem('marketingDropdownOpen', dropdown.classList.contains('active'));
+            };
+
             // Close dropdown when a link is clicked
             const dropdownLinks = document.querySelectorAll('#productsDropdown a');
             dropdownLinks.forEach(link => {
@@ -336,6 +439,18 @@
                     dropdown.classList.remove('active');
                     arrow.classList.remove('rotate');
                     localStorage.setItem('productsDropdownOpen', false);
+                });
+            });
+
+            // Close marketing dropdown when a link is clicked
+            const marketingDropdownLinks = document.querySelectorAll('#marketingDropdown a');
+            marketingDropdownLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const dropdown = document.getElementById('marketingDropdown');
+                    const arrow = document.getElementById('marketingArrow');
+                    dropdown.classList.remove('active');
+                    arrow.classList.remove('rotate');
+                    localStorage.setItem('marketingDropdownOpen', false);
                 });
             });
         });

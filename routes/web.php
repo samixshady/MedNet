@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
@@ -67,6 +68,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->name('products.expired');
 
         Route::resource('products', ProductController::class);
+
+        // Promotions routes
+        Route::prefix('promotions')->name('promotions.')->group(function () {
+            Route::get('/', [PromoController::class, 'index'])->name('index');
+            Route::post('/', [PromoController::class, 'store'])->name('store');
+            Route::delete('/{promotion}', [PromoController::class, 'destroy'])->name('destroy');
+            Route::post('/order', [PromoController::class, 'updateOrder'])->name('updateOrder');
+        });
     });
 });
 
