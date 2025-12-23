@@ -15,11 +15,6 @@
     <div class="main-content">
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- Search Bar Section -->
-                <div class="mb-12">
-                    <x-search-bar />
-                </div>
-
                 <!-- QuickBuy Section -->
                 <div class="mb-12">
                     <x-quick-buy-box />

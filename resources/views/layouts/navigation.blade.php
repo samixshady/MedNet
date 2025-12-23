@@ -9,8 +9,11 @@
                 </h2>
             </div>
 
+            <!-- Center: Search Bar (Hidden on Mobile) -->
+            <x-navbar-search />
+
             <!-- Center: Delivery -->
-            <div class="flex-1 flex justify-center">
+            <div class="hidden lg:flex flex-1 justify-center">
                 <div class="bg-blue-50 px-5 py-2 rounded-xl flex flex-col items-center border border-blue-200 shadow-sm">
                     <div class="flex items-center gap-2">
                         <span class="text-gray-700 text-sm font-semibold uppercase tracking-wide">
