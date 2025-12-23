@@ -417,9 +417,16 @@
 
                             <!-- Actions -->
                             <div class="actions">
-                                <button class="btn btn-add-to-cart" @if($product->stock_status === 'out_of_stock') disabled @endif>
-                                    <i class='bx bx-cart-add'></i> Add to Cart
-                                </button>
+                                <div style="display: flex; gap: 12px; align-items: center;">
+                                    <div style="flex: 1; display: flex; align-items: center; border: 1px solid #e5e7eb; border-radius: 6px; padding: 6px;">
+                                        <button type="button" onclick="decreaseQuantity()" style="background: none; border: none; cursor: pointer; padding: 0 8px; color: #6b7280; font-size: 18px; flex-shrink: 0;" id="qty-decrease">−</button>
+                                        <input type="number" id="add-to-cart-qty" value="1" min="1" max="50" style="border: none; text-align: center; font-size: 14px; flex: 1; outline: none;" readonly>
+                                        <button type="button" onclick="increaseQuantity()" style="background: none; border: none; cursor: pointer; padding: 0 8px; color: #6b7280; font-size: 18px; flex-shrink: 0;" id="qty-increase">+</button>
+                                    </div>
+                                    <button type="button" class="btn btn-add-to-cart" onclick="addToCart({{ $product->id }})" @if($product->stock_status === 'out_of_stock') disabled @endif style="flex: 1;">
+                                        <i class='bx bx-cart-add'></i> Add to Cart
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -427,4 +434,124 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.innerHTML = `
+                <i class='bx ${type === 'success' ? 'bx-check-circle' : 'bx-error-circle'}' style="font-size: 20px;"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function decreaseQuantity() {
+            const input = document.getElementById('add-to-cart-qty');
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function increaseQuantity() {
+            const input = document.getElementById('add-to-cart-qty');
+            if (input.value < 50) {
+                input.value = parseInt(input.value) + 1;
+            } else {
+                showToast('Maximum quantity is 50 items', 'error');
+            }
+        }
+
+        function addToCart(productId) {
+            const quantity = parseInt(document.getElementById('add-to-cart-qty').value);
+
+            fetch('{{ route('cart.add') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(`{{ $product->name }} has been added to the cart`, 'success');
+                    document.getElementById('add-to-cart-qty').value = 1;
+                    updateCartBadge();
+                } else {
+                    showToast(data.message || 'Error adding to cart', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Error adding to cart. Please try again.', 'error');
+                console.error('Error:', error);
+            });
+        }
+
+        function updateCartBadge() {
+            fetch('{{ route('cart.count') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('cart-badge');
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline-flex';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                });
+        }
+
+        // Add CSS animations if not already present
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </x-app-layout>

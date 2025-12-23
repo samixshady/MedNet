@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CartController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +22,18 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplements/{id}', [ProductController::class, 'show'])->name('supplements.show');
     Route::get('/first-aid', [ProductController::class, 'firstAid'])->name('first-aid');
     Route::get('/first-aid/{id}', [ProductController::class, 'show'])->name('first-aid.show');
+    
+    // Cart routes
+    Route::prefix('cart')->name('cart.')->group(function () {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::post('/add', [CartController::class, 'add'])->name('add');
+        Route::patch('/{cartItemId}/quantity', [CartController::class, 'updateQuantity'])->name('updateQuantity');
+        Route::post('/{cartItemId}/prescription', [CartController::class, 'uploadPrescription'])->name('uploadPrescription');
+        Route::delete('/{cartItemId}', [CartController::class, 'remove'])->name('remove');
+        Route::get('/count', [CartController::class, 'count'])->name('count');
+        Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    });
+    
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

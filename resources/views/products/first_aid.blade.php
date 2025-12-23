@@ -365,7 +365,7 @@
                                     </div>
 
                                     <!-- Add to Cart Button -->
-                                    <button class="add-to-cart-btn" onclick="event.preventDefault(); event.stopPropagation();" @if($product->stock_status === 'out_of_stock') disabled @endif>
+                                    <button class="add-to-cart-btn" onclick="event.preventDefault(); event.stopPropagation(); openQuantityModal({{ $product->id }}, '{{ $product->name }}')" @if($product->stock_status === 'out_of_stock') disabled @endif>
                                         <i class='bx bx-cart-add'></i> Add to Cart
                                     </button>
                                 </div>
@@ -387,4 +387,170 @@
             </div>
         </div>
     </div>
+
+    <!-- Quantity Selection Modal -->
+    <div id="quantityModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9998; align-items: center; justify-content: center;">
+        <div style="background: white; border-radius: 12px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
+            <h3 id="modalProductName" style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #11101D;">Select Quantity</h3>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
+                <button onclick="decreaseQuantityModal()" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 18px; color: #333; transition: all 0.2s;">−</button>
+                <input type="number" id="quantityInput" value="1" min="1" max="50" style="border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; font-size: 16px; padding: 12px; width: 80px; outline: none;">
+                <button onclick="increaseQuantityModal()" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 18px; color: #333; transition: all 0.2s;">+</button>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button onclick="closeQuantityModal()" style="flex: 1; padding: 12px; background: #e5e7eb; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: #333; transition: all 0.2s;">Cancel</button>
+                <button onclick="addToCartFromModal()" style="flex: 1; padding: 12px; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); border: none; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; transition: all 0.2s;">Add to Cart</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let modalProductId = null;
+
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#10b981' : '#ef4444'};
+                color: white;
+                padding: 16px 24px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                z-index: 9999;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                font-size: 14px;
+                animation: slideIn 0.3s ease-out;
+            `;
+            toast.innerHTML = `
+                <i class='bx ${type === 'success' ? 'bx-check-circle' : 'bx-error-circle'}' style="font-size: 20px;"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.animation = 'slideOut 0.3s ease-out';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function openQuantityModal(productId, productName) {
+            modalProductId = productId;
+            document.getElementById('modalProductName').textContent = `Add "${productName}" to cart`;
+            document.getElementById('quantityInput').value = 1;
+            document.getElementById('quantityModal').style.display = 'flex';
+        }
+
+        function closeQuantityModal() {
+            document.getElementById('quantityModal').style.display = 'none';
+            modalProductId = null;
+        }
+
+        function decreaseQuantityModal() {
+            const input = document.getElementById('quantityInput');
+            if (input.value > 1) {
+                input.value = parseInt(input.value) - 1;
+            }
+        }
+
+        function increaseQuantityModal() {
+            const input = document.getElementById('quantityInput');
+            if (input.value < 50) {
+                input.value = parseInt(input.value) + 1;
+            } else {
+                showToast('Maximum quantity is 50 items', 'error');
+            }
+        }
+
+        function addToCartFromModal() {
+            if (!modalProductId) {
+                showToast('Please select a product first', 'error');
+                return;
+            }
+            const quantity = parseInt(document.getElementById('quantityInput').value);
+
+            fetch('{{ route('cart.add') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                },
+                body: JSON.stringify({
+                    product_id: modalProductId,
+                    quantity: quantity
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    closeQuantityModal();
+                    updateCartBadge();
+                } else {
+                    showToast(data.message || 'Error adding to cart', 'error');
+                }
+            })
+            .catch(error => {
+                showToast('Error adding to cart. Please try again.', 'error');
+                console.error('Error:', error);
+            });
+        }
+
+        function updateCartBadge() {
+            fetch('{{ route('cart.count') }}')
+                .then(response => response.json())
+                .then(data => {
+                    const badge = document.getElementById('cart-badge');
+                    if (badge) {
+                        if (data.count > 0) {
+                            badge.textContent = data.count;
+                            badge.style.display = 'inline-flex';
+                        } else {
+                            badge.style.display = 'none';
+                        }
+                    }
+                });
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeQuantityModal();
+            }
+        });
+
+        // Add CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+            @keyframes slideOut {
+                from {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+                to {
+                    transform: translateX(400px);
+                    opacity: 0;
+                }
+            }
+        `;
+        if (!document.querySelector('style[data-toast-animations]')) {
+            style.setAttribute('data-toast-animations', 'true');
+            document.head.appendChild(style);
+        }
+
+        // Initialize cart badge on page load
+        window.addEventListener('load', updateCartBadge);
+    </script>
 </x-app-layout>
