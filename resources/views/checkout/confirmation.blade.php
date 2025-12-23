@@ -1,198 +1,238 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    </x-slot>
 
-@section('content')
-<div class="min-h-screen bg-gradient-to-br from-green-50 via-white to-green-50 py-12">
-    <div class="max-w-4xl mx-auto px-4">
-        <!-- Success Animation -->
-        <div class="text-center mb-12">
-            <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 mb-6 animate-bounce">
-                <svg class="w-12 h-12 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                </svg>
-            </div>
-            <h1 class="text-4xl font-bold text-gray-900 mb-3">Order Confirmed!</h1>
-            <p class="text-xl text-gray-600">Your order has been successfully placed</p>
-        </div>
+    @include('layouts.sidebar')
 
-        <!-- Tracking Number Card -->
-        <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-2xl p-8 mb-8 text-white">
-            <p class="text-green-100 text-sm font-semibold mb-2">TRACKING NUMBER</p>
-            <div class="flex items-end justify-between">
-                <div>
-                    <p class="text-5xl font-bold mb-2" id="trackingNumber">{{ $order->tracking_number }}</p>
-                    <p class="text-green-100">Save this number to track your order</p>
+    <div class="main-content">
+        <div class="py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto">
+                <!-- Success Animation -->
+                <div class="text-center mb-12">
+                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 mb-8 animate-bounce shadow-2xl">
+                        <svg class="w-14 h-14 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-5xl font-bold text-gray-900 mb-4">🎉 Order Confirmed!</h1>
+                    <p class="text-xl text-gray-600 mb-2">Your order has been successfully placed</p>
+                    <p class="text-lg text-emerald-600 font-semibold">Your product will arrive soon!</p>
                 </div>
-                <button onclick="copyTracking()" class="bg-white bg-opacity-20 hover:bg-opacity-30 rounded-lg p-3 transition-all duration-300 flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M7 3a1 1 0 000 2h6v2H7a2 2 0 00-2 2v2h12V7a1 1 0 10-2 0v1h-2V5a2 2 0 00-2-2H7z"/>
-                        <path fill-rule="evenodd" d="M5 9a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V9zm2 0h8v8H7V9z" clip-rule="evenodd"/>
-                    </svg>
-                    Copy
-                </button>
-            </div>
-        </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-            <!-- Order Details -->
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
-                    </svg>
-                    Order Details
-                </h2>
-
-                <div class="space-y-4">
-                    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                        <span class="text-gray-700">Order Date</span>
-                        <span class="font-semibold text-gray-900">{{ $order->created_at->format('M d, Y') }}</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                        <span class="text-gray-700">Order Time</span>
-                        <span class="font-semibold text-gray-900">{{ $order->created_at->format('h:i A') }}</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                        <span class="text-gray-700">Payment Method</span>
-                        <span class="font-semibold text-gray-900 capitalize">{{ $order->payment_method }}</span>
-                    </div>
-                    <div class="flex justify-between items-center pb-4 border-b border-gray-200">
-                        <span class="text-gray-700">Payment Status</span>
-                        <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">
-                            <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                            </svg>
-                            Paid
-                        </span>
-                    </div>
-                    <div class="flex justify-between items-center">
-                        <span class="text-gray-700">Order Status</span>
-                        <span class="inline-block px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-800">Processing</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Delivery Information -->
-            <div class="bg-white rounded-2xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                    <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/>
-                    </svg>
-                    Delivery Info
-                </h2>
-
-                <div class="space-y-4 bg-gradient-to-br from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
-                    <div>
-                        <p class="text-sm font-semibold text-gray-700 mb-1">Delivery Address</p>
-                        <p class="text-gray-900 font-medium">{{ $order->delivery_address }}</p>
-                    </div>
-                    @if($order->delivery_latitude && $order->delivery_longitude)
-                        <div class="text-xs text-gray-600 space-y-1">
-                            <p>📍 Latitude: {{ number_format($order->delivery_latitude, 4) }}</p>
-                            <p>📍 Longitude: {{ number_format($order->delivery_longitude, 4) }}</p>
+                <!-- Tracking Number Card - Large and Prominent -->
+                <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-3xl shadow-2xl p-10 mb-10 text-white transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-center">
+                        <p class="text-blue-100 text-sm font-bold uppercase tracking-widest mb-4">Your Tracking Number</p>
+                        <div class="mb-6">
+                            <p class="text-6xl font-black font-mono mb-3 break-words" id="trackingNumber">{{ $order->tracking_number }}</p>
+                            <p class="text-blue-100 text-lg">Save this number to track your order</p>
                         </div>
-                    @endif
-                    <div class="bg-white rounded-lg p-3 text-sm">
-                        <p class="text-gray-700 mb-1">Estimated Delivery</p>
-                        <p class="font-bold text-green-600">{{ $order->created_at->addDays(2)->format('M d, Y') }} - {{ $order->created_at->addDays(3)->format('M d, Y') }}</p>
+                        <div class="flex gap-3 justify-center flex-wrap">
+                            <button onclick="copyTracking()" class="bg-white bg-opacity-25 hover:bg-opacity-40 rounded-lg px-6 py-3 transition-all duration-300 flex items-center gap-2 font-semibold backdrop-blur-sm">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M7 3a1 1 0 000 2h6v2H7a2 2 0 00-2 2v2h12V7a1 1 0 10-2 0v1h-2V5a2 2 0 00-2-2H7z"/>
+                                    <path fill-rule="evenodd" d="M5 9a2 2 0 012-2h8a2 2 0 012 2v8a2 2 0 01-2 2H7a2 2 0 01-2-2V9zm2 0h8v8H7V9z" clip-rule="evenodd"/>
+                                </svg>
+                                Copy Tracking Number
+                            </button>
+                            <button onclick="downloadTracking()" class="bg-white bg-opacity-25 hover:bg-opacity-40 rounded-lg px-6 py-3 transition-all duration-300 flex items-center gap-2 font-semibold backdrop-blur-sm">
+                                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                                </svg>
+                                Download Receipt
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Order Items -->
-        <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-                <svg class="w-6 h-6 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 6H6.28l-.31-1.243A1 1 0 005 4H3z"/>
-                </svg>
-                Order Items ({{ $order->items->count() }})
-            </h2>
+                <!-- Order Information Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    <!-- Order Total -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-green-500">
+                        <p class="text-gray-600 text-sm font-bold uppercase mb-2">Order Total</p>
+                        <p class="text-4xl font-bold text-gray-900 mb-2">৳{{ number_format($order->total_amount, 2) }}</p>
+                        <p class="text-sm text-gray-500">including delivery fee</p>
+                    </div>
 
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b-2 border-gray-200">
-                            <th class="text-left py-3 px-4 font-bold text-gray-700">Product</th>
-                            <th class="text-center py-3 px-4 font-bold text-gray-700">Qty</th>
-                            <th class="text-right py-3 px-4 font-bold text-gray-700">Price</th>
-                            <th class="text-right py-3 px-4 font-bold text-gray-700">Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
+                    <!-- Order Date -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-blue-500">
+                        <p class="text-gray-600 text-sm font-bold uppercase mb-2">Order Date</p>
+                        <p class="text-3xl font-bold text-gray-900 mb-2">{{ $order->created_at->format('M d') }}</p>
+                        <p class="text-sm text-gray-500">{{ $order->created_at->format('Y') }} at {{ $order->created_at->format('h:i A') }}</p>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-purple-500">
+                        <p class="text-gray-600 text-sm font-bold uppercase mb-2">Delivery Address</p>
+                        <p class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{{ $order->delivery_address }}</p>
+                        <p class="text-sm text-gray-500">Standard Delivery</p>
+                    </div>
+                </div>
+
+                <!-- Order Items -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-10">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 6H6.28l-.31-1.243A1 1 0 005 4H3z"/>
+                        </svg>
+                        Order Items
+                    </h2>
+                    <div class="space-y-4">
                         @foreach($order->items as $item)
-                            <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                <td class="py-4 px-4">
-                                    <div>
-                                        <p class="font-semibold text-gray-900">{{ $item->product->name }}</p>
-                                        <p class="text-sm text-gray-600">{{ $item->product->generic_name ?? 'Generic' }}</p>
-                                    </div>
-                                </td>
-                                <td class="text-center py-4 px-4 font-semibold text-gray-900">{{ $item->quantity }}</td>
-                                <td class="text-right py-4 px-4 text-gray-900">৳{{ number_format($item->price, 2) }}</td>
-                                <td class="text-right py-4 px-4 font-bold text-green-600">৳{{ number_format($item->subtotal, 2) }}</td>
-                            </tr>
+                        <div class="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-200 hover:border-blue-300 transition-colors">
+                            <div class="flex-1">
+                                <h3 class="font-bold text-gray-900 text-lg">{{ $item->product->name }}</h3>
+                                <p class="text-gray-600 text-sm mt-1">
+                                    <span class="font-semibold text-gray-900">{{ $item->quantity }}</span> 
+                                    <span class="text-gray-500">× ৳{{ number_format($item->price, 2) }}</span>
+                                </p>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-2xl font-bold text-blue-600">৳{{ number_format($item->subtotal, 2) }}</p>
+                                <p class="text-sm text-gray-500 mt-1">Subtotal</p>
+                            </div>
+                        </div>
                         @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    </div>
 
-            <!-- Total Section -->
-            <div class="mt-6 flex justify-end">
-                <div class="w-full sm:w-80">
-                    <div class="flex justify-between py-3 border-b-2 border-gray-200 mb-4">
-                        <span class="text-gray-700">Subtotal</span>
-                        <span class="font-semibold">৳{{ number_format($order->items->sum(fn($item) => $item->subtotal), 2) }}</span>
-                    </div>
-                    <div class="flex justify-between py-3 border-b-2 border-gray-200 mb-4">
-                        <span class="text-gray-700">Delivery Fee</span>
-                        <span class="font-semibold text-blue-600">৳{{ number_format($order->total_amount - $order->items->sum(fn($item) => $item->subtotal), 2) }}</span>
-                    </div>
-                    <div class="flex justify-between py-3">
-                        <span class="text-lg font-bold text-gray-900">Total Amount</span>
-                        <span class="text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">৳{{ number_format($order->total_amount, 2) }}</span>
+                    <!-- Cost Breakdown -->
+                    <div class="mt-8 pt-6 border-t-2 border-gray-200 space-y-3">
+                        @php
+                        $subtotal = $order->items->sum('subtotal');
+                        $deliveryFee = $order->total_amount - $subtotal;
+                        @endphp
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 font-semibold">Subtotal</span>
+                            <span class="text-gray-900 font-bold">৳{{ number_format($subtotal, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-600 font-semibold">Delivery Fee</span>
+                            <span class="text-blue-600 font-bold">৳{{ number_format($deliveryFee, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between items-center pt-3 border-t-2 border-gray-200">
+                            <span class="text-gray-900 font-bold text-lg">Total Amount</span>
+                            <span class="text-2xl font-bold text-green-600">৳{{ number_format($order->total_amount, 2) }}</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-col sm:flex-row gap-4">
-            <a href="{{ route('checkout.order-details', $order) }}" class="flex-1 bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"/>
-                    <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 1 1 0 000-2H2a1 1 0 00-1 1v14a1 1 0 001 1h14a1 1 0 001-1V7a1 1 0 00-1-1h2a1 1 0 100 2 2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" clip-rule="evenodd"/>
-                </svg>
-                View Full Details
-            </a>
-            <a href="/" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-3 px-6 rounded-xl transition-colors duration-300 text-center flex items-center justify-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-                </svg>
-                Continue Shopping
-            </a>
-        </div>
+                <!-- What Happens Next -->
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-lg p-8 mb-10 border border-blue-200">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2z" clip-rule="evenodd"/>
+                        </svg>
+                        What Happens Next
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">1</div>
+                            <div>
+                                <p class="font-bold text-gray-900">Order Confirmed</p>
+                                <p class="text-gray-600 text-sm">Your order has been received and confirmed. Your tracking number is above.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">2</div>
+                            <div>
+                                <p class="font-bold text-gray-900">Processing</p>
+                                <p class="text-gray-600 text-sm">Your order is being prepared for shipment.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold">3</div>
+                            <div>
+                                <p class="font-bold text-gray-900">On the Way</p>
+                                <p class="text-gray-600 text-sm">Your package will be delivered to the address provided.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-10 h-10 rounded-full bg-green-600 flex items-center justify-center text-white font-bold">✓</div>
+                            <div>
+                                <p class="font-bold text-gray-900">Delivered</p>
+                                <p class="text-gray-600 text-sm">Your order has been delivered successfully!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-        <!-- Support Section -->
-        <div class="mt-12 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-2xl p-8 text-center">
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Need Help?</h3>
-            <p class="text-gray-700 mb-4">You will receive an email confirmation shortly with all order details and a link to track your order.</p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="mailto:support@mednet.com" class="text-blue-600 hover:text-blue-800 font-semibold">📧 Email Support</a>
-                <span class="text-gray-400">•</span>
-                <a href="tel:+8801234567890" class="text-blue-600 hover:text-blue-800 font-semibold">📞 Call Us</a>
-                <span class="text-gray-400">•</span>
-                <a href="#" class="text-blue-600 hover:text-blue-800 font-semibold">💬 Live Chat</a>
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="{{ route('profile.orders') }}" class="flex-1 sm:flex-initial bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg inline-flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+                        </svg>
+                        View My Orders
+                    </a>
+                    <a href="{{ route('dashboard') }}" class="flex-1 sm:flex-initial bg-gray-200 hover:bg-gray-300 text-gray-900 font-bold py-4 px-8 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl text-center text-lg inline-flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
+                        </svg>
+                        Continue Shopping
+                    </a>
+                </div>
+
+                <!-- Test Site Notice -->
+                <div class="mt-10 bg-amber-50 border-2 border-amber-300 rounded-2xl p-6">
+                    <div class="flex gap-3">
+                        <svg class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                        <div>
+                            <p class="font-bold text-amber-900">This is a Test Site</p>
+                            <p class="text-amber-800 text-sm mt-1">This is a demonstration environment. No actual delivery will occur. This is for testing purposes only.</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<script>
-function copyTracking() {
-    const tracking = document.getElementById('trackingNumber').textContent;
-    navigator.clipboard.writeText(tracking).then(() => {
-        alert('Tracking number copied to clipboard!');
-    });
-}
-</script>
-@endsection
+    <style>
+        .main-content {
+            margin-left: 280px;
+            transition: margin-left 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
+
+    <script>
+        function copyTracking() {
+            const trackingNumber = document.getElementById('trackingNumber').textContent.trim();
+            navigator.clipboard.writeText(trackingNumber).then(() => {
+                alert('✅ Tracking number copied to clipboard: ' + trackingNumber);
+            }).catch(() => {
+                alert('Failed to copy tracking number');
+            });
+        }
+
+        function downloadTracking() {
+            const trackingNumber = document.getElementById('trackingNumber').textContent.trim();
+            const content = `
+ORDER RECEIPT
+=============
+Tracking Number: ${trackingNumber}
+Order Date: {{ $order->created_at->format('M d, Y h:i A') }}
+Total Amount: ৳{{ number_format($order->total_amount, 2) }}
+Delivery Address: {{ $order->delivery_address }}
+
+Your product will arrive soon!
+Visit your profile orders page to track your order.
+            `;
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(content));
+            element.setAttribute('download', `receipt-${trackingNumber}.txt`);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+    </script>
+</x-app-layout>
+

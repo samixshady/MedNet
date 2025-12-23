@@ -851,9 +851,12 @@
 
             const address = document.querySelector('textarea[name="address"]').value;
             const deliveryLocation = document.querySelector('select[name="delivery_location"]').value;
+            const deliveryOption = document.querySelector('input[name="delivery_option"]:checked').value;
 
-            // Store delivery location in session via localStorage
+            // Store delivery information in localStorage
             localStorage.setItem('mednet_delivery_location', address);
+            localStorage.setItem('mednet_delivery_location_type', deliveryLocation);
+            localStorage.setItem('mednet_delivery_method', deliveryOption);
             
             // Redirect to new checkout page
             window.location.href = '{{ route('checkout.index') }}';

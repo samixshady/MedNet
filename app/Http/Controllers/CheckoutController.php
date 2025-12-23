@@ -27,49 +27,11 @@ class CheckoutController extends Controller
 
         $total = $cartItems->sum(fn($item) => $item->subtotal);
         
-        // Get delivery address from localStorage or session
-        $deliveryAddress = session('delivery_location', 'Not selected');
-        $deliveryCoords = session('delivery_coords', ['lat' => null, 'lng' => null]);
-        
-        // Delivery pricing
-        $deliveryPricing = [
-            'inside_dhaka' => ['standard' => 40, 'express' => 80, 'overnight' => 100],
-            'outside_dhaka' => ['standard' => 70, 'express' => 110, 'overnight' => 130]
-        ];
+        // Get delivery address from request or use default
+        // The address is passed from cart or stored in session
+        $deliveryAddress = request('address', session('delivery_location', 'Not selected'));
 
-        return view('checkout.summary', compact('cartItems', 'total', 'deliveryAddress', 'deliveryCoords', 'deliveryPricing'));
-    }
-
-    /**
-     * Show payment method selection page
-     */
-    public function payment(Request $request)
-    {
-        $request->validate([
-            'delivery_address' => 'required|string',
-            'delivery_location' => 'required|in:inside_dhaka,outside_dhaka',
-            'delivery_method' => 'required|in:standard,express,overnight',
-            'delivery_fee' => 'required|numeric|min:0',
-        ]);
-
-        $user = auth()->user();
-        $cartItems = Cart::where('user_id', $user->id)
-            ->with('product')
-            ->get();
-
-        if ($cartItems->isEmpty()) {
-            return redirect('/cart')->with('error', 'Your cart is empty');
-        }
-
-        $subtotal = $cartItems->sum(fn($item) => $item->subtotal);
-        $deliveryFee = $request->delivery_fee;
-        $total = $subtotal + $deliveryFee;
-        $deliveryAddress = $request->delivery_address;
-        $deliveryLocation = $request->delivery_location;
-        $deliveryMethod = $request->delivery_method;
-        $deliveryCoords = session('delivery_coords', ['lat' => null, 'lng' => null]);
-
-        return view('checkout.payment', compact('cartItems', 'subtotal', 'deliveryFee', 'total', 'deliveryAddress', 'deliveryCoords', 'deliveryLocation', 'deliveryMethod'));
+        return view('checkout.summary', compact('cartItems', 'total', 'deliveryAddress'));
     }
 
     /**
@@ -78,7 +40,7 @@ class CheckoutController extends Controller
     public function processPayment(Request $request)
     {
         $request->validate([
-            'payment_method' => 'required|in:visa,paypal',
+            'payment_method' => 'required|in:visa,paypal,test',
             'delivery_address' => 'required|string',
             'delivery_fee' => 'required|numeric|min:0',
         ]);
@@ -100,9 +62,13 @@ class CheckoutController extends Controller
             $deliveryFee = $request->delivery_fee;
             $totalAmount = $subtotal + $deliveryFee;
 
+            // Generate random tracking number
+            $trackingNumber = 'MN' . strtoupper(bin2hex(random_bytes(4))) . '-' . strtoupper(substr($user->name, 0, 3));
+
             // Create order
             $order = Order::create([
                 'user_id' => $user->id,
+                'tracking_number' => $trackingNumber,
                 'total_amount' => $totalAmount,
                 'delivery_address' => $request->delivery_address,
                 'delivery_latitude' => session('delivery_coords.lat'),
@@ -111,10 +77,6 @@ class CheckoutController extends Controller
                 'payment_status' => 'completed',
                 'order_status' => 'pending',
             ]);
-
-            // Generate tracking number
-            $trackingNumber = $order->generateTrackingNumber();
-            $order->update(['tracking_number' => $trackingNumber]);
 
             // Create order items and update product quantities
             foreach ($cartItems as $item) {
@@ -174,4 +136,30 @@ class CheckoutController extends Controller
 
         return view('checkout.order-details', compact('order'));
     }
-}
+
+    /**
+     * Reduce order item quantity (for test site)
+     */
+    public function reduceQuantity(OrderItem $orderItem)
+    {
+        // Check authorization
+        if ($orderItem->order->user_id !== auth()->id()) {
+            abort(403);
+        }
+
+        // Get the product
+        $product = Product::find($orderItem->product_id);
+        
+        // Add back the quantity to product (restore stock)
+        $product->increment('quantity', $orderItem->quantity);
+        
+        // Delete the order item
+        $orderItem->delete();
+        
+        // Recalculate order total
+        $order = $orderItem->order;
+        $newSubtotal = $order->items->sum('subtotal');
+        $order->update(['total_amount' => $newSubtotal]);
+
+        return redirect()->route('profile.orders')->with('success', 'Order item removed and quantity restored');
+    }}

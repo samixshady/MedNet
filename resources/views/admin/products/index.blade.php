@@ -432,6 +432,28 @@
         </div>
     </div>
 
+    <!-- Search Bar -->
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08); padding: 20px; margin-bottom: 20px; border: 1px solid #e5e5e5;">
+        <form method="GET" action="{{ route('admin.products.index') }}" style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 250px; position: relative;">
+                <input type="text" name="search" placeholder="🔍 Search by product name, generic name, manufacturer, or dosage..." value="{{ $search }}" style="width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; transition: all 0.3s ease;" onkeyup="this.style.borderColor = this.value ? '#3498db' : '#ddd';">
+            </div>
+            <button type="submit" style="padding: 12px 24px; background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; white-space: nowrap;">
+                <i class='bx bx-search'></i> Search
+            </button>
+            @if($search)
+            <a href="{{ route('admin.products.index') }}" style="padding: 12px 24px; background: #f0f0f0; color: #333; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+                <i class='bx bx-x'></i> Clear
+            </a>
+            @endif
+        </form>
+        @if($search)
+        <div style="margin-top: 12px; padding: 12px; background: #e8f4f8; border-left: 4px solid #3498db; border-radius: 4px;">
+            <p style="margin: 0; color: #333; font-size: 13px;"><strong>Search Results:</strong> Found <span style="color: #3498db; font-weight: 700;">{{ $products->count() }}</span> product(s) matching "<strong>{{ $search }}</strong>"</p>
+        </div>
+        @endif
+    </div>
+
     @if($products->count() > 0)
                 <div style="margin-bottom: 20px;">
                     <div class="sort-controls">
@@ -498,8 +520,8 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <span class="stock-status {{ $product->stock_status }}">
-                                            {{ ucfirst(str_replace('_', ' ', $product->stock_status)) }}
+                                        <span class="stock-status {{ $product->stock_status }}" style="font-size: 13px; font-weight: 700;">
+                                            {{ $product->quantity }} {{ $product->quantity === 1 ? 'unit' : 'units' }}
                                         </span>
                                     </td>
                                     <td>

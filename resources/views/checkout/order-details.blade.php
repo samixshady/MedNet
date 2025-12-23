@@ -1,8 +1,13 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    </x-slot>
 
-@section('content')
-<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-indigo-50 py-12">
-    <div class="max-w-6xl mx-auto px-4">
+    @include('layouts.sidebar')
+
+    <div class="main-content">
+        <div class="py-12 px-4">
+            <div class="max-w-4xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
             <a href="/" class="text-indigo-600 hover:text-indigo-800 font-semibold flex items-center gap-2 mb-6">
@@ -217,6 +222,19 @@
     </div>
 </div>
 
+<style>
+.main-content {
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+</style>
+
 <script>
 function copyTracking() {
     const tracking = document.getElementById('trackingNumber').textContent;
@@ -230,4 +248,4 @@ function copyTracking() {
     });
 }
 </script>
-@endsection
+</x-app-layout>

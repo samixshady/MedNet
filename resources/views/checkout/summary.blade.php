@@ -1,8 +1,13 @@
-@extends('layouts.app')
+<x-app-layout>
+    <x-slot name="header">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    </x-slot>
 
-@section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12">
-    <div class="max-w-6xl mx-auto px-4">
+    @include('layouts.sidebar')
+
+    <div class="main-content">
+        <div class="py-12 px-4">
+            <div class="max-w-6xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center gap-4 mb-6">
@@ -64,15 +69,14 @@
                         <div id="deliveryCoordsDisplay"></div>
                     </div>
 
-                    <form method="POST" action="{{ route('checkout.payment') }}" id="deliveryForm" class="space-y-4">
+                    <form method="POST" action="{{ route('checkout.process-payment') }}" id="deliveryForm" enctype="application/x-www-form-urlencoded">
                         @csrf
+                        <input type="hidden" name="payment_method" value="test">
                         <input type="hidden" name="delivery_address" value="{{ $deliveryAddress }}">
                         <input type="hidden" name="delivery_fee" value="40">
-                        <input type="hidden" name="delivery_location" value="inside_dhaka">
-                        <input type="hidden" name="delivery_method" value="standard">
 
-                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
-                            Proceed to Payment
+                        <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Complete Order & Get Tracking Number
                         </button>
                     </form>
                 </div>
@@ -124,26 +128,74 @@
     </div>
 </div>
 
+<style>
+.main-content {
+    margin-left: 280px;
+    transition: margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+}
+</style>
+
 <script>
-// Initialize delivery details from localStorage
+// Delivery pricing structure
+const deliveryPricing = {
+    inside_dhaka: {
+        standard: 40,
+        express: 80,
+        overnight: 100
+    },
+    outside_dhaka: {
+        standard: 70,
+        express: 110,
+        overnight: 130
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function() {
-    const savedLocation = localStorage.getItem('mednet_delivery_location');
-    const savedCoords = localStorage.getItem('mednet_delivery_coords');
+    // Get stored delivery information from localStorage
+    const savedAddress = localStorage.getItem('mednet_delivery_location');
+    const savedLocationType = localStorage.getItem('mednet_delivery_location_type') || 'inside_dhaka';
+    const savedMethod = localStorage.getItem('mednet_delivery_method') || 'standard';
     
-    if (savedLocation) {
-        document.getElementById('deliveryAddressDisplay').textContent = savedLocation;
-        document.getElementById('deliveryAddressInput').value = savedLocation;
+    // Update form hidden inputs - find them by name instead of ID
+    const addressInput = document.querySelector('input[name="delivery_address"]');
+    const locationInput = document.querySelector('input[name="delivery_location"]');
+    const methodInput = document.querySelector('input[name="delivery_method"]');
+    const feeInput = document.querySelector('input[name="delivery_fee"]');
+    
+    if (savedAddress && addressInput) {
+        addressInput.value = savedAddress;
+        document.getElementById('deliveryAddressDisplay').textContent = savedAddress;
     }
     
-    if (savedCoords) {
-        try {
-            const coords = JSON.parse(savedCoords);
-            const coordsDisplay = document.getElementById('deliveryCoordsDisplay');
-            coordsDisplay.innerHTML = `<p class="text-xs text-gray-600">📍 Lat: ${coords.lat.toFixed(4)}, Lng: ${coords.lng.toFixed(4)}</p>`;
-        } catch (e) {
-            console.error('Error parsing saved coordinates:', e);
-        }
+    if (savedLocationType && locationInput) {
+        locationInput.value = savedLocationType;
+    }
+    
+    if (savedMethod && methodInput) {
+        methodInput.value = savedMethod;
+    }
+    
+    // Calculate delivery fee
+    const deliveryFee = deliveryPricing[savedLocationType][savedMethod];
+    if (feeInput) {
+        feeInput.value = deliveryFee;
+    }
+    document.getElementById('deliveryFeeDisplay').textContent = '৳' + deliveryFee;
+    
+    // Update total - parse the subtotal properly
+    const subtotalText = document.getElementById('subtotalDisplay').textContent.replace('৳', '').trim();
+    const subtotal = parseFloat(subtotalText.replace(/,/g, ''));
+    
+    if (!isNaN(subtotal)) {
+        const total = subtotal + deliveryFee;
+        document.getElementById('totalDisplay').textContent = '৳' + total.toFixed(2);
     }
 });
 </script>
-@endsection
+</x-app-layout>

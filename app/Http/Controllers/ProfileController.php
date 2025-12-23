@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Order;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,22 @@ class ProfileController extends Controller
     {
         return view('profile.edit', [
             'user' => $request->user(),
+        ]);
+    }
+
+    /**
+     * Display user's orders
+     */
+    public function orders(Request $request): View
+    {
+        $orders = Order::where('user_id', $request->user()->id)
+            ->with('items.product')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('profile.orders', [
+            'user' => $request->user(),
+            'orders' => $orders,
         ]);
     }
 

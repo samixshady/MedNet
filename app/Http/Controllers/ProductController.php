@@ -15,14 +15,28 @@ class ProductController extends Controller
     public function index(Request $request)
     {
         $sort = $request->get('sort', 'name'); // default sort by name
+        $search = $request->get('search', ''); // get search query
         
-        if ($sort === 'expiry') {
-            $products = Product::orderBy('expiry_date', 'asc')->get();
-        } else {
-            $products = Product::orderBy('name', 'asc')->get();
+        $query = Product::query();
+        
+        // Apply search filter
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('generic_name', 'like', '%' . $search . '%')
+                  ->orWhere('manufacturer', 'like', '%' . $search . '%')
+                  ->orWhere('dosage', 'like', '%' . $search . '%');
+            });
         }
         
-        return view('admin.products.index', compact('products', 'sort'));
+        // Apply sorting
+        if ($sort === 'expiry') {
+            $products = $query->orderBy('expiry_date', 'asc')->get();
+        } else {
+            $products = $query->orderBy('name', 'asc')->get();
+        }
+        
+        return view('admin.products.index', compact('products', 'sort', 'search'));
     }
 
     /**

@@ -63,13 +63,14 @@ Route::middleware('auth')->group(function () {
     // Checkout routes
     Route::prefix('checkout')->name('checkout.')->group(function () {
         Route::get('/', [CheckoutController::class, 'index'])->name('index');
-        Route::post('/payment', [CheckoutController::class, 'payment'])->name('payment');
         Route::post('/process-payment', [CheckoutController::class, 'processPayment'])->name('process-payment');
         Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('confirmation');
         Route::get('/order-details/{order}', [CheckoutController::class, 'orderDetails'])->name('order-details');
+        Route::post('/reduce-quantity/{orderItem}', [CheckoutController::class, 'reduceQuantity'])->name('reduce-quantity');
     });
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/profile/orders', [ProfileController::class, 'orders'])->name('profile.orders');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
