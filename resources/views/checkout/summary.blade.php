@@ -1,0 +1,149 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-50 py-12">
+    <div class="max-w-6xl mx-auto px-4">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center gap-4 mb-6">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span class="text-blue-600 font-bold text-lg">1</span>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900">Checkout</h1>
+            </div>
+            <div class="h-1 bg-gradient-to-r from-blue-500 to-blue-300 rounded-full"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Main Content -->
+            <div class="lg:col-span-2">
+                <!-- Order Summary -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M9 2C7.89543 2 7 2.89543 7 4V20C7 21.1046 7.89543 22 9 22H15C16.1046 22 17 21.1046 17 20V4C17 2.89543 16.1046 2 15 2H9Z"/>
+                        </svg>
+                        Order Items
+                    </h2>
+
+                    <div class="space-y-4">
+                        @forelse($cartItems as $item)
+                            <div class="flex items-start justify-between p-4 border border-gray-200 rounded-xl hover:border-blue-300 transition-colors">
+                                <div class="flex-1">
+                                    <h3 class="font-semibold text-gray-900 mb-1">{{ $item->product->name }}</h3>
+                                    <p class="text-sm text-gray-600">{{ $item->product->generic_name ?? 'Generic' }}</p>
+                                    <p class="text-xs text-gray-500 mt-2">Quantity: {{ $item->quantity }}</p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="font-bold text-blue-600">৳{{ number_format($item->subtotal, 2) }}</p>
+                                    <p class="text-sm text-gray-600">৳{{ number_format($item->product->updated_price ?? $item->product->price, 2) }}/unit</p>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="text-center py-12">
+                                <p class="text-gray-600">Your cart is empty</p>
+                            </div>
+                        @endforelse
+                    </div>
+                </div>
+
+                <!-- Delivery Information -->
+                <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"/>
+                        </svg>
+                        Delivery Details
+                    </h2>
+
+                    <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6 mb-6">
+                        <div class="mb-4">
+                            <p class="text-sm font-semibold text-gray-700 mb-1">Delivery Address</p>
+                            <p id="deliveryAddressDisplay" class="text-lg font-bold text-gray-900">{{ $deliveryAddress }}</p>
+                        </div>
+                        <div id="deliveryCoordsDisplay"></div>
+                    </div>
+
+                    <form method="POST" action="{{ route('checkout.payment') }}" id="deliveryForm" class="space-y-4">
+                        @csrf
+                        <input type="hidden" name="delivery_address" value="{{ $deliveryAddress }}">
+                        <input type="hidden" name="delivery_fee" value="40">
+                        <input type="hidden" name="delivery_location" value="inside_dhaka">
+                        <input type="hidden" name="delivery_method" value="standard">
+
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Proceed to Payment
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Sidebar - Price Summary -->
+            <div class="lg:col-span-1">
+                <div class="bg-white rounded-2xl shadow-lg p-8 sticky top-4">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Price Summary</h3>
+
+                    <div class="space-y-4 mb-6 pb-6 border-b-2 border-gray-200">
+                        <div class="flex justify-between">
+                            <span class="text-gray-700">Subtotal</span>
+                            <span class="font-semibold text-gray-900" id="subtotalDisplay">৳{{ number_format($total, 2) }}</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700">Delivery Fee</span>
+                            <span class="font-semibold text-gray-900" id="deliveryFeeDisplay">৳40</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-700">Discount</span>
+                            <span class="font-semibold text-green-600">-৳0.00</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-lg font-bold text-gray-900">Total</span>
+                            <span class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-500 bg-clip-text text-transparent" id="totalDisplay">৳{{ number_format($total + 40, 2) }}</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-700">
+                        <p class="flex items-start gap-2">
+                            <svg class="w-4 h-4 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zm-11-1a1 1 0 11-2 0 1 1 0 012 0z" clip-rule="evenodd"/>
+                            </svg>
+                            Delivery fee varies based on location and method
+                        </p>
+                    </div>
+
+                    <div class="mt-6 text-xs text-gray-600 text-center">
+                        <p>Items: {{ $cartItems->count() }}</p>
+                        <p>Estimated delivery: 2-3 days</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Initialize delivery details from localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    const savedLocation = localStorage.getItem('mednet_delivery_location');
+    const savedCoords = localStorage.getItem('mednet_delivery_coords');
+    
+    if (savedLocation) {
+        document.getElementById('deliveryAddressDisplay').textContent = savedLocation;
+        document.getElementById('deliveryAddressInput').value = savedLocation;
+    }
+    
+    if (savedCoords) {
+        try {
+            const coords = JSON.parse(savedCoords);
+            const coordsDisplay = document.getElementById('deliveryCoordsDisplay');
+            coordsDisplay.innerHTML = `<p class="text-xs text-gray-600">📍 Lat: ${coords.lat.toFixed(4)}, Lng: ${coords.lng.toFixed(4)}</p>`;
+        } catch (e) {
+            console.error('Error parsing saved coordinates:', e);
+        }
+    }
+});
+</script>
+@endsection

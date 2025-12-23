@@ -850,32 +850,13 @@
             e.preventDefault();
 
             const address = document.querySelector('textarea[name="address"]').value;
-            const comments = document.querySelector('textarea[name="comments"]').value;
-            const deliveryOption = document.querySelector('input[name="delivery_option"]:checked').value;
+            const deliveryLocation = document.querySelector('select[name="delivery_location"]').value;
 
-            fetch('{{ route('cart.checkout') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    address: address,
-                    comments: comments,
-                    delivery_option: deliveryOption
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast(data.message, 'success');
-                    setTimeout(() => {
-                        window.location.href = data.redirect;
-                    }, 1000);
-                } else {
-                    showToast(data.message, 'error');
-                }
-            });
+            // Store delivery location in session via localStorage
+            localStorage.setItem('mednet_delivery_location', address);
+            
+            // Redirect to new checkout page
+            window.location.href = '{{ route('checkout.index') }}';
         });
 
         function showToast(message, type = 'success') {

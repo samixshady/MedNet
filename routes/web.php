@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\QuickBuyController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,15 @@ Route::middleware('auth')->group(function () {
         Route::delete('/{cartItemId}', [CartController::class, 'remove'])->name('remove');
         Route::get('/count', [CartController::class, 'count'])->name('count');
         Route::post('/checkout', [CartController::class, 'checkout'])->name('checkout');
+    });
+
+    // Checkout routes
+    Route::prefix('checkout')->name('checkout.')->group(function () {
+        Route::get('/', [CheckoutController::class, 'index'])->name('index');
+        Route::post('/payment', [CheckoutController::class, 'payment'])->name('payment');
+        Route::post('/process-payment', [CheckoutController::class, 'processPayment'])->name('process-payment');
+        Route::get('/confirmation/{order}', [CheckoutController::class, 'confirmation'])->name('confirmation');
+        Route::get('/order-details/{order}', [CheckoutController::class, 'orderDetails'])->name('order-details');
     });
     
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
