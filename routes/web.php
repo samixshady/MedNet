@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\PromoController;
+use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
@@ -86,6 +87,13 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/', [PromoController::class, 'store'])->name('store');
             Route::delete('/{promotion}', [PromoController::class, 'destroy'])->name('destroy');
             Route::post('/order', [PromoController::class, 'updateOrder'])->name('updateOrder');
+        });
+
+        // User Management routes
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('/', [UserManagementController::class, 'index'])->name('index');
+            Route::delete('/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
+            Route::post('/{user}/ban', [UserManagementController::class, 'ban'])->name('ban');
         });
     });
 });

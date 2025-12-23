@@ -279,7 +279,7 @@
             </li>
 
             <li>
-                <a href="">
+                <a href="{{ route('admin.users.index') }}">
                     <i class='bx bx-user'></i>
                     <span class="links_name">Users</span>
                 </a>
