@@ -44,24 +44,33 @@
             }
 
             .cart-items {
-                background: white;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-                overflow: hidden;
+                background: transparent;
+                border-radius: 0;
+                box-shadow: none;
+                overflow: visible;
+                display: flex;
+                flex-direction: column;
+                gap: 16px;
             }
 
             .cart-item {
                 display: grid;
-                grid-template-columns: 100px 1fr auto;
+                grid-template-columns: 120px 1fr auto;
                 gap: 20px;
                 padding: 20px;
-                border-bottom: 1px solid #e5e5e5;
-                align-items: start;
-                transition: all 0.2s ease;
+                border-bottom: none;
+                align-items: center;
+                transition: all 0.3s ease;
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+                border: 1px solid #f0f0f0;
             }
 
             .cart-item:hover {
-                background: #f9f9f9;
+                background: white;
+                box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+                transform: translateY(-2px);
             }
 
             .cart-item:last-child {
@@ -69,33 +78,35 @@
             }
 
             .item-image {
-                width: 100px;
-                height: 100px;
+                width: 120px;
+                height: 120px;
                 object-fit: cover;
-                border-radius: 8px;
-                background: #f5f5f5;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                font-size: 40px;
+                font-size: 48px;
                 color: #ccc;
             }
 
             .item-details {
                 display: flex;
                 flex-direction: column;
-                gap: 8px;
+                gap: 10px;
             }
 
             .item-name {
                 font-size: 16px;
                 font-weight: 700;
                 color: #11101D;
+                line-height: 1.4;
             }
 
             .item-generic {
                 font-size: 13px;
-                color: #666;
+                color: #999;
+                font-weight: 500;
             }
 
             .item-price {
@@ -107,44 +118,54 @@
             .item-controls {
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
+                gap: 14px;
                 align-items: flex-end;
             }
 
             .quantity-control {
                 display: flex;
                 align-items: center;
-                gap: 8px;
-                background: #f5f5f5;
+                gap: 2px;
+                background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
                 border-radius: 8px;
                 padding: 6px;
+                border: 1px solid #e9ecef;
             }
 
             .qty-btn {
-                width: 32px;
-                height: 32px;
+                width: 36px;
+                height: 36px;
                 border: none;
                 background: white;
-                border-radius: 4px;
+                border-radius: 6px;
                 cursor: pointer;
-                font-weight: 600;
+                font-weight: 700;
                 transition: all 0.2s ease;
                 display: flex;
                 align-items: center;
                 justify-content: center;
+                font-size: 16px;
+                color: #27ae60;
             }
 
             .qty-btn:hover {
-                background: #e5e5e5;
+                background: #27ae60;
+                color: white;
+                transform: scale(1.05);
+            }
+
+            .qty-btn:active {
+                transform: scale(0.95);
             }
 
             .qty-input {
-                width: 50px;
+                width: 60px;
                 text-align: center;
                 border: none;
                 background: transparent;
-                font-weight: 600;
-                font-size: 14px;
+                font-weight: 700;
+                font-size: 15px;
+                color: #11101D;
             }
 
             .qty-input::-webkit-outer-spin-button,
@@ -160,21 +181,21 @@
             }
 
             .prescription-upload {
-                margin-top: 8px;
+                margin-top: 4px;
             }
 
             .prescription-label {
                 font-size: 12px;
-                color: #666;
-                font-weight: 600;
-                margin-bottom: 4px;
+                color: #e67e22;
+                font-weight: 700;
+                margin-bottom: 6px;
                 display: block;
             }
 
             .file-input-wrapper {
                 position: relative;
                 display: inline-block;
-                width: 100%;
+                width: auto;
             }
 
             .file-input {
@@ -182,42 +203,77 @@
             }
 
             .file-btn {
-                background: #3498db;
+                background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 color: white;
-                padding: 8px 16px;
+                padding: 8px 14px;
                 border-radius: 6px;
                 font-size: 12px;
                 font-weight: 600;
                 cursor: pointer;
                 border: none;
                 transition: all 0.2s ease;
-                display: inline-block;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
             }
 
             .file-btn:hover {
-                background: #2980b9;
+                background: linear-gradient(135deg, #2980b9 0%, #1f618d 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
             }
 
             .file-name {
                 font-size: 12px;
-                color: #666;
+                color: #27ae60;
                 margin-top: 4px;
+                font-weight: 600;
             }
 
             .remove-btn {
-                background: #e74c3c;
+                background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
                 color: white;
-                border: none;
-                padding: 8px 16px;
+                padding: 8px 14px;
                 border-radius: 6px;
-                font-size: 13px;
+                font-size: 12px;
                 font-weight: 600;
                 cursor: pointer;
+                border: none;
                 transition: all 0.2s ease;
+                display: inline-flex;
+                align-items: center;
+                gap: 6px;
             }
 
             .remove-btn:hover {
-                background: #c0392b;
+                background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+            }
+
+            @media (max-width: 768px) {
+                .cart-item {
+                    grid-template-columns: 100px 1fr;
+                    gap: 16px;
+                }
+
+                .item-image {
+                    width: 100px;
+                    height: 100px;
+                    font-size: 36px;
+                }
+
+                .item-controls {
+                    grid-column: 2;
+                    align-items: flex-start;
+                }
+            }
+
+            .file-name {
+                font-size: 12px;
+                color: #27ae60;
+                margin-top: 4px;
+                font-weight: 600;
             }
 
             .empty-cart {
@@ -616,7 +672,7 @@
                                             </select>
                                         </div>
 
-                                        <div class="form-group">
+                                        <div class="form-group delivery-section-box" id="delivery_options_section">
                                             <label class="form-label">Delivery Option *</label>
                                             <div class="delivery-options">
                                                 <label class="delivery-option">
@@ -857,15 +913,20 @@
 
         function updateDeliveryOptions() {
             const location = document.getElementById('delivery_location').value;
+            const deliverySection = document.getElementById('delivery_options_section');
             
             if (!location) {
-                // Reset prices
+                // Hide delivery options and reset prices
+                deliverySection.classList.remove('show');
                 document.getElementById('standard_price').textContent = '(৳40)';
                 document.getElementById('express_price').textContent = '(৳80)';
                 document.getElementById('overnight_price').textContent = '(৳100)';
                 return;
             }
 
+            // Show delivery options
+            deliverySection.classList.add('show');
+            
             const prices = deliveryPricing[location];
             document.getElementById('standard_price').textContent = `(৳${prices.standard})`;
             document.getElementById('express_price').textContent = `(৳${prices.express})`;
