@@ -2,7 +2,10 @@
     <x-slot name="header">
         <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
         <link rel="stylesheet" href="{{ asset('css/search-bar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/quick-buy.css') }}">
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sonner@latest/dist/index.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sonner@latest/dist/styles.css" rel="stylesheet" />
     </x-slot>
 
     <!-- Sidebar Include -->
@@ -15,5 +18,10 @@
                 <!-- Search Bar Section -->
                 <div class="mb-12">
                     <x-search-bar />
+                </div>
+
+                <!-- QuickBuy Section -->
+                <div class="mb-12">
+                    <x-quick-buy-box />
                 </div>
 </x-app-layout>

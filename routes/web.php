@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\QuickBuyController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/supplements/{id}', [ProductController::class, 'show'])->name('supplements.show');
     Route::get('/first-aid', [ProductController::class, 'firstAid'])->name('first-aid');
     Route::get('/first-aid/{id}', [ProductController::class, 'show'])->name('first-aid.show');
+    
+    // QuickBuy routes
+    Route::prefix('quick-buy')->name('quick-buy.')->group(function () {
+        Route::get('/manage', [QuickBuyController::class, 'manage'])->name('manage');
+        Route::get('/items', [QuickBuyController::class, 'getItems'])->name('items');
+        Route::post('/add', [QuickBuyController::class, 'add'])->name('add');
+        Route::post('/{quickBuyId}/remove', [QuickBuyController::class, 'remove'])->name('remove');
+        Route::patch('/{quickBuyId}/quantity', [QuickBuyController::class, 'updateQuantity'])->name('updateQuantity');
+    });
     
     // Cart routes
     Route::prefix('cart')->name('cart.')->group(function () {

@@ -1,6 +1,41 @@
-<div class="w-full max-w-5xl mx-auto px-4 py-8 -ml-12">
+<div class="w-full max-w-5xl mx-auto px-4 py-8" style="transform: translateX(-400px) translateY(-100px);">
     <!-- Search Bar Container -->
     <div class="relative" x-data="searchBar()" @click.outside="open = false">
+        <!-- Category Filter (Optional) -->
+        <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Filter by Category (Optional)</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <button
+                    @click="category = 'all'; query = ''; suggestions = []"
+                    :class="category === 'all' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                    class="px-3 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                >
+                    All
+                </button>
+                <button
+                    @click="category = 'medicine'; query = ''; suggestions = []"
+                    :class="category === 'medicine' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                    class="px-3 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                >
+                    💊 Medicine
+                </button>
+                <button
+                    @click="category = 'supplement'; query = ''; suggestions = []"
+                    :class="category === 'supplement' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                    class="px-3 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                >
+                    🥤 Supplement
+                </button>
+                <button
+                    @click="category = 'first_aid'; query = ''; suggestions = []"
+                    :class="category === 'first_aid' ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'"
+                    class="px-3 py-2 rounded-lg font-semibold transition-all duration-200 text-sm"
+                >
+                    🩹 First Aid
+                </button>
+            </div>
+        </div>
+
         <!-- Input and Button Container -->
         <div class="flex gap-3">
             <!-- Search Input -->
@@ -108,6 +143,7 @@
             open: false,
             loading: false,
             debounceTimer: null,
+            category: 'all',
 
             handleInput() {
                 clearTimeout(this.debounceTimer);
@@ -127,12 +163,23 @@
 
             async fetchSuggestions() {
                 try {
-                    const response = await fetch(
-                        `/search?q=${encodeURIComponent(this.query)}`
-                    );
+                    let url = `/search?q=${encodeURIComponent(this.query)}`;
+                    if (this.category !== 'all') {
+                        url += `&category=${this.category}`;
+                    }
+                    const response = await fetch(url);
                     const data = await response.json();
-                    this.suggestions = data;
-                    this.open = data.length > 0;
+                    
+                    // Filter by category if selected
+                    if (this.category !== 'all') {
+                        this.suggestions = data.filter(item => {
+                            const itemTag = item.type.toLowerCase().replace(' ', '_');
+                            return itemTag === this.category;
+                        });
+                    } else {
+                        this.suggestions = data;
+                    }
+                    this.open = this.suggestions.length > 0;
                 } catch (error) {
                     console.error('Search error:', error);
                     this.suggestions = [];

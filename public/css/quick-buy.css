@@ -1,0 +1,311 @@
+/* QuickBuy Component Styles */
+
+/* Quick Buy Container */
+.quick-buy-container {
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+}
+
+.quick-buy-container:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Quick Buy Item Card */
+.quick-buy-item {
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.quick-buy-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.quick-buy-item img {
+    transition: transform 0.3s ease;
+}
+
+.quick-buy-item:hover img {
+    transform: scale(1.1);
+}
+
+/* Quick Buy Card (in manage page) */
+.quick-buy-card {
+    transition: all 0.3s ease;
+    border: 1px solid #f3f4f6;
+}
+
+.quick-buy-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+/* Smooth Animations */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.quick-buy-item {
+    animation: slideIn 0.3s ease;
+}
+
+/* Quantity Input Styles */
+.quick-buy-item input[type="number"] {
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.quick-buy-item input[type="number"]:focus {
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    border-color: #3b82f6;
+}
+
+/* Button Styles */
+.quick-buy-item button {
+    transition: all 0.2s ease;
+}
+
+.quick-buy-item button:active {
+    transform: scale(0.95);
+}
+
+/* Add to Cart Button */
+.quick-buy-item button:not(.remove-btn) {
+    position: relative;
+    overflow: hidden;
+}
+
+.quick-buy-item button:not(.remove-btn)::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.quick-buy-item button:not(.remove-btn):hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+/* Remove Button */
+.remove-btn {
+    transition: background-color 0.2s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .quick-buy-item {
+        margin-bottom: 1rem;
+    }
+
+    .quick-buy-item .p-4 {
+        padding: 1rem;
+    }
+}
+
+/* Loading Spinner */
+.animate-spin {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Smooth transition for dropdowns */
+.quick-buy-dropdown {
+    transition: all 0.2s ease;
+    transform-origin: top;
+}
+
+/* Custom scrollbar for suggestion lists */
+.suggestion-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.suggestion-list::-webkit-scrollbar-track {
+    background: #f3f4f6;
+    border-radius: 10px;
+}
+
+.suggestion-list::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 10px;
+    transition: background 0.2s ease;
+}
+
+.suggestion-list::-webkit-scrollbar-thumb:hover {
+    background: #9ca3af;
+}
+
+/* Empty state styling */
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+    text-align: center;
+}
+
+.empty-state svg {
+    margin-bottom: 1rem;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Hover effects for product items */
+.product-suggestion {
+    transition: all 0.15s ease;
+}
+
+.product-suggestion:hover {
+    background-color: #f9fafb;
+    padding-left: 1.5rem;
+}
+
+/* Badge styles */
+.product-type-badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.product-type-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Medicine badge */
+.badge-medicine {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+/* Supplement badge */
+.badge-supplement {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+/* First aid badge */
+.badge-first-aid {
+    background-color: #fee2e2;
+    color: #b91c1c;
+}
+
+/* Grid animation for items appearing */
+.grid > div {
+    animation: slideIn 0.3s ease;
+}
+
+/* Stagger animation for grid items */
+.grid > div:nth-child(1) {
+    animation-delay: 0.05s;
+}
+
+.grid > div:nth-child(2) {
+    animation-delay: 0.1s;
+}
+
+.grid > div:nth-child(3) {
+    animation-delay: 0.15s;
+}
+
+.grid > div:nth-child(4) {
+    animation-delay: 0.2s;
+}
+
+.grid > div:nth-child(n+5) {
+    animation-delay: 0.25s;
+}
+
+/* Disabled state */
+.quick-buy-item button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.quick-buy-item button:disabled:hover {
+    background-color: inherit;
+    transform: none;
+}
+
+/* Success animation */
+@keyframes successPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+    }
+}
+
+.success-pulse {
+    animation: successPulse 0.6s ease;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+    .quick-buy-card {
+        background-color: #1f2937;
+        color: #f3f4f6;
+        border-color: #374151;
+    }
+
+    .product-suggestion:hover {
+        background-color: #374151;
+    }
+
+    .quick-buy-item {
+        background-color: #111827;
+        border-color: #374151;
+    }
+}
+
+/* Print styles */
+@media print {
+    .quick-buy-item button,
+    .quick-buy-container a {
+        display: none;
+    }
+}
