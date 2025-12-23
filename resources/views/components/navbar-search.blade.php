@@ -28,7 +28,8 @@
                 x-transition:leave="transition ease-in duration-150"
                 x-transition:leave-start="opacity-100 scale-100"
                 x-transition:leave-end="opacity-0 scale-95"
-                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl z-50 max-h-96 overflow-y-auto border border-gray-200"
+                style="z-index: 9999; position: absolute;"
+                class="top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-2xl max-h-96 overflow-y-auto border border-gray-200"
             >
                 <!-- Desktop Suggestions List -->
                 <template x-for="(suggestion, index) in suggestions" :key="index">
@@ -70,7 +71,8 @@
             <!-- Desktop No Results -->
             <div
                 x-show="open && query.length >= 2 && suggestions.length === 0 && !loading"
-                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl p-6 text-center text-gray-600 z-50 border border-gray-200"
+                style="z-index: 9999; position: absolute;"
+                class="top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-2xl p-6 text-center text-gray-600 border border-gray-200"
             >
                 <p class="text-base font-medium text-gray-700">No products found</p>
             </div>
@@ -98,7 +100,8 @@
         x-transition:leave-start="opacity-100"
         x-transition:leave-end="opacity-0"
         @click.self="mobileSearchOpen = false"
-        class="fixed inset-0 bg-black bg-opacity-50 z-50 md:hidden"
+        style="z-index: 9999;"
+        class="fixed inset-0 bg-black bg-opacity-50 md:hidden"
     >
         <div class="bg-white rounded-b-2xl shadow-2xl">
             <div class="px-4 py-4 flex items-center gap-3 border-b border-gray-200">

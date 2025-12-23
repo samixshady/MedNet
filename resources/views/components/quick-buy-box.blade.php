@@ -1,12 +1,20 @@
-<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: 250px; top: 100px; z-index: 50;">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: 250px; top: 100px; z-index: 10;">
     <!-- Header with Edit Button -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 flex justify-between items-center flex-shrink-0">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 flex justify-between items-center flex-shrink-0 gap-2">
         <div>
             <h2 class="text-lg font-bold text-white">⚡ QuickBuy</h2>
         </div>
-        <a href="{{ route('quick-buy.manage') }}" class="px-4 py-2 text-sm bg-white text-blue-600 hover:bg-blue-50 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95">
-            ✏️ Edit
-        </a>
+        <div class="flex gap-2">
+            <button 
+                onclick="addAllToCart()" 
+                class="px-4 py-2 text-sm bg-green-500 text-white hover:bg-green-600 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95"
+            >
+                🛒 Add All to Cart
+            </button>
+            <a href="{{ route('quick-buy.manage') }}" class="px-4 py-2 text-sm bg-white text-blue-600 hover:bg-blue-50 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95">
+                ✏️ Edit
+            </a>
+        </div>
     </div>
 
     <!-- QuickBuy Items -->
@@ -57,6 +65,7 @@
                                     <th class="px-4 py-3 text-left font-bold text-gray-800" style="font-size: 1.05rem;">Name</th>
                                     <th class="px-4 py-3 text-center font-bold text-gray-800" style="width: 80px; font-size: 1.05rem;">Qty</th>
                                     <th class="px-4 py-3 text-right font-bold text-gray-800" style="width: 100px; font-size: 1.05rem;">Price</th>
+                                    <th class="px-4 py-3 text-center font-bold text-gray-800" style="width: 90px; font-size: 0.95rem;">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -65,6 +74,14 @@
                                         <td class="px-4 py-3 text-gray-900 font-semibold truncate" style="font-size: 1rem;">${item.name}</td>
                                         <td class="px-4 py-3 text-center text-gray-900 font-bold" style="font-size: 1.1rem;">${item.quantity || 1}</td>
                                         <td class="px-4 py-3 text-right text-green-600 font-bold" style="font-size: 1rem;">৳${item.price.toFixed(0)}</td>
+                                        <td class="px-4 py-3 text-center">
+                                            <button 
+                                                onclick="addSingleToCart(${item.product_id}, ${item.quantity || 1})"
+                                                class="px-3 py-1 bg-green-500 hover:bg-green-600 text-white font-bold text-xs rounded transition-all duration-200 active:scale-95"
+                                            >
+                                                Add
+                                            </button>
+                                        </td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -73,6 +90,138 @@
                 }
             })
             .catch(error => console.error('Error loading QuickBuy dashboard:', error));
+    }
+
+    function addSingleToCart(productId, quantity) {
+        console.log('Adding single item to cart:', productId, 'Quantity:', quantity);
+        
+        fetch('/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+            },
+            body: JSON.stringify({
+                product_id: productId,
+                quantity: quantity
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Cart add response:', data);
+            if (data.success) {
+                if (typeof Sonner !== 'undefined') {
+                    Sonner.toast.success(data.message);
+                } else {
+                    alert(data.message);
+                }
+                // Update cart count if available
+                if (window.updateCartCount) {
+                    window.updateCartCount(data.cartCount);
+                }
+            } else {
+                if (typeof Sonner !== 'undefined') {
+                    Sonner.toast.error(data.message);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error adding to cart:', error);
+            if (typeof Sonner !== 'undefined') {
+                Sonner.toast.error('Failed to add to cart');
+            } else {
+                alert('Failed to add to cart');
+            }
+        });
+    }
+
+    function addAllToCart() {
+        console.log('Adding all QuickBuy items to cart');
+        
+        fetch('/quick-buy/items')
+            .then(response => response.json())
+            .then(items => {
+                if (items.length === 0) {
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.error('No items in QuickBuy');
+                    } else {
+                        alert('No items in QuickBuy');
+                    }
+                    return;
+                }
+
+                console.log('Adding', items.length, 'items to cart');
+                
+                // Add each item to cart
+                let successCount = 0;
+                let errorCount = 0;
+                
+                const addPromises = items.map(item => 
+                    fetch('/cart/add', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        },
+                        body: JSON.stringify({
+                            product_id: item.product_id,
+                            quantity: item.quantity || 1
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            successCount++;
+                        } else {
+                            errorCount++;
+                        }
+                        return data;
+                    })
+                    .catch(error => {
+                        console.error('Error adding item to cart:', error);
+                        errorCount++;
+                    })
+                );
+
+                Promise.all(addPromises).then(results => {
+                    console.log('Add to cart results - Success:', successCount, 'Error:', errorCount);
+                    
+                    if (successCount > 0 && errorCount === 0) {
+                        if (typeof Sonner !== 'undefined') {
+                            Sonner.toast.success(`Added ${successCount} item${successCount > 1 ? 's' : ''} to cart`);
+                        } else {
+                            alert(`Added ${successCount} item${successCount > 1 ? 's' : ''} to cart`);
+                        }
+                    } else if (successCount > 0 && errorCount > 0) {
+                        if (typeof Sonner !== 'undefined') {
+                            Sonner.toast.warning(`Added ${successCount} item${successCount > 1 ? 's' : ''}, ${errorCount} failed`);
+                        } else {
+                            alert(`Added ${successCount} item${successCount > 1 ? 's' : ''}, ${errorCount} failed`);
+                        }
+                    } else {
+                        if (typeof Sonner !== 'undefined') {
+                            Sonner.toast.error('Failed to add items to cart');
+                        } else {
+                            alert('Failed to add items to cart');
+                        }
+                    }
+                    
+                    // Update cart count if available
+                    if (window.updateCartCount) {
+                        window.updateCartCount();
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error loading QuickBuy items:', error);
+                if (typeof Sonner !== 'undefined') {
+                    Sonner.toast.error('Failed to load QuickBuy items');
+                } else {
+                    alert('Failed to load QuickBuy items');
+                }
+            });
     }
 
     function addToCartFromQuickBuy(productId, quickBuyId) {
@@ -106,23 +255,39 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    sonner.success(data.message);
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.success(data.message);
+                    } else {
+                        alert(data.message);
+                    }
                     // Update cart count if available
                     if (window.updateCartCount) {
                         window.updateCartCount(data.cartCount);
                     }
                 } else {
-                    sonner.error(data.message);
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.error(data.message);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
                 }
             })
             .catch(error => {
                 console.error('Error adding to cart:', error);
-                sonner.error('Failed to add to cart');
+                if (typeof Sonner !== 'undefined') {
+                    Sonner.toast.error('Failed to add to cart');
+                } else {
+                    alert('Failed to add to cart');
+                }
             });
         })
         .catch(error => {
             console.error('Error updating quantity:', error);
-            sonner.error('Failed to update quantity');
+            if (typeof Sonner !== 'undefined') {
+                Sonner.toast.error('Failed to update quantity');
+            } else {
+                alert('Failed to update quantity');
+            }
         });
     }
 </script>
