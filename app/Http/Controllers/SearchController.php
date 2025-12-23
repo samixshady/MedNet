@@ -26,7 +26,7 @@ class SearchController extends Controller
                 $q->whereRaw('LOWER(name) LIKE LOWER(?)', ["{$query}%"])
                   ->orWhereRaw('LOWER(generic_name) LIKE LOWER(?)', ["{$query}%"]);
             })
-            ->select('id', 'name', 'generic_name', 'dosage', 'tag', 'updated_price', 'image_path')
+            ->select('id', 'name', 'generic_name', 'dosage', 'tag', 'updated_price', 'price', 'image_path')
             ->orderByRaw("
                 CASE 
                     WHEN LOWER(name) LIKE LOWER(?) THEN 1
@@ -46,13 +46,16 @@ class SearchController extends Controller
                 
                 $routeName = $tagRouteMap[$product->tag] ?? 'medicine.show';
                 
+                // Use updated_price if available, otherwise fall back to price
+                $productPrice = $product->updated_price ?? $product->price ?? 0;
+                
                 return [
                     'id' => $product->id,
                     'name' => $product->name,
                     'generic_name' => $product->generic_name,
                     'dosage' => $product->dosage,
                     'type' => ucfirst(str_replace('_', ' ', $product->tag)),
-                    'price' => number_format($product->updated_price, 2),
+                    'price' => (float) $productPrice,
                     'image_path' => $product->image_path,
                     'url' => route($routeName, $product->id),
                 ];

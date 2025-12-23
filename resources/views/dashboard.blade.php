@@ -16,13 +16,4 @@
                 <div class="mb-12">
                     <x-search-bar />
                 </div>
-
-                <!-- Welcome Section -->
-                <div class="bg-white rounded-lg shadow-md p-8">
-                    <h1 class="text-3xl font-bold text-gray-900 mb-2">Welcome to MedNet</h1>
-                    <p class="text-gray-600">Browse our extensive collection of medicines, supplements, and first aid products.</p>
-                </div>
-            </div>
-        </div>
-    </div>
 </x-app-layout>

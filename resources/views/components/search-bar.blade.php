@@ -1,4 +1,4 @@
-<div class="w-full max-w-5xl mx-auto px-4 py-8">
+<div class="w-full max-w-5xl mx-auto px-4 py-8 -ml-12">
     <!-- Search Bar Container -->
     <div class="relative" x-data="searchBar()" @click.outside="open = false">
         <!-- Input and Button Container -->
@@ -65,7 +65,7 @@
                             <div class="flex flex-wrap items-center gap-3 mt-2">
                                 <span class="px-3 py-1.5 bg-blue-100 text-blue-800 rounded-full font-semibold text-sm" x-text="suggestion.type"></span>
                                 <span class="text-base text-gray-600 font-medium" x-text="suggestion.dosage"></span>
-                                <span class="font-bold text-lg text-green-600" x-text="'₱' + suggestion.price"></span>
+                                <span class="font-bold text-lg text-green-600" x-text="'৳ ' + suggestion.price.toFixed(2)"></span>
                             </div>
                         </div>
 
