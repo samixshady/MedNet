@@ -69,7 +69,7 @@
                             </div>
                             
                             <!-- Search Bar from Dashboard -->
-                            <div class="relative" x-data="quickBuySearch()" @click.outside="open = false">
+                            <div class="relative" x-data="quickBuySearch()" @click.outside="if (!$event.target.closest('button[type=button]')) open = false">
                                 <div class="flex gap-3">
                                     <input
                                         type="text"
@@ -96,9 +96,10 @@
                                 <div
                                     x-show="open && suggestions.length > 0"
                                     x-transition:enter="transition ease-out duration-200"
-                                    x-transition:enter-start="opacity-0 -translate-y-2"
-                                    x-transition:enter-end="opacity-100 translate-y-0"
-                                    class="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-gray-200 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto"
+                                    x-transition:enter-start="opacity-0 scale-95"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    class="absolute top-full left-0 right-0 mt-2 bg-white border-2 border-gray-200 rounded-lg shadow-2xl z-50 max-h-80 overflow-y-auto"
+                                    @click.away="open = false"
                                 >
                                     <template x-for="(suggestion, index) in suggestions" :key="index">
                                         <div
@@ -125,10 +126,13 @@
                                                     </div>
                                                 </div>
                                                 <button
-                                                    @click="addToQuickBuy(suggestion)"
-                                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-all duration-200 flex-shrink-0"
+                                                    type="button"
+                                                    @click="addToQuickBuy(suggestion); $event.stopPropagation();"
+                                                    :disabled="isAdding"
+                                                    class="px-4 py-2 bg-green-600 hover:bg-green-700 disabled:bg-green-400 disabled:cursor-not-allowed text-white font-bold rounded-lg transition-all duration-200 flex-shrink-0 whitespace-nowrap"
                                                 >
-                                                    Add
+                                                    <span x-show="!isAdding">Add</span>
+                                                    <span x-show="isAdding">Adding...</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -219,6 +223,7 @@
                 open: false,
                 loading: false,
                 debounceTimer: null,
+                isAdding: false,
 
                 handleInput() {
                     clearTimeout(this.debounceTimer);
@@ -242,8 +247,10 @@
                         if (selectedCategory !== 'all') {
                             url += `&category=${selectedCategory}`;
                         }
+                        console.log('Fetching from URL:', url);
                         const response = await fetch(url);
                         const data = await response.json();
+                        console.log('Search results:', data);
                         
                         // Filter by category if selected
                         if (selectedCategory !== 'all') {
@@ -251,6 +258,7 @@
                         } else {
                             this.suggestions = data;
                         }
+                        console.log('Filtered suggestions:', this.suggestions);
                         this.open = this.suggestions.length > 0;
                     } catch (error) {
                         console.error('Search error:', error);
@@ -285,6 +293,11 @@
                 },
 
                 async addToQuickBuy(product) {
+                    if (this.isAdding) return; // Prevent duplicate submissions
+                    
+                    console.log('Adding to QuickBuy:', product);
+                    
+                    this.isAdding = true;
                     try {
                         const response = await fetch('/quick-buy/add', {
                             method: 'POST',
@@ -296,19 +309,43 @@
                         });
 
                         const data = await response.json();
+                        console.log('QuickBuy add response:', data);
 
                         if (data.success) {
-                            sonner.success(data.message);
                             this.query = '';
                             this.suggestions = [];
                             this.open = false;
-                            setTimeout(() => loadQuickBuyItems(), 300);
+                            this.selectedIndex = -1;
+                            
+                            // Show success notification
+                            if (typeof Sonner !== 'undefined') {
+                                Sonner.toast.success(data.message);
+                            } else {
+                                alert(data.message);
+                            }
+                            
+                            // Reload items after a short delay to ensure DB write completes
+                            console.log('Reloading items in 800ms...');
+                            setTimeout(() => {
+                                console.log('Calling loadQuickBuyItems from add');
+                                loadQuickBuyItems();
+                            }, 800);
                         } else {
-                            sonner.error(data.message);
+                            if (typeof Sonner !== 'undefined') {
+                                Sonner.toast.error(data.message);
+                            } else {
+                                alert('Error: ' + data.message);
+                            }
                         }
                     } catch (error) {
                         console.error('Error adding to QuickBuy:', error);
-                        sonner.error('Failed to add to QuickBuy');
+                        if (typeof Sonner !== 'undefined') {
+                            Sonner.toast.error('Failed to add to QuickBuy');
+                        } else {
+                            alert('Failed to add to QuickBuy');
+                        }
+                    } finally {
+                        this.isAdding = false;
                     }
                 }
             }
@@ -316,68 +353,141 @@
 
         // Load QuickBuy items on page load
         function loadQuickBuyItems() {
+            console.log('loadQuickBuyItems called');
             fetch('/quick-buy/items')
-                .then(response => response.json())
+                .then(response => {
+                    console.log('Items response status:', response.status);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
                 .then(items => {
+                    console.log('Loaded items:', items);
+                    console.log('Number of items:', items.length);
+                    
                     const container = document.getElementById('quickbuy-items-container');
                     const emptyState = document.getElementById('empty-state');
                     const countEl = document.querySelector('#quickbuy-count span');
 
+                    if (!container) {
+                        console.error('Container not found');
+                        return;
+                    }
+
                     countEl.textContent = items.length;
+                    console.log('Updated count to:', items.length);
 
                     if (items.length === 0) {
+                        console.log('No items - showing empty state');
                         container.innerHTML = '';
                         emptyState.style.display = 'block';
                     } else {
+                        console.log('Rendering', items.length, 'items');
                         emptyState.style.display = 'none';
                         container.innerHTML = items.map(item => `
-                            <div class="quick-buy-card bg-gray-50 rounded-lg p-4 hover:shadow-lg transition-all duration-300">
-                                ${item.image_path ? `<img src="/storage/${item.image_path}" alt="${item.name}" class="w-full h-40 object-cover rounded-lg mb-3">` : ''}
-                                <h3 class="font-bold text-gray-900 truncate">${item.name}</h3>
-                                <p class="text-sm text-gray-600 truncate">${item.generic_name}</p>
-                                <div class="flex items-center gap-2 mt-2 text-xs">
-                                    <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded font-semibold">${item.type}</span>
-                                    <span class="text-gray-600">${item.dosage}</span>
-                                </div>
-                                <p class="text-lg font-bold text-green-600 mt-3">৳ ${item.price.toFixed(2)}</p>
-                                <div class="flex gap-2 mt-4">
-                                    <button onclick="removeFromQuickBuy(${item.id})" class="flex-1 px-3 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 text-sm">
-                                        Remove
-                                    </button>
+                            <div class="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 overflow-hidden">
+                                ${item.image_path ? `<img src="/storage/${item.image_path}" alt="${item.name}" class="w-full h-40 object-cover">` : '<div class="w-full h-40 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center"><span class="text-4xl">📦</span></div>'}
+                                <div class="p-5">
+                                    <h3 class="font-bold text-gray-900 text-lg truncate">${item.name}</h3>
+                                    <p class="text-sm text-gray-600 truncate mt-1">${item.generic_name || 'N/A'}</p>
+                                    <div class="flex items-center gap-2 mt-3 text-xs flex-wrap">
+                                        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-semibold">${item.type || 'Product'}</span>
+                                        <span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full">${item.dosage || ''}</span>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <p class="text-xl font-bold text-green-600">৳ ${item.price.toFixed(2)}</p>
+                                        <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-semibold">In Stock</span>
+                                    </div>
+                                    <div class="mt-4 flex gap-2">
+                                        <button type="button" onclick="removeFromQuickBuy(${item.id})" class="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-all duration-200 text-sm active:scale-95">
+                                            Remove
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         `).join('');
-                    }
-                })
-                .catch(error => console.error('Error loading QuickBuy items:', error));
-        }
-
-        function removeFromQuickBuy(quickBuyId) {
-            if (confirm('Remove this item from QuickBuy?')) {
-                fetch(`/quick-buy/${quickBuyId}/remove`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        sonner.success(data.message);
-                        loadQuickBuyItems();
-                    } else {
-                        sonner.error(data.message);
+                        console.log('Items rendered successfully');
                     }
                 })
                 .catch(error => {
-                    console.error('Error:', error);
-                    sonner.error('Failed to remove item');
+                    console.error('Error loading QuickBuy items:', error);
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.error('Failed to load QuickBuy items: ' + error.message);
+                    } else {
+                        alert('Failed to load QuickBuy items');
+                    }
                 });
-            }
         }
 
-        // Load items on page load
-        document.addEventListener('DOMContentLoaded', loadQuickBuyItems);
+        function removeFromQuickBuy(quickBuyId) {
+            console.log('Remove clicked - QuickBuy ID:', quickBuyId);
+            
+            if (!confirm('Remove this item from QuickBuy?')) {
+                console.log('Remove cancelled');
+                return;
+            }
+            
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+            console.log('CSRF Token present:', !!csrfToken);
+            console.log('Sending POST to /quick-buy/' + quickBuyId + '/remove');
+            
+            fetch(`/quick-buy/${quickBuyId}/remove`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                }
+            })
+            .then(response => {
+                console.log('Remove response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Remove response data:', data);
+                if (data.success) {
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.success(data.message);
+                    } else {
+                        alert(data.message);
+                    }
+                    console.log('Reloading items after remove...');
+                    setTimeout(() => {
+                        console.log('Calling loadQuickBuyItems from remove');
+                        loadQuickBuyItems();
+                    }, 500);
+                } else {
+                    if (typeof Sonner !== 'undefined') {
+                        Sonner.toast.error(data.message);
+                    } else {
+                        alert('Error: ' + data.message);
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Remove error:', error);
+                if (typeof Sonner !== 'undefined') {
+                    Sonner.toast.error('Failed to remove item: ' + error.message);
+                } else {
+                    alert('Failed to remove item: ' + error.message);
+                }
+            });
+        }
+
+        // Load items on page load and refresh periodically
+        window.addEventListener('load', function() {
+            console.log('Page loaded, initializing QuickBuy');
+            loadQuickBuyItems();
+        });
+        
+        // Also call it immediately in case DOMContentLoaded already fired
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadQuickBuyItems);
+        } else {
+            loadQuickBuyItems();
+        }
     </script>
 </x-app-layout>
