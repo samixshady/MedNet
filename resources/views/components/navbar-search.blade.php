@@ -1,7 +1,7 @@
 <!-- Navbar Search Bar - Mobile Friendly & Sleek Design -->
 <div class="flex items-center flex-1" x-data="navbarSearch()" @click.outside="open = false">
     <!-- Desktop Search (md and above) -->
-    <div class="hidden md:flex items-center flex-1 max-w-sm mx-4 relative">
+    <div class="hidden md:flex items-center flex-1 max-w-2xl mx-4 relative">
         <div class="w-full relative">
             <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
@@ -16,7 +16,7 @@
                 @keydown.escape="open = false"
                 @focus="query.length >= 2 && (open = true)"
                 placeholder="Search products..."
-                class="w-full pl-10 pr-4 py-2.5 bg-white bg-opacity-95 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white transition-all duration-200 text-sm text-gray-800 placeholder-gray-500 shadow-sm hover:shadow-md"
+                class="w-full pl-10 pr-4 py-2.5 bg-white bg-opacity-95 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:bg-white transition-all duration-200 text-base text-gray-800 placeholder-gray-500 shadow-sm hover:shadow-md"
             />
 
             <!-- Desktop Suggestions Dropdown -->
@@ -36,21 +36,21 @@
                         @click="selectSuggestion(suggestion)"
                         @mouseenter="selectedIndex = index"
                         :class="selectedIndex === index ? 'bg-blue-50 border-l-4 border-blue-600' : 'hover:bg-gray-50'"
-                        class="px-4 py-3 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 flex items-center gap-3"
+                        class="px-4 py-4 cursor-pointer border-b border-gray-100 last:border-b-0 transition-all duration-150 flex items-center gap-3"
                     >
                         <template x-if="suggestion.image_path">
                             <img
                                 :src="'/storage/' + suggestion.image_path"
                                 :alt="suggestion.name"
-                                class="w-10 h-10 object-cover rounded-md flex-shrink-0"
+                                class="w-12 h-12 object-cover rounded-md flex-shrink-0"
                                 onerror="this.style.display='none'"
                             />
                         </template>
                         <div class="flex-1 min-w-0">
-                            <p class="text-sm font-semibold text-gray-900 truncate" x-text="suggestion.name"></p>
+                            <p class="text-base font-semibold text-gray-900 truncate" x-text="suggestion.name"></p>
                             <div class="flex items-center gap-2 mt-1">
-                                <span class="text-xs px-2 py-0.5 bg-blue-100 text-blue-700 rounded-full font-medium" x-text="suggestion.type"></span>
-                                <span class="text-xs text-green-600 font-bold" x-text="'৳ ' + suggestion.price.toFixed(2)"></span>
+                                <span class="text-sm px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium" x-text="suggestion.type"></span>
+                                <span class="text-sm text-green-600 font-bold" x-text="'৳ ' + suggestion.price.toFixed(2)"></span>
                             </div>
                         </div>
                     </div>
@@ -58,10 +58,11 @@
 
                 <!-- Desktop Loading State -->
                 <template x-if="loading">
-                    <div class="px-4 py-4 text-center">
+                    <div class="px-4 py-6 text-center">
                         <div class="inline-block">
-                            <div class="animate-spin rounded-full h-6 w-6 border-3 border-blue-200 border-t-blue-600"></div>
+                            <div class="animate-spin rounded-full h-7 w-7 border-3 border-blue-200 border-t-blue-600"></div>
                         </div>
+                        <p class="mt-2 text-sm text-gray-600">Searching...</p>
                     </div>
                 </template>
             </div>
@@ -69,9 +70,9 @@
             <!-- Desktop No Results -->
             <div
                 x-show="open && query.length >= 2 && suggestions.length === 0 && !loading"
-                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl p-4 text-center text-gray-600 z-50 border border-gray-200"
+                class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl p-6 text-center text-gray-600 z-50 border border-gray-200"
             >
-                <p class="text-sm font-medium text-gray-700">No products found</p>
+                <p class="text-base font-medium text-gray-700">No products found</p>
             </div>
         </div>
     </div>
@@ -138,11 +139,11 @@
                             />
                         </template>
                         <div class="flex-1 min-w-0">
-                            <p class="text-base font-semibold text-gray-900 truncate" x-text="suggestion.name"></p>
-                            <p class="text-sm text-gray-600 truncate mt-1" x-text="suggestion.generic_name"></p>
+                            <p class="text-lg font-semibold text-gray-900 truncate" x-text="suggestion.name"></p>
+                            <p class="text-base text-gray-600 truncate mt-1" x-text="suggestion.generic_name"></p>
                             <div class="flex items-center gap-2 mt-2">
-                                <span class="text-xs px-2 py-1 bg-blue-100 text-blue-700 rounded-full font-medium" x-text="suggestion.type"></span>
-                                <span class="text-sm text-green-600 font-bold" x-text="'৳ ' + suggestion.price.toFixed(2)"></span>
+                                <span class="text-sm px-3 py-1 bg-blue-100 text-blue-700 rounded-full font-medium" x-text="suggestion.type"></span>
+                                <span class="text-base text-green-600 font-bold" x-text="'৳ ' + suggestion.price.toFixed(2)"></span>
                             </div>
                         </div>
                         <svg class="w-5 h-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
