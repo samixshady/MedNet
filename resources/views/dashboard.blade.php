@@ -22,6 +22,9 @@
                     <!-- Promotional Slider to the Right -->
                     <x-promotional-slider :promotions="$promotions" />
                 </div>
+
+                <!-- Discount Carousel Section -->
+                <x-discount-carousel :discountedProducts="$discountedProducts" />
             </div>
         </div>
     </div>

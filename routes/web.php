@@ -19,7 +19,14 @@ Route::get('/dashboard', function () {
         ->orderBy('display_order')
         ->take(6)
         ->get();
-    return view('dashboard', ['promotions' => $promotions]);
+    
+    $discountedProducts = \App\Models\Product::where('discount', '>', 0)
+        ->where('stock_status', '!=', 'out_of_stock')
+        ->orderBy('discount', 'desc')
+        ->take(20)
+        ->get();
+    
+    return view('dashboard', ['promotions' => $promotions, 'discountedProducts' => $discountedProducts]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
