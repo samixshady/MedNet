@@ -796,23 +796,21 @@
         }
 
         function removeItem(itemId) {
-            if (confirm('Are you sure you want to remove this item from your cart?')) {
-                fetch(`/cart/${itemId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast(data.message, 'success');
-                        setTimeout(() => {
-                            location.reload();
-                        }, 500);
-                    }
-                });
-            }
+            fetch(`/cart/${itemId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast(data.message, 'success');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 500);
+                }
+            });
         }
 
         function updateSummary(subtotal, total) {

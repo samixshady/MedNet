@@ -35,6 +35,20 @@
 <link href="https://cdn.jsdelivr.net/npm/sonner@latest/dist/styles.css" rel="stylesheet" />
 
 <script>
+    // Helper function to update cart badge
+    function updateCartBadgeWithCount(count) {
+        console.log('Updating cart badge with count:', count);
+        const badge = document.getElementById('cart-badge');
+        if (!badge) return;
+        
+        if (count > 0) {
+            badge.textContent = count;
+            badge.style.display = 'inline-flex';
+        } else {
+            badge.style.display = 'none';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         loadQuickBuyDashboard();
     });
@@ -115,9 +129,9 @@
                 } else {
                     alert(data.message);
                 }
-                // Update cart count if available
-                if (window.updateCartCount) {
-                    window.updateCartCount(data.cartCount);
+                // Update cart badge with count from response
+                if (data.cartCount !== undefined) {
+                    updateCartBadgeWithCount(data.cartCount);
                 }
             } else {
                 if (typeof Sonner !== 'undefined') {
@@ -208,9 +222,9 @@
                         }
                     }
                     
-                    // Update cart count if available
-                    if (window.updateCartCount) {
-                        window.updateCartCount();
+                    // Update cart badge - fetch current count to get accurate total
+                    if (window.updateCartBadge) {
+                        window.updateCartBadge();
                     }
                 });
             })
