@@ -79,12 +79,14 @@
             background: white;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
+            overflow: auto;
+            border: 1px solid #e5e5e5;
         }
 
         .products-table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: auto;
         }
 
         .products-table thead {
@@ -92,26 +94,37 @@
         }
 
         .products-table th {
-            padding: 16px;
+            padding: 12px 10px;
             text-align: left;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: uppercase;
-            color: #333;
-            border-bottom: 2px solid #e5e5e5;
+            color: #555;
+            border-bottom: 2px solid #d0d0d0;
+            border-right: 1px solid #e5e5e5;
+            background: linear-gradient(135deg, #f8f9fa 0%, #f0f2f5 100%);
+            white-space: nowrap;
+        }
+
+        .products-table th:last-child {
+            border-right: none;
         }
 
         .products-table td {
-            padding: 16px;
+            padding: 12px 10px;
             border-bottom: 1px solid #e5e5e5;
+            border-right: 1px solid #f0f0f0;
             color: #333;
-            font-size: 14px;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .products-table td:last-child {
+            border-right: none;
         }
 
         .products-table tbody tr:hover {
-            background-color: #f5f5f5;
-            border: 1px solid #000;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            background-color: #f9f9f9;
             transition: all 0.2s ease;
         }
 
@@ -185,17 +198,17 @@
         }
 
         .product-image {
-            width: 50px;
-            height: 50px;
+            width: 45px;
+            height: 45px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 5px;
         }
 
         .tag {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: 600;
             text-transform: capitalize;
         }
@@ -217,9 +230,9 @@
 
         .stock-status {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 11px;
             font-weight: 600;
         }
 
@@ -240,9 +253,9 @@
 
         .prescription-badge {
             display: inline-block;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 11px;
             font-weight: 600;
         }
 
@@ -270,18 +283,18 @@
 
         .discount-badge {
             display: inline-block;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 5px;
+            font-size: 11px;
             font-weight: 700;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            min-width: 45px;
+            min-width: 40px;
             text-align: center;
         }
 
         .discount-badge.no-discount {
-            background: #e0e0e0;
+            background: #e8e8e8;
             color: #999;
             font-weight: 600;
         }
@@ -289,12 +302,12 @@
         .discounted-price {
             font-weight: 700;
             color: white;
-            font-size: 15px;
+            font-size: 13px;
             background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 4px 10px;
+            border-radius: 5px;
             display: inline-block;
-            min-width: 60px;
+            min-width: 55px;
             text-align: center;
         }
 
@@ -307,22 +320,23 @@
 
         .action-buttons {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             align-items: center;
             justify-content: center;
+            white-space: nowrap;
         }
 
         .btn-edit, .btn-delete {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 6px;
+            width: 32px;
+            height: 32px;
+            border-radius: 5px;
             border: none;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 18px;
+            font-size: 16px;
         }
 
         .btn-edit {
@@ -333,8 +347,8 @@
         .btn-edit:hover {
             background: #3498db;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(52, 152, 219, 0.25);
             text-decoration: none;
         }
 
@@ -346,8 +360,8 @@
         .btn-delete:hover {
             background: #e74c3c;
             color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(231, 76, 60, 0.25);
         }
 
         .empty-state {
@@ -408,12 +422,17 @@
 <div class="products-container">
     <div class="products-header">
         <h1>All Products</h1>
-        <a href="{{ route('admin.products.create') }}" class="add-product-btn">
-                    <i class='bx bx-plus'></i> Add New Product
-                </a>
-            </div>
+        <div style="display: flex; gap: 12px; align-items: center;">
+            <a href="{{ route('admin.products.expired') }}" class="add-product-btn" style="background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);">
+                <i class='bx bx-alert-circle'></i> Expired Products
+            </a>
+            <a href="{{ route('admin.products.create') }}" class="add-product-btn">
+                <i class='bx bx-plus'></i> Add New Product
+            </a>
+        </div>
+    </div>
 
-            @if($products->count() > 0)
+    @if($products->count() > 0)
                 <div style="margin-bottom: 20px;">
                     <div class="sort-controls">
                         <span class="sort-label">Sort by:</span>

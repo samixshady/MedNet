@@ -223,7 +223,9 @@ class ProductController extends Controller
      */
     public function medicine()
     {
-        $products = Product::where('tag', 'medicine')->paginate(30);
+        $products = Product::where('tag', 'medicine')
+            ->where('expiry_date', '>=', now()->toDateString())
+            ->paginate(30);
         return view('products.medicine', compact('products'));
     }
 
@@ -232,7 +234,9 @@ class ProductController extends Controller
      */
     public function supplements()
     {
-        $products = Product::where('tag', 'supplement')->paginate(30);
+        $products = Product::where('tag', 'supplement')
+            ->where('expiry_date', '>=', now()->toDateString())
+            ->paginate(30);
         return view('products.supplements', compact('products'));
     }
 
@@ -241,8 +245,30 @@ class ProductController extends Controller
      */
     public function firstAid()
     {
-        $products = Product::where('tag', 'first_aid')->paginate(30);
+        $products = Product::where('tag', 'first_aid')
+            ->where('expiry_date', '>=', now()->toDateString())
+            ->paginate(30);
         return view('products.first_aid', compact('products'));
+    }
+
+    /**
+     * Display expired products
+     */
+    public function expiredProducts(Request $request)
+    {
+        $sort = $request->get('sort', 'name');
+        
+        if ($sort === 'expiry') {
+            $products = Product::where('expiry_date', '<', now()->toDateString())
+                ->orderBy('expiry_date', 'asc')
+                ->get();
+        } else {
+            $products = Product::where('expiry_date', '<', now()->toDateString())
+                ->orderBy('name', 'asc')
+                ->get();
+        }
+        
+        return view('admin.products.expired', compact('products', 'sort'));
     }
 }
 

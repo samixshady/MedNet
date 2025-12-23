@@ -38,6 +38,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('products/expired', [ProductController::class, 'expiredProducts'])
+            ->name('products.expired');
+
         Route::resource('products', ProductController::class);
     });
 });
