@@ -308,7 +308,7 @@
                     <h1>Supplement Products</h1>
                     <p class="text-gray-600">Browse our collection of supplements</p>
                 </div>
-
+                <x-search-bar />
                 @if($products->count() > 0)
                     <div class="products-grid">
                         @foreach($products as $product)
