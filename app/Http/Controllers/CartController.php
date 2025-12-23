@@ -16,8 +16,10 @@ class CartController extends Controller
         $cartItems = Cart::where('user_id', auth()->id())
             ->with('product')
             ->get();
+        
+        $savedAddresses = auth()->user()->addresses()->get();
 
-        return view('cart.index', compact('cartItems'));
+        return view('cart.index', compact('cartItems', 'savedAddresses'));
     }
 
     /**

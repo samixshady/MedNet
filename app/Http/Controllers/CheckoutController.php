@@ -30,8 +30,11 @@ class CheckoutController extends Controller
         // Get delivery address from request or use default
         // The address is passed from cart or stored in session
         $deliveryAddress = request('address', session('delivery_location', 'Not selected'));
+        
+        // Get user's saved addresses
+        $savedAddresses = $user->addresses()->get();
 
-        return view('checkout.summary', compact('cartItems', 'total', 'deliveryAddress'));
+        return view('checkout.summary', compact('cartItems', 'total', 'deliveryAddress', 'savedAddresses'));
     }
 
     /**

@@ -67,6 +67,14 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
+                        <x-dropdown-link :href="route('profile.addresses')">
+                            {{ __('Addresses') }}
+                        </x-dropdown-link>
+
+                        <x-dropdown-link :href="route('profile.orders')">
+                            {{ __('View Orders') }}
+                        </x-dropdown-link>
+
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')"
@@ -139,6 +147,14 @@
             <div class="mt-3 space-y-2">
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('profile.addresses')">
+                    {{ __('Addresses') }}
+                </x-responsive-nav-link>
+
+                <x-responsive-nav-link :href="route('profile.orders')">
+                    {{ __('View Orders') }}
                 </x-responsive-nav-link>
 
                 <form method="POST" action="{{ route('logout') }}">

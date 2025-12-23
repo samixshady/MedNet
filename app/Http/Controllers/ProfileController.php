@@ -39,6 +39,17 @@ class ProfileController extends Controller
     }
 
     /**
+     * Display user's addresses
+     */
+    public function addresses(Request $request): View
+    {
+        return view('profile.addresses', [
+            'user' => $request->user(),
+            'addresses' => $request->user()->addresses()->get(),
+        ]);
+    }
+
+    /**
      * Update the user's profile information.
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse

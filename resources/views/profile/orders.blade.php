@@ -1,5 +1,12 @@
 <x-app-layout>
     <x-slot name="header">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/search-bar.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/quick-buy.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/promotional-slider.css') }}">
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sonner@latest/dist/index.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/sonner@latest/dist/styles.css" rel="stylesheet" />
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('My Orders') }}
         </h2>
@@ -211,4 +218,5 @@
             });
         }
     </script>
+    </div>
 </x-app-layout>

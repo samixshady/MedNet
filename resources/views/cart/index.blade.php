@@ -5,19 +5,39 @@
             .cart-container {
                 max-width: 1200px;
                 margin: 0 auto;
-                padding: 20px;
+                padding: 16px;
+            }
+
+            @media (min-width: 640px) {
+                .cart-container {
+                    padding: 20px;
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .cart-container {
+                    padding: 24px;
+                }
             }
 
             .cart-grid {
                 display: grid;
-                grid-template-columns: 1fr 400px;
-                gap: 24px;
+                grid-template-columns: 1fr;
+                gap: 20px;
                 margin-bottom: 40px;
             }
 
-            @media (max-width: 968px) {
+            @media (min-width: 1024px) {
                 .cart-grid {
-                    grid-template-columns: 1fr;
+                    grid-template-columns: 1fr 380px;
+                    gap: 24px;
+                }
+            }
+
+            @media (min-width: 1280px) {
+                .cart-grid {
+                    grid-template-columns: 1fr 400px;
+                    gap: 24px;
                 }
             }
 
@@ -55,9 +75,9 @@
 
             .cart-item {
                 display: grid;
-                grid-template-columns: 120px 1fr auto;
-                gap: 20px;
-                padding: 20px;
+                grid-template-columns: 90px 1fr auto;
+                gap: 12px;
+                padding: 12px;
                 border-bottom: none;
                 align-items: center;
                 transition: all 0.3s ease;
@@ -65,6 +85,22 @@
                 border-radius: 12px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
                 border: 1px solid #f0f0f0;
+            }
+
+            @media (min-width: 640px) {
+                .cart-item {
+                    grid-template-columns: 110px 1fr auto;
+                    gap: 16px;
+                    padding: 16px;
+                }
+            }
+
+            @media (min-width: 1024px) {
+                .cart-item {
+                    grid-template-columns: 120px 1fr auto;
+                    gap: 20px;
+                    padding: 20px;
+                }
             }
 
             .cart-item:hover {
@@ -652,6 +688,21 @@
                                 <div class="delivery-section">
                                     <div class="section-title">Delivery Information</div>
 
+                                    <!-- Saved Addresses Dropdown -->
+                                    @if($savedAddresses->count() > 0)
+                                        <div class="form-group" style="margin-bottom: 24px;">
+                                            <label class="form-label">Quick Select Saved Address</label>
+                                            <select class="form-select" id="saved_address_select" onchange="useSavedAddressInCart()">
+                                                <option value="">-- Choose a saved address --</option>
+                                                @foreach($savedAddresses as $address)
+                                                    <option value="{{ $address->id }}" data-address="{{ $address->address }}" data-location="{{ $address->is_inside_dhaka ? 'inside_dhaka' : 'outside_dhaka' }}">
+                                                        {{ $address->alias_name }} ({{ $address->is_inside_dhaka ? 'Inside Dhaka' : 'Outside Dhaka' }})
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    @endif
+
                                     <form id="checkoutForm">
                                         <div class="form-group">
                                             <label class="form-label">Delivery Address *</label>
@@ -913,6 +964,29 @@
             document.getElementById('standard_price').textContent = `(৳${prices.standard})`;
             document.getElementById('express_price').textContent = `(৳${prices.express})`;
             document.getElementById('overnight_price').textContent = `(৳${prices.overnight})`;
+        }
+
+        // Function to use saved address in cart
+        function useSavedAddressInCart() {
+            const select = document.getElementById('saved_address_select');
+            const selectedOption = select.options[select.selectedIndex];
+            
+            if (selectedOption.value === '') {
+                return;
+            }
+            
+            const address = selectedOption.getAttribute('data-address');
+            const location = selectedOption.getAttribute('data-location');
+            
+            // Fill address field
+            document.querySelector('textarea[name="address"]').value = address;
+            
+            // Set location dropdown
+            document.getElementById('delivery_location').value = location;
+            
+            // Update delivery options and calculate totals
+            updateDeliveryOptions();
+            calculateTotals();
         }
 
         calculateTotals();

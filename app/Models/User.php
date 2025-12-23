@@ -49,4 +49,10 @@ class User extends Authenticatable
             'is_banned' => 'boolean',
         ];
     }
+
+    public function addresses()
+    {
+        return $this->hasMany(Address::class);
+    }
 }
+

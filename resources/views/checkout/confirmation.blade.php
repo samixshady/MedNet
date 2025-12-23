@@ -9,19 +9,19 @@
         <div class="py-12 px-4 sm:px-6 lg:px-8">
             <div class="max-w-4xl mx-auto">
                 <!-- Success Animation -->
-                <div class="text-center mb-12">
-                    <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 mb-8 animate-bounce shadow-2xl">
-                        <svg class="w-14 h-14 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <div class="text-center mb-8 sm:mb-12">
+                    <div class="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-green-400 to-emerald-500 mb-6 sm:mb-8 animate-bounce shadow-2xl">
+                        <svg class="w-10 h-10 sm:w-14 sm:h-14 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                         </svg>
                     </div>
-                    <h1 class="text-5xl font-bold text-gray-900 mb-4">🎉 Order Confirmed!</h1>
-                    <p class="text-xl text-gray-600 mb-2">Your order has been successfully placed</p>
-                    <p class="text-lg text-emerald-600 font-semibold">Your product will arrive soon!</p>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-2 sm:mb-4">🎉 Order Confirmed!</h1>
+                    <p class="text-base sm:text-lg lg:text-xl text-gray-600 mb-1 sm:mb-2">Your order has been successfully placed</p>
+                    <p class="text-base sm:text-lg text-emerald-600 font-semibold">Your product will arrive soon!</p>
                 </div>
 
                 <!-- Tracking Number Card - Large and Prominent -->
-                <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-3xl shadow-2xl p-10 mb-10 text-white transform hover:scale-105 transition-transform duration-300">
+                <div class="bg-gradient-to-br from-blue-600 via-blue-500 to-indigo-600 rounded-2xl sm:rounded-3xl shadow-2xl p-6 sm:p-8 lg:p-10 mb-8 sm:mb-10 text-white transform hover:scale-105 transition-transform duration-300">
                     <div class="text-center">
                         <p class="text-blue-100 text-sm font-bold uppercase tracking-widest mb-4">Your Tracking Number</p>
                         <div class="mb-6">
