@@ -324,6 +324,11 @@
                         <!-- Product Information -->
                         <div class="product-info-section">
                             <h1 class="product-title">{{ $product->name }}</h1>
+                            @if($product->generic_name)
+                                <p style="font-size: 16px; color: #666; margin-bottom: 16px;">
+                                    <strong>Generic Name:</strong> {{ $product->generic_name }}
+                                </p>
+                            @endif
 
                             <!-- Meta Information -->
                             <div class="product-meta">

@@ -40,6 +40,7 @@ class ProductController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'generic_name' => 'required|string|max:255',
             'description' => 'required|string',
             'quantity' => 'required|integer|min:0',
             'expiry_date' => 'required|date|after_or_equal:today',
@@ -54,6 +55,7 @@ class ProductController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'name.required' => 'Product name is required',
+            'generic_name.required' => 'Generic name is required',
             'description.required' => 'Product description is required',
             'quantity.required' => 'Quantity is required',
             'expiry_date.required' => 'Expiry date is required',
@@ -130,6 +132,7 @@ class ProductController extends Controller
 
         $validated = $request->validate([
             'name' => 'required|string|max:255',
+            'generic_name' => 'required|string|max:255',
             'description' => 'required|string',
             'quantity' => 'required|integer|min:0',
             'expiry_date' => 'required|date|after_or_equal:today',
@@ -144,6 +147,7 @@ class ProductController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ], [
             'name.required' => 'Product name is required',
+            'generic_name.required' => 'Generic name is required',
             'description.required' => 'Product description is required',
             'quantity.required' => 'Quantity is required',
             'expiry_date.required' => 'Expiry date is required',

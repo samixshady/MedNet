@@ -90,6 +90,14 @@
                         <span class="error-message" id="name_error"></span>
                     </div>
                     <div class="form-group">
+                        <label>Generic Name <span class="required">*</span></label>
+                        <input type="text" name="generic_name" placeholder="e.g., Acetylsalicylic Acid" required>
+                        <span class="error-message" id="generic_name_error"></span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
                         <label>Manufacturer/Brand <span class="required">*</span></label>
                         <input type="text" name="manufacturer" placeholder="e.g., Bayer" required>
                         <span class="error-message" id="manufacturer_error"></span>
