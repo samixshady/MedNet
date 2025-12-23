@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,6 +17,7 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    Route::get('/search', [SearchController::class, 'search'])->name('search');
     Route::get('/medicine', [ProductController::class, 'medicine'])->name('medicine');
     Route::get('/medicine/{id}', [ProductController::class, 'show'])->name('medicine.show');
     Route::get('/supplements', [ProductController::class, 'supplements'])->name('supplements');
