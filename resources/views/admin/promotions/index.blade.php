@@ -777,7 +777,7 @@
             deleteBtn.disabled = true;
             deleteBtn.innerHTML = '<span class="loading-spinner"></span> Deleting...';
 
-            fetch(`{{ route('admin.promotions.destroy', '') }}/${promotionId}`, {
+            fetch(`/admin/promotions/${promotionId}`, {
                 method: 'DELETE',
                 headers: {
                     'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,

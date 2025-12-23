@@ -263,7 +263,7 @@
             <!-- Marketing Dropdown Menu -->
             <li class="marketing-menu-item">
                 <button class="marketing-toggle" onclick="adminToggleMarketingMenu(event)" type="button" id="marketingToggleBtn">
-                    <i class='bx bx-megaphone'></i>
+                    <i class='bx bx-trending-up'></i>
                     <span class="links_name">Marketing</span>
                     <i class='bx bx-chevron-down dropdown-arrow' id="marketingArrow"></i>
                 </button>
