@@ -1,4 +1,4 @@
-<div class="w-full max-w-5xl mx-auto px-4 py-8" style="transform: translateX(-400px) translateY(-100px);">
+<div class="w-full max-w-5xl mx-auto px-4 py-8" style="transform: translateX(-190px) translateY(-100px);">
     <!-- Search Bar Container -->
     <div class="relative" x-data="searchBar()" @click.outside="open = false">
         <!-- Category Filter (Optional) -->
