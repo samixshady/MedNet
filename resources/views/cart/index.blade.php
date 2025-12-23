@@ -600,12 +600,21 @@
                                         </div>
 
                                         <div class="form-group">
+                                            <label class="form-label">Delivery Location *</label>
+                                            <select name="delivery_location" id="delivery_location" class="form-select" required onchange="updateDeliveryOptions()">
+                                                <option value="">Select Location</option>
+                                                <option value="inside_dhaka">Inside Dhaka</option>
+                                                <option value="outside_dhaka">Outside Dhaka</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label class="form-label">Delivery Option *</label>
                                             <div class="delivery-options">
                                                 <label class="delivery-option">
                                                     <input type="radio" name="delivery_option" value="standard" required checked>
                                                     <div class="option-label">
-                                                        <span class="option-name">Standard Delivery</span>
+                                                        <span class="option-name">Standard Delivery <span id="standard_price">(৳40)</span></span>
                                                         <span class="option-desc">3-5 business days</span>
                                                     </div>
                                                 </label>
@@ -613,7 +622,7 @@
                                                 <label class="delivery-option">
                                                     <input type="radio" name="delivery_option" value="express" required>
                                                     <div class="option-label">
-                                                        <span class="option-name">Express Delivery (+৳100)</span>
+                                                        <span class="option-name">Express Delivery <span id="express_price">(৳80)</span></span>
                                                         <span class="option-desc">1-2 business days</span>
                                                     </div>
                                                 </label>
@@ -621,7 +630,7 @@
                                                 <label class="delivery-option">
                                                     <input type="radio" name="delivery_option" value="overnight" required>
                                                     <div class="option-label">
-                                                        <span class="option-name">Overnight Delivery (+৳200)</span>
+                                                        <span class="option-name">Overnight Delivery <span id="overnight_price">(৳100)</span></span>
                                                         <span class="option-desc">Next business day</span>
                                                     </div>
                                                 </label>
@@ -757,15 +766,20 @@
 
             document.getElementById('subtotal').textContent = '৳' + subtotal.toFixed(2);
 
+            const deliveryLocation = document.getElementById('delivery_location').value;
             const deliveryOption = document.querySelector('input[name="delivery_option"]:checked').value;
             let shipping = 0;
-            if (deliveryOption === 'express') shipping = 100;
-            if (deliveryOption === 'overnight') shipping = 200;
+
+            if (deliveryLocation) {
+                const prices = deliveryPricing[deliveryLocation];
+                shipping = prices[deliveryOption];
+            }
 
             document.getElementById('shipping').textContent = '৳' + shipping.toFixed(2);
             document.getElementById('total').textContent = '৳' + (subtotal + shipping).toFixed(2);
         }
 
+        document.getElementById('delivery_location').addEventListener('change', calculateTotals);
         document.querySelectorAll('input[name="delivery_option"]').forEach(option => {
             option.addEventListener('change', calculateTotals);
         });
@@ -817,6 +831,37 @@
                 toast.classList.add('hide');
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
+        }
+
+        // Delivery pricing for Inside and Outside Dhaka
+        const deliveryPricing = {
+            inside_dhaka: {
+                standard: 40,
+                express: 80,
+                overnight: 100
+            },
+            outside_dhaka: {
+                standard: 70,
+                express: 110,
+                overnight: 130
+            }
+        };
+
+        function updateDeliveryOptions() {
+            const location = document.getElementById('delivery_location').value;
+            
+            if (!location) {
+                // Reset prices
+                document.getElementById('standard_price').textContent = '(৳40)';
+                document.getElementById('express_price').textContent = '(৳80)';
+                document.getElementById('overnight_price').textContent = '(৳100)';
+                return;
+            }
+
+            const prices = deliveryPricing[location];
+            document.getElementById('standard_price').textContent = `(৳${prices.standard})`;
+            document.getElementById('express_price').textContent = `(৳${prices.express})`;
+            document.getElementById('overnight_price').textContent = `(৳${prices.overnight})`;
         }
 
         calculateTotals();
