@@ -47,7 +47,7 @@
                 </div>
 
                 <!-- Order Information Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                     <!-- Order Total -->
                     <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-green-500">
                         <p class="text-gray-600 text-sm font-bold uppercase mb-2">Order Total</p>
@@ -58,6 +58,36 @@
                     <!-- Order Date -->
                     <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-blue-500">
                         <p class="text-gray-600 text-sm font-bold uppercase mb-2">Order Date</p>
+                        <p class="text-3xl font-bold text-gray-900 mb-2">{{ $order->created_at->format('M d') }}</p>
+                        <p class="text-sm text-gray-500">{{ $order->created_at->format('Y') }} at {{ $order->created_at->format('h:i A') }}</p>
+                    </div>
+
+                    <!-- Delivery Address -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-purple-500">
+                        <p class="text-gray-600 text-sm font-bold uppercase mb-2">Delivery Address</p>
+                        <p class="text-lg font-bold text-gray-900 mb-2 line-clamp-2">{{ $order->delivery_address }}</p>
+                        <p class="text-sm text-gray-500">Standard Delivery</p>
+                    </div>
+
+                    <!-- Payment Method -->
+                    <div class="bg-white rounded-2xl shadow-lg p-8 border-l-4 border-orange-500">
+                        <p class="text-gray-600 text-sm font-bold uppercase mb-2">Payment Method</p>
+                        <div class="flex items-center gap-2 mb-2">
+                            @if($order->payment_method === 'card')
+                                <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M20 8H4V6h16m0 10H4v-6h16m0-4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+                                </svg>
+                                <span class="font-bold text-gray-900">Credit Card</span>
+                            @elseif($order->payment_method === 'paypal')
+                                <svg class="w-6 h-6 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 3H3v18h6c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H5v-4h4c1.66 0 3 1.34 3 3s-1.34 3-3 3zm11-8H11v10h9c3.31 0 6-2.69 6-6s-2.69-6-6-6z"/>
+                                </svg>
+                                <span class="font-bold text-gray-900">PayPal</span>
+                            @endif
+                        </div>
+                        <p class="text-sm text-gray-500">{{ ucfirst($order->payment_status) }}</p>
+                    </div>
+                </div>
                         <p class="text-3xl font-bold text-gray-900 mb-2">{{ $order->created_at->format('M d') }}</p>
                         <p class="text-sm text-gray-500">{{ $order->created_at->format('Y') }} at {{ $order->created_at->format('h:i A') }}</p>
                     </div>
@@ -80,7 +110,7 @@
                     </h2>
                     <div class="space-y-4">
                         @foreach($order->items as $item)
-                        <div class="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-200 hover:border-blue-300 transition-colors">
+                        <div class="flex items-center justify-between p-5 bg-gradient-to-r from-gray-50 to-white rounded-xl border border-gray-200 hover:border-blue-300 transition-colors group">
                             <div class="flex-1">
                                 <h3 class="font-bold text-gray-900 text-lg">{{ $item->product->name }}</h3>
                                 <p class="text-gray-600 text-sm mt-1">
@@ -88,10 +118,16 @@
                                     <span class="text-gray-500">× ৳{{ number_format($item->price, 2) }}</span>
                                 </p>
                             </div>
-                            <div class="text-right">
+                            <div class="text-right mr-4">
                                 <p class="text-2xl font-bold text-blue-600">৳{{ number_format($item->subtotal, 2) }}</p>
                                 <p class="text-sm text-gray-500 mt-1">Subtotal</p>
                             </div>
+                            <form method="POST" action="{{ route('checkout.reduce-quantity', $item->id) }}" class="inline" onsubmit="return confirm('❓ Deduct this product quantity? This will return the item to stock.');">
+                                @csrf
+                                <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity hover:underline px-3 py-2 bg-red-50 rounded hover:bg-red-100 whitespace-nowrap">
+                                    🔄 Deduct Qty
+                                </button>
+                            </form>
                         </div>
                         @endforeach
                     </div>

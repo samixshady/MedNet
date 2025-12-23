@@ -40,7 +40,7 @@ class CheckoutController extends Controller
     public function processPayment(Request $request)
     {
         $request->validate([
-            'payment_method' => 'required|in:visa,paypal,test',
+            'payment_method_field' => 'required|in:card,paypal',
             'delivery_address' => 'required|string',
             'delivery_fee' => 'required|numeric|min:0',
         ]);
@@ -73,7 +73,7 @@ class CheckoutController extends Controller
                 'delivery_address' => $request->delivery_address,
                 'delivery_latitude' => session('delivery_coords.lat'),
                 'delivery_longitude' => session('delivery_coords.lng'),
-                'payment_method' => $request->payment_method,
+                'payment_method' => $request->payment_method_field,
                 'payment_status' => 'completed',
                 'order_status' => 'pending',
             ]);

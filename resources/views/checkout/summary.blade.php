@@ -69,14 +69,48 @@
                         <div id="deliveryCoordsDisplay"></div>
                     </div>
 
+                    <!-- Payment Method Selection -->
+                    <div class="bg-white rounded-xl border-2 border-gray-200 p-6 mb-6">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Select Payment Method</h3>
+                        <div class="space-y-3">
+                            <!-- Credit/Debit Card Option -->
+                            <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group">
+                                <input type="radio" name="payment_method" value="card" class="w-5 h-5 text-blue-600 cursor-pointer" checked>
+                                <div class="ml-4 flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M20 8H4V6h16m0 10H4v-6h16m0-4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
+                                        </svg>
+                                        <span class="font-bold text-gray-900">Credit/Debit Card</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">Visa, Mastercard, American Express</p>
+                                </div>
+                            </label>
+
+                            <!-- PayPal Option -->
+                            <label class="flex items-center p-4 border-2 border-gray-200 rounded-lg cursor-pointer hover:border-blue-500 hover:bg-blue-50 transition-all group">
+                                <input type="radio" name="payment_method" value="paypal" class="w-5 h-5 text-blue-600 cursor-pointer">
+                                <div class="ml-4 flex-1">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M9 3H3v18h6c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H5v-4h4c1.66 0 3 1.34 3 3s-1.34 3-3 3zm11-8H11v10h9c3.31 0 6-2.69 6-6s-2.69-6-6-6z"/>
+                                        </svg>
+                                        <span class="font-bold text-gray-900">PayPal</span>
+                                    </div>
+                                    <p class="text-sm text-gray-600 mt-1">Fast and secure payment</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
                     <form method="POST" action="{{ route('checkout.process-payment') }}" id="deliveryForm" enctype="application/x-www-form-urlencoded">
                         @csrf
-                        <input type="hidden" name="payment_method" value="test">
+                        <input type="hidden" name="payment_method_field" id="payment_method_field" value="card">
                         <input type="hidden" name="delivery_address" value="{{ $deliveryAddress }}">
                         <input type="hidden" name="delivery_fee" value="40">
 
-                        <button type="submit" class="w-full bg-gradient-to-r from-green-600 to-green-500 hover:from-green-700 hover:to-green-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
-                            Complete Order & Get Tracking Number
+                        <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
+                            Proceed to Payment
                         </button>
                     </form>
                 </div>
@@ -157,6 +191,18 @@ const deliveryPricing = {
 };
 
 document.addEventListener('DOMContentLoaded', function() {
+    // Handle payment method selection
+    const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
+    const paymentMethodField = document.getElementById('payment_method_field');
+    
+    paymentMethodRadios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            if (paymentMethodField) {
+                paymentMethodField.value = this.value;
+            }
+        });
+    });
+    
     // Get stored delivery information from localStorage
     const savedAddress = localStorage.getItem('mednet_delivery_location');
     const savedLocationType = localStorage.getItem('mednet_delivery_location_type') || 'inside_dhaka';
