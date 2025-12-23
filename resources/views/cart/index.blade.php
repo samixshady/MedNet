@@ -425,6 +425,14 @@
                 opacity: 0.6;
             }
 
+            .delivery-section-box {
+                display: none;
+            }
+
+            .delivery-section-box.show {
+                display: block;
+            }
+
             .toast {
                 position: fixed;
                 top: 20px;
