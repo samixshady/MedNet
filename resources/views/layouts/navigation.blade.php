@@ -3,7 +3,7 @@
         <div class="flex justify-between items-center h-16">
 
             <!-- Left: Hamburger Menu (Mobile) + MedNet Logo -->
-            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-w-0">
+            <div class="flex items-center gap-1.5 sm:gap-3 flex-shrink-0 overflow-hidden">
                 <!-- Hamburger Menu Button (Mobile Only) -->
                 <button id="sidebar-toggle" class="md:hidden p-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group flex-shrink-0" aria-label="Toggle Menu">
                     <div class="hamburger-icon">
@@ -14,13 +14,13 @@
                 </button>
 
                 <!-- MedNet Logo -->
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-1 sm:gap-2 group flex-shrink-0 overflow-hidden">
                     <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300 flex-shrink-0">
-                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="font-bold text-base sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-none tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
+                    <h2 class="hidden xs:block font-bold text-sm sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-none tracking-tight group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap mednet-mobile">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
@@ -260,4 +260,34 @@
 
         window.updateCartBadge = updateCartBadge;
     </script>
+
+    <style>
+        /* Custom breakpoint for extra small devices */
+        @media (min-width: 380px) {
+            .hidden.xs\:block {
+                display: block;
+            }
+        }
+
+        /* Mobile MedNet text optimization */
+        .mednet-mobile {
+            display: block;
+            font-size: 2.625rem; /* 42px - 3x bigger than original 14px */
+            line-height: 1;
+            letter-spacing: -0.02em;
+        }
+
+        @media (min-width: 380px) {
+            .mednet-mobile {
+                font-size: 3rem; /* 48px - 3x bigger than original 16px */
+            }
+        }
+
+        @media (min-width: 640px) {
+            .mednet-mobile {
+                font-size: 1.5rem; /* 24px */
+                letter-spacing: -0.025em;
+            }
+        }
+    </style>
 </nav>
