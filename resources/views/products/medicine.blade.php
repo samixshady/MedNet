@@ -487,7 +487,19 @@
                     quantity: quantity
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 419) {
+                        showToast('Please log in to add items to cart', 'error');
+                        setTimeout(() => {
+                            window.location.href = '{{ route('login') }}';
+                        }, 1500);
+                        throw new Error('Unauthenticated');
+                    }
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     showToast(data.message, 'success');
@@ -498,8 +510,10 @@
                 }
             })
             .catch(error => {
-                showToast('Error adding to cart. Please try again.', 'error');
-                console.error('Error:', error);
+                if (error.message !== 'Unauthenticated') {
+                    showToast('Error adding to cart. Please try again.', 'error');
+                    console.error('Error:', error);
+                }
             });
         }
 

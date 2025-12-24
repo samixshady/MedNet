@@ -435,8 +435,12 @@
         </div>
     </div>
 
-    <script>
-        function showToast(message, type = 'success') {
+    <script type="text/javascript">
+        console.log('Product show page script loaded');
+        console.log('Product ID:', {{ $product->id }});
+        
+        // Define functions in global scope
+        window.showToast = function(message, type = 'success') {
             const toast = document.createElement('div');
             toast.className = `toast ${type}`;
             toast.style.cssText = `
@@ -464,26 +468,30 @@
                 toast.style.animation = 'slideOut 0.3s ease-out';
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
-        }
+        };
 
-        function decreaseQuantity() {
+        window.decreaseQuantity = function() {
+            console.log('decreaseQuantity called');
             const input = document.getElementById('add-to-cart-qty');
-            if (input.value > 1) {
+            if (input && input.value > 1) {
                 input.value = parseInt(input.value) - 1;
             }
-        }
+        };
 
-        function increaseQuantity() {
+        window.increaseQuantity = function() {
+            console.log('increaseQuantity called');
             const input = document.getElementById('add-to-cart-qty');
-            if (input.value < 50) {
+            if (input && input.value < 50) {
                 input.value = parseInt(input.value) + 1;
             } else {
                 showToast('Maximum quantity is 50 items', 'error');
             }
-        }
+        };
 
-        function addToCart(productId) {
+        window.addToCart = function(productId) {
+            console.log('addToCart called with productId:', productId);
             const quantity = parseInt(document.getElementById('add-to-cart-qty').value);
+            console.log('Quantity:', quantity);
 
             fetch('{{ route('cart.add') }}', {
                 method: 'POST',
@@ -496,7 +504,19 @@
                     quantity: quantity
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 419) {
+                        showToast('Please log in to add items to cart', 'error');
+                        setTimeout(() => {
+                            window.location.href = '{{ route('login') }}';
+                        }, 1500);
+                        throw new Error('Unauthenticated');
+                    }
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
             .then(data => {
                 if (data.success) {
                     showToast(`{{ $product->name }} has been added to the cart`, 'success');
@@ -507,12 +527,14 @@
                 }
             })
             .catch(error => {
-                showToast('Error adding to cart. Please try again.', 'error');
-                console.error('Error:', error);
+                if (error.message !== 'Unauthenticated') {
+                    showToast('Error adding to cart. Please try again.', 'error');
+                    console.error('Error:', error);
+                }
             });
-        }
+        };
 
-        function updateCartBadge() {
+        window.updateCartBadge = function() {
             fetch('{{ route('cart.count') }}')
                 .then(response => response.json())
                 .then(data => {
@@ -526,32 +548,35 @@
                         }
                     }
                 });
-        }
+        };
 
         // Add CSS animations if not already present
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(400px);
-                    opacity: 0;
+        if (!document.getElementById('toast-animations')) {
+            const styleElement = document.createElement('style');
+            styleElement.id = 'toast-animations';
+            styleElement.textContent = `
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
                 }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
+                @keyframes slideOut {
+                    from {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                    to {
+                        transform: translateX(400px);
+                        opacity: 0;
+                    }
                 }
-            }
-            @keyframes slideOut {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(400px);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+            `;
+            document.head.appendChild(styleElement);
+        }
     </script>
 </x-app-layout>
