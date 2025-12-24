@@ -1,7 +1,7 @@
 @props(['discountedProducts' => []])
 
 <!-- Desktop View (hidden on mobile) -->
-<div class="hidden lg:block w-full mt-12" style="transform: translate(-40px, -150px);">
+<div class="hidden lg:block w-full mt-12" style="transform: translate(-40px, -200px);">
     <div class="max-w-7xl mx-auto px-4">
         <!-- Header - Centered "Features" -->
         <div class="text-center mb-8">
