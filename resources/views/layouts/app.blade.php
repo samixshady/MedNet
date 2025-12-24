@@ -11,6 +11,18 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+        <!-- Mobile Navbar Styles -->
+        <link rel="stylesheet" href="{{ asset('css/mobile-navbar.css') }}">
+
+        <!-- Mobile Sidebar Styles -->
+        <link rel="stylesheet" href="{{ asset('css/mobile-sidebar.css') }}">
+
+        <!-- Sidebar Styles -->
+        <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+
+        <!-- Navbar Styles -->
+        <link rel="stylesheet" href="{{ asset('css/navbar.css') }}">
+
         <!-- Mobile Footer Styles -->
         <link rel="stylesheet" href="{{ asset('css/mobile-footer.css') }}">
 
@@ -20,6 +32,12 @@
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation')
+
+            <!-- Mobile Navbar Toggle & Overlay -->
+            <x-mobile-navbar />
+
+            <!-- Mobile Sidebar (Collapsible) -->
+            <x-mobile-sidebar />
 
             <!-- Page Heading -->
             @isset($header)
@@ -45,5 +63,8 @@
             <!-- Mobile Footer -->
             <x-mobile-footer />
         </div>
+
+        <!-- Mobile Sidebar Collapse Script -->
+        <script src="{{ asset('js/mobile-sidebar.js') }}"></script>
     </body>
 </html>
