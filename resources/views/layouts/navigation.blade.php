@@ -140,7 +140,7 @@
         </div>
 
         <!-- Mobile Delivery Location -->
-        <div class="px-4 py-4 border-b border-slate-700/50">
+        <div class="px-4 py-4 border-b border-slate-700/50 hidden">
             <button onclick="toggleMap()" class="w-full flex items-center justify-between p-3 bg-white/5 hover:bg-white/10 rounded-xl transition-all duration-300 group">
                 <div class="flex items-center gap-3">
                     <div class="p-2 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-all duration-300">
@@ -196,10 +196,13 @@
     </div>
 
     <!-- Keep your same map + JS -->
-    <div id="delivery-map-root"></div>
+    <div id="delivery-map-root" class="hidden lg:block"></div>
 
     <script>
         function toggleMap() {
+            // Only work on desktop
+            if (window.innerWidth < 1024) return;
+            
             const mapRoot = document.getElementById('delivery-map-root');
             const mapContainer = mapRoot.querySelector('.delivery-map-container');
             

@@ -120,8 +120,8 @@
 </div>
 
 <!-- Mobile View (shown only on mobile) -->
-<div class="lg:hidden w-full mt-6 px-0">
-    <div class="text-center mb-6 px-3">
+<div class="lg:hidden w-full mt-0 px-0">
+    <div class="text-center mb-4 px-3">
         <h2 class="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
             <span class="text-2xl">✨</span>
             Featured Deals
@@ -138,41 +138,41 @@
                     @endphp
                     @foreach($chunks as $chunkIndex => $chunk)
                         <div class="mobile-carousel-slide flex-shrink-0 w-full px-3" data-mobile-index="{{ $chunkIndex }}">
-                            <div class="grid grid-cols-3 gap-2">
+                            <div class="grid grid-cols-3 gap-3">
                                 @foreach($chunk as $product)
                                     <a href="{{ route('medicine.show', $product->id) }}" class="group block">
-                                        <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
+                                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
                                             <!-- Product Image -->
-                                            <div class="relative h-24 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                                            <div class="relative h-32 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                                                 @if($product->image_path)
                                                     <img src="{{ asset('storage/' . $product->image_path) }}" 
                                                          alt="{{ $product->name }}" 
                                                          class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                                 @else
                                                     <div class="w-full h-full flex items-center justify-center">
-                                                        <svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <svg class="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                                         </svg>
                                                     </div>
                                                 @endif
                                                 
                                                 <!-- Discount Badge -->
-                                                <div class="absolute top-1 right-1 bg-gradient-to-r from-red-500 to-pink-500 text-white px-1.5 py-0.5 rounded-full font-bold text-[8px] shadow-lg">
+                                                <div class="absolute top-1.5 right-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-0.5 rounded-full font-bold text-[9px] shadow-lg">
                                                     -{{ $product->discount }}%
                                                 </div>
 
                                                 <!-- Stock Status Badge -->
-                                                <div class="absolute bottom-1 left-1">
+                                                <div class="absolute bottom-1.5 left-1.5">
                                                     @if($product->stock_status === 'normal')
-                                                        <span class="inline-block bg-green-500 text-white text-[7px] font-bold px-1 py-0.5 rounded-full shadow-sm">
+                                                        <span class="inline-block bg-green-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                                                             ✓
                                                         </span>
                                                     @elseif($product->stock_status === 'low_stock')
-                                                        <span class="inline-block bg-yellow-500 text-white text-[7px] font-bold px-1 py-0.5 rounded-full shadow-sm">
+                                                        <span class="inline-block bg-yellow-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                                                             !
                                                         </span>
                                                     @else
-                                                        <span class="inline-block bg-gray-500 text-white text-[7px] font-bold px-1 py-0.5 rounded-full shadow-sm">
+                                                        <span class="inline-block bg-gray-500 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
                                                             ✕
                                                         </span>
                                                     @endif
@@ -180,8 +180,8 @@
                                             </div>
 
                                             <!-- Product Info -->
-                                            <div class="p-1.5 flex-1 flex flex-col">
-                                                <h3 class="font-semibold text-gray-800 text-[9px] leading-tight line-clamp-2 mb-1 group-hover:text-indigo-600 transition-colors">
+                                            <div class="p-2 flex-1 flex flex-col">
+                                                <h3 class="font-semibold text-gray-800 text-[10px] leading-tight line-clamp-2 mb-1.5 group-hover:text-indigo-600 transition-colors">
                                                     {{ $product->name }}
                                                 </h3>
                                                 
@@ -189,11 +189,11 @@
                                                 <div class="mt-auto">
                                                     @if($product->updated_price && $product->updated_price < $product->price)
                                                         <div class="space-y-0.5">
-                                                            <span class="text-xs font-bold text-green-600 block">৳{{ number_format($product->updated_price, 0) }}</span>
-                                                            <span class="text-[8px] text-gray-400 line-through block">৳{{ number_format($product->price, 0) }}</span>
+                                                            <span class="text-sm font-bold text-green-600 block">৳{{ number_format($product->updated_price, 0) }}</span>
+                                                            <span class="text-[9px] text-gray-400 line-through block">৳{{ number_format($product->price, 0) }}</span>
                                                         </div>
                                                     @else
-                                                        <span class="text-xs font-bold text-gray-800 block">৳{{ number_format($product->price, 0) }}</span>
+                                                        <span class="text-sm font-bold text-gray-800 block">৳{{ number_format($product->price, 0) }}</span>
                                                     @endif
                                                 </div>
                                             </div>
