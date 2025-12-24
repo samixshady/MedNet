@@ -175,26 +175,26 @@
 
     /* Sidebar Footer */
     .sidebar-footer {
-        padding: 20px;
+        padding: 12px 14px;
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         margin-top: auto;
         background: rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        margin: 16px 8px 16px 8px;
+        border-radius: 6px;
+        margin: 12px 8px 12px 8px;
         text-align: center;
     }
 
     .sidebar-footer-text {
-        font-size: 13px;
+        font-size: 11px;
         font-weight: 600;
         color: #ecf0f1;
         margin: 0;
     }
 
     .sidebar-footer-subtext {
-        font-size: 12px;
+        font-size: 10px;
         color: #95a5a6;
-        margin: 6px 0 0 0;
+        margin: 3px 0 0 0;
     }
 
     /* Scrollbar Styling */
