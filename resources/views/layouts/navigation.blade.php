@@ -10,7 +10,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="hidden sm:block font-bold text-xl sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
+                    <h2 class="font-bold text-lg sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
@@ -40,11 +40,9 @@
                 </div>
 
                 <!-- Search Icon (Mobile) -->
-                <button @click="$dispatch('open-mobile-search')" class="md:hidden p-2 sm:p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200 text-white flex-shrink-0">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </button>
+                <div class="md:hidden flex-shrink-0">
+                    <x-navbar-search />
+                </div>
 
                 <!-- Cart Icon -->
                 <a href="{{ route('cart.index') }}" class="relative group p-2 sm:p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 flex-shrink-0">

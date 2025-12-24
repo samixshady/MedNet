@@ -14,7 +14,7 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="py-6 sm:py-12">
+        <div class="py-2 sm:py-12">
             <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
                 <!-- QuickBuy and Promotional Slider Section -->
                 <div class="mb-8 sm:mb-12 flex flex-col lg:flex-row gap-6 lg:gap-0 lg:relative lg:min-h-[380px]">

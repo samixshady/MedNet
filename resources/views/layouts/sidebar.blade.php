@@ -12,9 +12,9 @@
 
 <!-- Sidebar -->
 <aside class="header sidebar-new" id="sidebar">
-    <!-- Close Button for Mobile with X Animation -->
-    <button id="sidebar-close" class="md:hidden absolute top-4 right-4 p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500 border border-red-500/30 hover:border-red-500 transition-all duration-300 text-red-400 hover:text-white shadow-lg hover:shadow-xl hover:shadow-red-500/30 transform hover:scale-110 active:scale-95 hover:rotate-90 group">
-        <i class='bx bx-x text-2xl group-hover:rotate-180 transition-transform duration-300'></i>
+    <!-- Close Button for Mobile with X inside red circle -->
+    <button id="sidebar-close" class="md:hidden absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 flex items-center justify-center transition-all duration-300 text-white shadow-lg hover:shadow-xl hover:shadow-red-500/50 transform hover:scale-110 active:scale-95 hover:rotate-90 group">
+        <i class='bx bx-x text-2xl font-bold group-hover:rotate-180 transition-transform duration-300'></i>
     </button>
 
     <!-- Header -->

@@ -129,82 +129,160 @@
     </div>
 
     @if($discountedProducts->count() > 0)
-        <div class="grid grid-cols-2 gap-3">
-            @foreach($discountedProducts->take(8) as $product)
-                <a href="{{ route('medicine.show', $product->id) }}" class="group block">
-                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
-                        <!-- Product Image -->
-                        <div class="relative h-32 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
-                            @if($product->image_path)
-                                <img src="{{ asset('storage/' . $product->image_path) }}" 
-                                     alt="{{ $product->name }}" 
-                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                    </svg>
-                                </div>
-                            @endif
-                            
-                            <!-- Discount Badge -->
-                            <div class="absolute top-1.5 right-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-0.5 rounded-full font-bold text-[10px] shadow-lg">
-                                -{{ $product->discount }}%
-                            </div>
+        <div class="relative">
+            <!-- Carousel Wrapper -->
+            <div class="overflow-hidden mobile-carousel-wrapper">
+                <div class="mobile-carousel-track flex transition-transform duration-700 ease-in-out gap-3" style="transform: translateX(0);">
+                    @foreach($discountedProducts as $mobileIndex => $product)
+                        <div class="mobile-carousel-slide flex-shrink-0 w-full" data-mobile-index="{{ $mobileIndex }}">
+                            <div class="grid grid-cols-2 gap-3">
+                                <a href="{{ route('medicine.show', $product->id) }}" class="group block">
+                                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
+                                        <!-- Product Image -->
+                                        <div class="relative h-32 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                                            @if($product->image_path)
+                                                <img src="{{ asset('storage/' . $product->image_path) }}" 
+                                                     alt="{{ $product->name }}" 
+                                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                            @else
+                                                <div class="w-full h-full flex items-center justify-center">
+                                                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                    </svg>
+                                                </div>
+                                            @endif
+                                            
+                                            <!-- Discount Badge -->
+                                            <div class="absolute top-1.5 right-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-0.5 rounded-full font-bold text-[10px] shadow-lg">
+                                                -{{ $product->discount }}%
+                                            </div>
 
-                            <!-- Stock Status Badge -->
-                            <div class="absolute bottom-1.5 left-1.5">
-                                @if($product->stock_status === 'normal')
-                                    <span class="inline-block bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                                        In Stock
-                                    </span>
-                                @elseif($product->stock_status === 'low_stock')
-                                    <span class="inline-block bg-yellow-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                                        Low
-                                    </span>
-                                @else
-                                    <span class="inline-block bg-gray-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
-                                        Out
-                                    </span>
-                                @endif
-                            </div>
-                        </div>
-
-                        <!-- Product Info -->
-                        <div class="p-2.5 flex-1 flex flex-col">
-                            <h3 class="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors">
-                                {{ $product->name }}
-                            </h3>
-                            
-                            <!-- Pricing -->
-                            <div class="mt-auto">
-                                @if($product->updated_price && $product->updated_price < $product->price)
-                                    <div class="space-y-0.5">
-                                        <div class="flex items-center gap-1">
-                                            <span class="text-sm font-bold text-green-600">৳{{ number_format($product->updated_price, 0) }}</span>
+                                            <!-- Stock Status Badge -->
+                                            <div class="absolute bottom-1.5 left-1.5">
+                                                @if($product->stock_status === 'normal')
+                                                    <span class="inline-block bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                        In Stock
+                                                    </span>
+                                                @elseif($product->stock_status === 'low_stock')
+                                                    <span class="inline-block bg-yellow-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                        Low
+                                                    </span>
+                                                @else
+                                                    <span class="inline-block bg-gray-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                        Out
+                                                    </span>
+                                                @endif
+                                            </div>
                                         </div>
-                                        <span class="text-[10px] text-gray-400 line-through">৳{{ number_format($product->price, 0) }}</span>
+
+                                        <!-- Product Info -->
+                                        <div class="p-2.5 flex-1 flex flex-col">
+                                            <h3 class="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors">
+                                                {{ $product->name }}
+                                            </h3>
+                                            
+                                            <!-- Pricing -->
+                                            <div class="mt-auto">
+                                                @if($product->updated_price && $product->updated_price < $product->price)
+                                                    <div class="space-y-0.5">
+                                                        <div class="flex items-center gap-1">
+                                                            <span class="text-sm font-bold text-green-600">৳{{ number_format($product->updated_price, 0) }}</span>
+                                                        </div>
+                                                        <span class="text-[10px] text-gray-400 line-through">৳{{ number_format($product->price, 0) }}</span>
+                                                    </div>
+                                                @else
+                                                    <span class="text-sm font-bold text-gray-800">৳{{ number_format($product->price, 0) }}</span>
+                                                @endif
+                                            </div>
+                                        </div>
                                     </div>
-                                @else
-                                    <span class="text-sm font-bold text-gray-800">৳{{ number_format($product->price, 0) }}</span>
+                                </a>
+
+                                @if($loop->iteration % 2 == 1 && isset($discountedProducts[$loop->index + 1]))
+                                    @php $nextProduct = $discountedProducts[$loop->index + 1]; @endphp
+                                    <a href="{{ route('medicine.show', $nextProduct->id) }}" class="group block">
+                                        <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
+                                            <!-- Product Image -->
+                                            <div class="relative h-32 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                                                @if($nextProduct->image_path)
+                                                    <img src="{{ asset('storage/' . $nextProduct->image_path) }}" 
+                                                         alt="{{ $nextProduct->name }}" 
+                                                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                                @else
+                                                    <div class="w-full h-full flex items-center justify-center">
+                                                        <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                        </svg>
+                                                    </div>
+                                                @endif
+                                                
+                                                <!-- Discount Badge -->
+                                                <div class="absolute top-1.5 right-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-0.5 rounded-full font-bold text-[10px] shadow-lg">
+                                                    -{{ $nextProduct->discount }}%
+                                                </div>
+
+                                                <!-- Stock Status Badge -->
+                                                <div class="absolute bottom-1.5 left-1.5">
+                                                    @if($nextProduct->stock_status === 'normal')
+                                                        <span class="inline-block bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                            In Stock
+                                                        </span>
+                                                    @elseif($nextProduct->stock_status === 'low_stock')
+                                                        <span class="inline-block bg-yellow-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                            Low
+                                                        </span>
+                                                    @else
+                                                        <span class="inline-block bg-gray-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                                            Out
+                                                        </span>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <!-- Product Info -->
+                                            <div class="p-2.5 flex-1 flex flex-col">
+                                                <h3 class="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors">
+                                                    {{ $nextProduct->name }}
+                                                </h3>
+                                                
+                                                <!-- Pricing -->
+                                                <div class="mt-auto">
+                                                    @if($nextProduct->updated_price && $nextProduct->updated_price < $nextProduct->price)
+                                                        <div class="space-y-0.5">
+                                                            <div class="flex items-center gap-1">
+                                                                <span class="text-sm font-bold text-green-600">৳{{ number_format($nextProduct->updated_price, 0) }}</span>
+                                                            </div>
+                                                            <span class="text-[10px] text-gray-400 line-through">৳{{ number_format($nextProduct->price, 0) }}</span>
+                                                        </div>
+                                                    @else
+                                                        <span class="text-sm font-bold text-gray-800">৳{{ number_format($nextProduct->price, 0) }}</span>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
                                 @endif
                             </div>
                         </div>
-                    </div>
-                </a>
-            @endforeach
-        </div>
-
-        @if($discountedProducts->count() > 8)
-            <div class="mt-4 text-center">
-                <a href="#" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
-                    View All Deals
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                    </svg>
-                </a>
+                        @if($loop->iteration % 2 == 0 || $loop->last)
+                            @php continue; @endphp
+                        @endif
+                    @endforeach
+                </div>
             </div>
-        @endif
+
+            <!-- Navigation Dots -->
+            @if($discountedProducts->count() > 2)
+                <div class="flex justify-center gap-2 mt-4">
+                    @for($i = 0; $i < ceil($discountedProducts->count() / 2); $i++)
+                        <button onclick="goToMobileSlide({{ $i }})" 
+                                class="mobile-carousel-dot h-2 w-2 rounded-full transition-all duration-300 {{ $i === 0 ? 'bg-indigo-600 w-6' : 'bg-indigo-300' }}"
+                                aria-label="Go to slide {{ $i + 1 }}">
+                        </button>
+                    @endfor
+                </div>
+            @endif
+        </div>
     @else
         <div class="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
             <div class="text-4xl mb-3">🎁</div>
@@ -257,6 +335,9 @@
 <script>
     let currentDiscountCarouselIndex = 0;
     let discountCarouselAutoInterval = null;
+    
+    let currentMobileSlideIndex = 0;
+    let mobileCarouselAutoInterval = null;
 
     function updateDiscountCarousel() {
         const track = document.querySelector('.discount-carousel-track');
@@ -322,12 +403,66 @@
         startDiscountCarouselAutoPlay();
     }
 
+    // Mobile Carousel Functions
+    function updateMobileCarousel() {
+        const track = document.querySelector('.mobile-carousel-track');
+        const slides = document.querySelectorAll('.mobile-carousel-slide');
+        const totalSlides = slides.length;
+        
+        if (!track || totalSlides === 0) return;
+
+        // Calculate scroll position
+        track.style.transform = `translateX(-${currentMobileSlideIndex * 100}%)`;
+
+        // Update dots
+        const dots = document.querySelectorAll('.mobile-carousel-dot');
+        dots.forEach((dot, index) => {
+            if (index === currentMobileSlideIndex) {
+                dot.classList.remove('w-2', 'bg-indigo-300');
+                dot.classList.add('bg-indigo-600', 'w-6');
+            } else {
+                dot.classList.remove('bg-indigo-600', 'w-6');
+                dot.classList.add('w-2', 'bg-indigo-300');
+            }
+        });
+    }
+
+    function nextMobileSlide() {
+        const slides = document.querySelectorAll('.mobile-carousel-slide');
+        const totalSlides = slides.length;
+        if (totalSlides === 0) return;
+        
+        currentMobileSlideIndex = (currentMobileSlideIndex + 1) % totalSlides;
+        updateMobileCarousel();
+        resetMobileCarouselAutoPlay();
+    }
+
+    function goToMobileSlide(index) {
+        currentMobileSlideIndex = index;
+        updateMobileCarousel();
+        resetMobileCarouselAutoPlay();
+    }
+
+    function startMobileCarouselAutoPlay() {
+        const slides = document.querySelectorAll('.mobile-carousel-slide');
+        if (slides.length <= 1) return;
+
+        mobileCarouselAutoInterval = setInterval(() => {
+            nextMobileSlide();
+        }, 4000);
+    }
+
+    function resetMobileCarouselAutoPlay() {
+        clearInterval(mobileCarouselAutoInterval);
+        startMobileCarouselAutoPlay();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
+            // Desktop carousel
             updateDiscountCarousel();
             startDiscountCarouselAutoPlay();
 
-            // Pause on hover
             const wrapper = document.querySelector('.discount-carousel-wrapper');
             if (wrapper) {
                 wrapper.addEventListener('mouseenter', () => {
@@ -336,6 +471,41 @@
                 wrapper.addEventListener('mouseleave', () => {
                     startDiscountCarouselAutoPlay();
                 });
+            }
+
+            // Mobile carousel
+            updateMobileCarousel();
+            startMobileCarouselAutoPlay();
+
+            const mobileWrapper = document.querySelector('.mobile-carousel-wrapper');
+            if (mobileWrapper) {
+                // Touch swipe support
+                let touchStartX = 0;
+                let touchEndX = 0;
+
+                mobileWrapper.addEventListener('touchstart', (e) => {
+                    touchStartX = e.changedTouches[0].screenX;
+                    clearInterval(mobileCarouselAutoInterval);
+                });
+
+                mobileWrapper.addEventListener('touchend', (e) => {
+                    touchEndX = e.changedTouches[0].screenX;
+                    handleSwipe();
+                    startMobileCarouselAutoPlay();
+                });
+
+                function handleSwipe() {
+                    const swipeThreshold = 50;
+                    if (touchStartX - touchEndX > swipeThreshold) {
+                        // Swipe left - next slide
+                        nextMobileSlide();
+                    } else if (touchEndX - touchStartX > swipeThreshold) {
+                        // Swipe right - previous slide
+                        const slides = document.querySelectorAll('.mobile-carousel-slide');
+                        currentMobileSlideIndex = (currentMobileSlideIndex - 1 + slides.length) % slides.length;
+                        updateMobileCarousel();
+                    }
+                }
             }
         }, 100);
     });
