@@ -1,16 +1,20 @@
-<!-- Mobile Toggle Button -->
-<button id="sidebar-toggle" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-200">
-    <i class='bx bx-menu text-2xl'></i>
+<!-- Mobile Toggle Button with Animation -->
+<button id="sidebar-toggle" class="md:hidden fixed top-20 left-4 z-50 p-3 bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-xl hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105 active:scale-95 group">
+    <div class="hamburger-icon">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+    </div>
 </button>
 
 <!-- Overlay for Mobile -->
-<div id="sidebar-overlay" class="fixed inset-0 bg-black bg-opacity-50 md:hidden hidden z-30 transition-opacity duration-300"></div>
+<div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm md:hidden hidden z-30 transition-all duration-300"></div>
 
 <!-- Sidebar -->
 <aside class="header sidebar-new" id="sidebar">
-    <!-- Close Button for Mobile -->
-    <button id="sidebar-close" class="md:hidden absolute top-4 right-4 p-2 rounded-lg hover:bg-gray-700 transition-colors duration-200 text-white">
-        <i class='bx bx-x text-2xl'></i>
+    <!-- Close Button for Mobile with X Animation -->
+    <button id="sidebar-close" class="md:hidden absolute top-4 right-4 p-2.5 rounded-xl bg-red-500/10 hover:bg-red-500 border border-red-500/30 hover:border-red-500 transition-all duration-300 text-red-400 hover:text-white shadow-lg hover:shadow-xl hover:shadow-red-500/30 transform hover:scale-110 active:scale-95 hover:rotate-90 group">
+        <i class='bx bx-x text-2xl group-hover:rotate-180 transition-transform duration-300'></i>
     </button>
 
     <!-- Header -->
@@ -53,16 +57,55 @@
 
     <!-- Footer -->
     <div class="sidebar-footer">
-        <p class="sidebar-footer-text">MedNet Online Pharmacy</p>
+        <p class="sidebar-footer-text">MedNet</p>
         <p class="sidebar-footer-subtext">Your trusted health partner</p>
     </div>
 </aside>
 
 <style>
+    /* Hamburger Menu Animation */
+    .hamburger-icon {
+        width: 24px;
+        height: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        cursor: pointer;
+    }
+
+    .hamburger-line {
+        width: 100%;
+        height: 3px;
+        background-color: white;
+        border-radius: 2px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #sidebar-toggle:hover .hamburger-line:nth-child(1) {
+        transform: translateY(-2px);
+    }
+
+    #sidebar-toggle:hover .hamburger-line:nth-child(3) {
+        transform: translateY(2px);
+    }
+
+    #sidebar-toggle.active .hamburger-line:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    #sidebar-toggle.active .hamburger-line:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+    }
+
+    #sidebar-toggle.active .hamburger-line:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+    }
+
     /* Sidebar Styling */
     .sidebar-new {
-        background-color: #37404f !important;
-        border-right: 2px solid #1a252f;
+        background: linear-gradient(180deg, #37404f 0%, #2c3542 100%) !important;
+        border-right: 2px solid #1e2530;
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3) !important;
         display: flex !important;
         flex-direction: column !important;
@@ -72,6 +115,8 @@
         height: calc(100vh - 64px) !important;
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
         overflow-y: auto !important;
+        overflow-x: hidden !important;
+        z-index: 40 !important;
     }
 
     .sidebar-new.show {
@@ -89,28 +134,20 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        font-size: 22px;
+        font-size: 20px;
         font-weight: 700;
         color: #ffffff;
-        margin-bottom: 8px;
     }
 
     .sidebar-title i {
         font-size: 24px;
-        color: #3498db;
-    }
-
-    .sidebar-subtitle {
-        font-size: 13px;
-        color: #95a5a6;
-        margin: 0;
-        padding-left: 36px;
+        color: #60a5fa;
     }
 
     /* Sidebar Navigation */
     .sidebar-nav {
         flex: 1;
-        padding: 16px 8px;
+        padding: 16px 12px;
     }
 
     .sidebar-menu {
@@ -119,7 +156,7 @@
         padding: 0;
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px;
     }
 
     .sidebar-menu li {
@@ -133,11 +170,11 @@
         align-items: center;
         gap: 14px;
         padding: 14px 16px;
-        color: #bdc3c7;
+        color: #cbd5e1;
         text-decoration: none;
         font-size: 15px;
         font-weight: 500;
-        border-radius: 8px;
+        border-radius: 10px;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
@@ -147,30 +184,30 @@
         font-size: 20px;
         flex-shrink: 0;
         transition: all 0.3s ease;
+        color: #94a3b8;
     }
 
     .sidebar-link:hover {
-        background-color: rgba(52, 152, 219, 0.1);
-        color: #3498db;
-        padding-left: 20px;
+        background: rgba(96, 165, 250, 0.1);
+        color: #ffffff;
+        transform: translateX(4px);
     }
 
     .sidebar-link:hover i {
-        color: #3498db;
+        color: #60a5fa;
         transform: scale(1.1);
     }
 
     /* Active Link State */
     .sidebar-link.active {
-        background: linear-gradient(90deg, #3498db 0%, rgba(52, 152, 219, 0.3) 100%);
+        background: linear-gradient(90deg, rgba(96, 165, 250, 0.2) 0%, rgba(59, 130, 246, 0.1) 100%);
         color: #ffffff;
-        box-shadow: inset 0 0 10px rgba(52, 152, 219, 0.3);
-        border-left: 3px solid #3498db;
+        border-left: 3px solid #60a5fa;
         padding-left: 13px;
     }
 
     .sidebar-link.active i {
-        color: #3498db;
+        color: #60a5fa;
     }
 
     /* Sidebar Footer */
@@ -179,22 +216,22 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         margin-top: auto;
         background: rgba(0, 0, 0, 0.2);
-        border-radius: 8px;
-        margin: 16px 8px 16px 8px;
+        border-radius: 10px;
+        margin: 16px 12px;
         text-align: center;
     }
 
     .sidebar-footer-text {
-        font-size: 13px;
-        font-weight: 600;
-        color: #ecf0f1;
-        margin: 0;
+        font-size: 14px;
+        font-weight: 700;
+        color: #ffffff;
+        margin: 0 0 4px 0;
     }
 
     .sidebar-footer-subtext {
         font-size: 12px;
-        color: #95a5a6;
-        margin: 6px 0 0 0;
+        color: #94a3b8;
+        margin: 0;
     }
 
     /* Scrollbar Styling */
@@ -207,12 +244,12 @@
     }
 
     .sidebar-new::-webkit-scrollbar-thumb {
-        background: rgba(52, 152, 219, 0.4);
+        background: rgba(96, 165, 250, 0.3);
         border-radius: 3px;
     }
 
     .sidebar-new::-webkit-scrollbar-thumb:hover {
-        background: rgba(52, 152, 219, 0.6);
+        background: rgba(96, 165, 250, 0.5);
     }
 
     /* Mobile Responsive */
@@ -220,9 +257,9 @@
         .sidebar-new {
             position: fixed !important;
             left: 0 !important;
-            top: 70px !important;
-            width: 250px !important;
-            height: calc(100vh - 70px) !important;
+            top: 64px !important;
+            width: 260px !important;
+            height: calc(100vh - 64px) !important;
             transform: translateX(-100%) !important;
             z-index: 1001 !important;
             padding-top: 16px !important;
@@ -242,14 +279,14 @@
         }
 
         .sidebar-title {
-            font-size: 20px;
+            font-size: 19px;
         }
     }
 
     /* Desktop View */
     @media (min-width: 769px) {
         .sidebar-new {
-            width: 220px !important;
+            width: 240px !important;
         }
 
         #sidebar-toggle,
@@ -270,25 +307,53 @@
         function openSidebar() {
             sidebar.classList.add('show');
             overlay.classList.remove('hidden');
+            toggle.classList.add('active');
             document.body.style.overflow = 'hidden';
+            
+            // Add ripple effect
+            const ripple = document.createElement('div');
+            ripple.style.cssText = 'position: absolute; border-radius: 50%; background: rgba(59, 130, 246, 0.6); width: 100px; height: 100px; margin-top: -50px; margin-left: -50px; animation: ripple 0.6s; pointer-events: none;';
+            toggle.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
         }
 
         function closeSidebar() {
             sidebar.classList.remove('show');
             overlay.classList.add('hidden');
+            toggle.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
-        toggle?.addEventListener('click', openSidebar);
-        close?.addEventListener('click', closeSidebar);
+        toggle?.addEventListener('click', function(e) {
+            if (sidebar.classList.contains('show')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+
+        close?.addEventListener('click', function() {
+            closeSidebar();
+            // Add close animation feedback
+            close.style.transform = 'scale(0.8) rotate(90deg)';
+            setTimeout(() => {
+                close.style.transform = '';
+            }, 200);
+        });
+
         overlay?.addEventListener('click', closeSidebar);
 
-        // Close on link click
+        // Close on link click with feedback
         const links = sidebar.querySelectorAll('.sidebar-link');
         links.forEach(link => {
-            link.addEventListener('click', function() {
+            link.addEventListener('click', function(e) {
                 if (window.innerWidth < 769) {
-                    closeSidebar();
+                    // Add click feedback
+                    link.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        link.style.transform = '';
+                        closeSidebar();
+                    }, 150);
                 }
             });
         });
@@ -300,4 +365,20 @@
             }
         });
     });
+
+    // Add ripple animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes ripple {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 </script>
