@@ -1,20 +1,13 @@
-<!-- Mobile Toggle Button with Animation -->
-<button id="sidebar-toggle" class="md:hidden fixed top-20 left-4 z-50 p-3 bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-xl hover:from-blue-600 hover:to-blue-700 shadow-xl hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 transform hover:scale-105 active:scale-95 group">
-    <div class="hamburger-icon">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-    </div>
-</button>
-
 <!-- Overlay for Mobile -->
 <div id="sidebar-overlay" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm md:hidden hidden z-30 transition-all duration-300"></div>
 
 <!-- Sidebar -->
 <aside class="header sidebar-new" id="sidebar">
-    <!-- Close Button for Mobile with X inside red circle -->
-    <button id="sidebar-close" class="md:hidden absolute top-4 right-4 w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 flex items-center justify-center transition-all duration-300 text-white shadow-lg hover:shadow-xl hover:shadow-red-500/50 transform hover:scale-110 active:scale-95 hover:rotate-90 group">
-        <i class='bx bx-x text-2xl font-bold group-hover:rotate-180 transition-transform duration-300'></i>
+    <!-- Close Button for Mobile -->
+    <button id="sidebar-close" class="md:hidden absolute top-5 right-5 p-1.5 rounded-lg bg-red-500/10 hover:bg-red-500 border border-red-500/30 hover:border-red-500 transition-all duration-300 text-red-500 hover:text-white group">
+        <svg class="w-6 h-6 transition-transform duration-300 group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
     </button>
 
     <!-- Header -->
@@ -117,6 +110,13 @@
         overflow-y: auto !important;
         overflow-x: hidden !important;
         z-index: 40 !important;
+    }
+
+    @media (max-width: 768px) {
+        .sidebar-new {
+            top: 64px !important;
+            height: calc(100vh - 64px) !important;
+        }
     }
 
     .sidebar-new.show {

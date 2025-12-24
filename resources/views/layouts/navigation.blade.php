@@ -1,16 +1,26 @@
 <nav x-data="{ open: false }" class="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 backdrop-blur-md shadow-2xl border-b border-slate-600/30 fixed top-0 left-0 right-0 z-50 transition-all duration-300">
     <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
-        <div class="flex justify-between items-center h-16 lg:h-18">
+        <div class="flex justify-between items-center h-16">
 
-            <!-- Left: MedNet Logo with elegant styling -->
-            <div class="flex-shrink-0 flex items-center min-w-0">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-1.5 sm:gap-2 group">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300">
+            <!-- Left: Hamburger Menu (Mobile) + MedNet Logo -->
+            <div class="flex items-center gap-2 sm:gap-3 flex-shrink-0 min-w-0">
+                <!-- Hamburger Menu Button (Mobile Only) -->
+                <button id="sidebar-toggle" class="md:hidden p-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 group flex-shrink-0" aria-label="Toggle Menu">
+                    <div class="hamburger-icon">
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                        <span class="hamburger-line"></span>
+                    </div>
+                </button>
+
+                <!-- MedNet Logo -->
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-1.5 sm:gap-2 group flex-shrink-0">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300 flex-shrink-0">
                         <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="font-bold text-lg sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
+                    <h2 class="font-bold text-base sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-none tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
