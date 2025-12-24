@@ -35,6 +35,9 @@
                     {{ $slot ?? '' }}
                 @endif
             </main>
+
+            <!-- Footer -->
+            <x-footer />
         </div>
     </body>
 </html>
