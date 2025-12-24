@@ -14,10 +14,10 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="pt-0 pb-2 sm:py-12 lg:-mt-12">
+        <div class="pt-0 pb-2 sm:py-12">
             <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
                 <!-- QuickBuy and Promotional Slider Section -->
-                <div class="mb-6 sm:mb-12 flex flex-col lg:flex-row gap-4 lg:gap-0 lg:relative lg:min-h-[380px] lg:-translate-y-12">
+                <div class="mb-6 sm:mb-12 flex flex-col lg:flex-row gap-4 lg:gap-0 lg:relative lg:min-h-[380px] lg:mt-8">
                     <!-- QuickBuy Box -->
                     <div class="w-full lg:w-auto">
                         <x-quick-buy-box />

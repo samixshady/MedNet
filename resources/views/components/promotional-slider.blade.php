@@ -4,7 +4,7 @@
     <link rel="stylesheet" href="{{ asset('css/promotional-slider.css') }}">
 @endonce
 
-<div class="bg-white rounded-xl shadow-lg overflow-hidden promotional-slider-container w-full lg:w-[550px] h-[320px] flex flex-col relative lg:absolute lg:left-[500px] lg:top-[-80px] z-10">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden promotional-slider-container w-full lg:w-[550px] h-[320px] flex flex-col relative lg:absolute lg:left-[300px] lg:top-[-80px] z-10">
     <!-- Header -->
     <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-3 sm:px-4 py-3 flex justify-between items-center flex-shrink-0">
         <div>
