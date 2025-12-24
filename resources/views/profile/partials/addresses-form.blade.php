@@ -1,44 +1,44 @@
 <!-- Addresses Section -->
-<div class="p-4 sm:p-8 bg-white shadow sm:rounded-lg">
+<div class="p-3 sm:p-8 bg-white shadow sm:rounded-lg">
     <div class="max-w-4xl">
-        <div class="mb-6">
-            <h3 class="text-2xl font-bold text-gray-900 flex items-center gap-3 mb-2">
-                <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+        <div class="mb-4 sm:mb-6">
+            <h3 class="text-lg sm:text-2xl font-bold text-gray-900 flex items-center gap-2 sm:gap-3 mb-1.5 sm:mb-2">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/>
                 </svg>
                 Saved Addresses
             </h3>
-            <p class="text-gray-600 text-sm">Save up to 5 delivery addresses for quick checkout</p>
+            <p class="text-gray-600 text-xs sm:text-sm">Save up to 5 delivery addresses for quick checkout</p>
         </div>
 
         <!-- Addresses List -->
-        <div class="mb-8">
+        <div class="mb-6 sm:mb-8">
             @if($addresses->count() > 0)
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
                     @foreach($addresses as $address)
-                        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-400 transition-colors">
-                            <div class="flex justify-between items-start mb-3 gap-2">
-                                <div class="flex items-center gap-2 flex-wrap">
-                                    <span class="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-xs sm:text-sm font-semibold">
+                        <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:border-blue-400 transition-colors">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-3 gap-2">
+                                <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap max-w-full">
+                                    <span class="bg-blue-100 text-blue-600 px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-semibold truncate max-w-[120px] sm:max-w-none">
                                         {{ $address->alias_name }}
                                     </span>
                                     @if($address->is_inside_dhaka)
-                                        <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs font-semibold">Inside Dhaka</span>
+                                        <span class="bg-green-100 text-green-600 px-1.5 sm:px-2 py-1 rounded text-xs font-semibold whitespace-nowrap">Inside Dhaka</span>
                                     @else
-                                        <span class="bg-orange-100 text-orange-600 px-2 py-1 rounded text-xs font-semibold">Outside Dhaka</span>
+                                        <span class="bg-orange-100 text-orange-600 px-1.5 sm:px-2 py-1 rounded text-xs font-semibold whitespace-nowrap">Outside Dhaka</span>
                                     @endif
                                 </div>
                                 <div class="flex gap-1 flex-shrink-0">
-                                    <button onclick="openEditModal({{ $address->id }}, '{{ $address->alias_name }}', '{{ addslashes($address->address) }}', '{{ $address->phone }}', {{ $address->is_inside_dhaka ? 'true' : 'false' }})" class="text-blue-600 hover:text-blue-700 text-xs font-semibold px-2 py-1 bg-blue-50 rounded hover:bg-blue-100 transition">✎ Edit</button>
+                                    <button onclick="openEditModal({{ $address->id }}, '{{ $address->alias_name }}', '{{ addslashes($address->address) }}', '{{ $address->phone }}', {{ $address->is_inside_dhaka ? 'true' : 'false' }})" class="text-blue-600 hover:text-blue-700 text-xs font-semibold px-2 py-1 bg-blue-50 rounded hover:bg-blue-100 transition whitespace-nowrap">✎ Edit</button>
                                     <form method="POST" action="{{ route('addresses.destroy', $address->id) }}" style="display:inline;">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-700 text-xs font-semibold px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition" onclick="return confirm('Delete this address?')">✕ Delete</button>
+                                        <button type="submit" class="text-red-600 hover:text-red-700 text-xs font-semibold px-2 py-1 bg-red-50 rounded hover:bg-red-100 transition whitespace-nowrap" onclick="return confirm('Delete this address?')">✕ Delete</button>
                                     </form>
                                 </div>
                             </div>
                             <p class="text-gray-700 text-sm mb-2 break-words">{{ $address->address }}</p>
-                            <p class="text-gray-600 text-xs">📞 {{ $address->phone }}</p>
+                            <p class="text-gray-600 text-xs break-all">📞 {{ $address->phone }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -50,65 +50,65 @@
 
             @if($addresses->count() < 5)
                 <!-- Add New Address Form -->
-                <div class="border-2 border-dashed border-blue-300 rounded-lg p-6 bg-blue-50">
-                    <h4 class="font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                        <span class="text-blue-600 font-bold">+</span> Add New Address
+                <div class="border-2 border-dashed border-blue-300 rounded-lg p-3 sm:p-6 bg-blue-50">
+                    <h4 class="font-semibold text-base sm:text-lg text-gray-900 mb-3 sm:mb-4 flex items-center gap-2">
+                        <span class="text-blue-600 font-bold text-lg">+</span> Add New Address
                     </h4>
 
                     <form method="POST" action="{{ route('addresses.store') }}">
                         @csrf
 
                         <!-- Alias Name -->
-                        <div class="mb-4">
-                            <label for="alias_name" class="block text-sm font-semibold text-gray-700 mb-2">Address Label *</label>
-                            <div class="flex gap-2 mb-3">
+                        <div class="mb-3 sm:mb-4">
+                            <label for="alias_name" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Address Label *</label>
+                            <div class="flex flex-wrap gap-1.5 sm:gap-2 mb-2 sm:mb-3">
                                 @foreach(['Home', 'Work', 'Gym', 'Parents', 'Other'] as $preset)
-                                    <button type="button" class="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-blue-100 transition" onclick="setAlias('{{ $preset }}')">
+                                    <button type="button" class="px-2 sm:px-3 py-1 border border-gray-300 rounded-lg text-xs sm:text-sm hover:bg-blue-100 transition whitespace-nowrap" onclick="setAlias('{{ $preset }}')">
                                         {{ $preset }}
                                     </button>
                                 @endforeach
                             </div>
-                            <input type="text" id="alias_name" name="alias_name" placeholder="e.g., Home" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
+                            <input type="text" id="alias_name" name="alias_name" placeholder="e.g., Home" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" required>
                             @error('alias_name')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
                         </div>
 
                         <!-- Address -->
-                        <div class="mb-4">
-                            <label for="address" class="block text-sm font-semibold text-gray-700 mb-2">Full Address *</label>
-                            <textarea id="address" name="address" placeholder="Enter your full address" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" rows="3" required></textarea>
-                            @error('address')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        <div class="mb-3 sm:mb-4">
+                            <label for="address" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Full Address *</label>
+                            <textarea id="address" name="address" placeholder="Enter your full address" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" rows="3" required></textarea>
+                            @error('address')<span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>@enderror
                         </div>
 
                         <!-- Phone -->
-                        <div class="mb-4">
-                            <label for="phone" class="block text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
-                            <input type="tel" id="phone" name="phone" placeholder="01xxxxxxxxx" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" required>
-                            @error('phone')<span class="text-red-500 text-sm">{{ $message }}</span>@enderror
+                        <div class="mb-3 sm:mb-4">
+                            <label for="phone" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">Phone Number *</label>
+                            <input type="tel" id="phone" name="phone" placeholder="01xxxxxxxxx" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm" required>
+                            @error('phone')<span class="text-red-500 text-xs sm:text-sm">{{ $message }}</span>@enderror
                         </div>
 
                         <!-- Inside/Outside Dhaka -->
-                        <div class="mb-6">
-                            <label class="block text-sm font-semibold text-gray-700 mb-3">Location Type *</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer">
+                        <div class="mb-4 sm:mb-6">
+                            <label class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2 sm:mb-3">Location Type *</label>
+                            <div class="flex gap-3 sm:gap-4">
+                                <label class="flex items-center gap-1.5 sm:gap-2 cursor-pointer">
                                     <input type="radio" name="is_inside_dhaka" value="1" checked class="w-4 h-4 text-blue-600">
-                                    <span class="text-gray-700">Inside Dhaka</span>
+                                    <span class="text-gray-700 text-sm">Inside Dhaka</span>
                                 </label>
-                                <label class="flex items-center gap-2 cursor-pointer">
+                                <label class="flex items-center gap-1.5 sm:gap-2 cursor-pointer">
                                     <input type="radio" name="is_inside_dhaka" value="0" class="w-4 h-4 text-blue-600">
-                                    <span class="text-gray-700">Outside Dhaka</span>
+                                    <span class="text-gray-700 text-sm">Outside Dhaka</span>
                                 </label>
                             </div>
                         </div>
 
-                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg transition-colors">
+                        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold sm:font-bold py-2.5 sm:py-3 px-4 rounded-lg transition-colors text-sm sm:text-base">
                             💾 Save Address
                         </button>
                     </form>
                 </div>
             @else
-                <div class="text-center py-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p class="text-yellow-700 font-semibold">✓ You have saved the maximum of 5 addresses</p>
+                <div class="text-center py-3 sm:py-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                    <p class="text-yellow-700 font-semibold text-xs sm:text-sm">✓ You have saved the maximum of 5 addresses</p>
                 </div>
             @endif
         </div>

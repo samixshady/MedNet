@@ -31,6 +31,7 @@
                 grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
                 gap: 24px;
                 margin-bottom: 40px;
+                width: 100%;
             }
 
             @media (max-width: 1200px) {
@@ -42,15 +43,19 @@
 
             @media (max-width: 768px) {
                 .products-grid {
-                    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                    gap: 16px;
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 10px;
+                    margin-left: 0;
+                    margin-right: 0;
                 }
             }
 
             @media (max-width: 480px) {
                 .products-grid {
                     grid-template-columns: repeat(2, 1fr);
-                    gap: 12px;
+                    gap: 8px;
+                    margin-left: 0;
+                    margin-right: 0;
                 }
             }
 
@@ -301,9 +306,9 @@
 
     @include('layouts.sidebar')
 
-    <div class="main-content">
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+    <div class="main-content" style="overflow-x: hidden;">
+        <div class="py-6 sm:py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="supplements-header">
                     <h1>Supplement Products</h1>
                     <p class="text-gray-600">Browse our collection of supplements</p>

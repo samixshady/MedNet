@@ -61,7 +61,7 @@ body {
 .main-content {
   margin-left: 220px; /* space for sidebar */
   padding: 20px;
-  margin-top: 50px; /* space for navbar */
+  margin-top: 64px; /* space for navbar - 64px is navbar height */
 }
 
 /* ----------------------------
@@ -83,6 +83,7 @@ body {
 
   .main-content {
     margin-left: 0;
-    margin-top: 200px; /* space so it doesn't hide under header */
+    margin-top: 64px; /* space for fixed navbar only - 64px navbar height */
+    padding: 10px; /* reduce padding on mobile */
   }
 }
