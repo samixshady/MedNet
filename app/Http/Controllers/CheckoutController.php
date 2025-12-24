@@ -57,6 +57,19 @@ class CheckoutController extends Controller
             return redirect('/cart')->with('error', 'Your cart is empty');
         }
 
+        // Validate prescription uploads for prescription-required items
+        $missingPrescriptions = $cartItems->filter(function ($item) {
+            return $item->product && 
+                   $item->product->prescription_required && 
+                   empty($item->prescription_file_path);
+        });
+
+        if ($missingPrescriptions->isNotEmpty()) {
+            $productNames = $missingPrescriptions->pluck('product.name')->implode(', ');
+            return redirect('/cart')->with('error', 
+                'Please upload prescriptions for the following items: ' . $productNames);
+        }
+
         try {
             DB::beginTransaction();
 
@@ -67,6 +80,11 @@ class CheckoutController extends Controller
 
             // Generate random tracking number
             $trackingNumber = 'MN' . strtoupper(bin2hex(random_bytes(4))) . '-' . strtoupper(substr($user->name, 0, 3));
+
+            // Check if any items require prescription
+            $requiresPrescription = $cartItems->contains(function ($item) {
+                return $item->product && $item->product->prescription_required;
+            });
 
             // Create order
             $order = Order::create([
@@ -79,6 +97,8 @@ class CheckoutController extends Controller
                 'payment_method' => $request->payment_method_field,
                 'payment_status' => 'completed',
                 'order_status' => 'pending',
+                'prescription_required' => $requiresPrescription,
+                'prescription_status' => $requiresPrescription ? 'pending' : 'approved',
             ]);
 
             // Create order items and update product quantities
@@ -89,6 +109,7 @@ class CheckoutController extends Controller
                     'quantity' => $item->quantity,
                     'price' => $item->product->updated_price ?? $item->product->price,
                     'subtotal' => $item->subtotal,
+                    'prescription_file_path' => $item->prescription_file_path ?? null,
                 ]);
 
                 // Decrease product quantity

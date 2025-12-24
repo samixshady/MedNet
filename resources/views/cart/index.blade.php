@@ -217,21 +217,39 @@
             }
 
             .prescription-upload {
-                margin-top: 4px;
+                margin-top: 12px;
+                padding: 12px;
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                border-radius: 6px;
             }
 
             .prescription-label {
-                font-size: 12px;
-                color: #e67e22;
+                font-size: 13px;
+                color: #856404;
                 font-weight: 700;
-                margin-bottom: 6px;
-                display: block;
+                margin-bottom: 8px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .prescription-required-badge {
+                background: #dc3545;
+                color: white;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 10px;
+                font-weight: 700;
+                text-transform: uppercase;
+                margin-left: 4px;
             }
 
             .file-input-wrapper {
                 position: relative;
-                display: inline-block;
-                width: auto;
+                display: block;
+                width: 100%;
+                margin-top: 8px;
             }
 
             .file-input {
@@ -241,16 +259,18 @@
             .file-btn {
                 background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
                 color: white;
-                padding: 8px 14px;
+                padding: 10px 16px;
                 border-radius: 6px;
-                font-size: 12px;
+                font-size: 13px;
                 font-weight: 600;
                 cursor: pointer;
                 border: none;
                 transition: all 0.2s ease;
                 display: inline-flex;
                 align-items: center;
-                gap: 6px;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
             }
 
             .file-btn:hover {
@@ -262,8 +282,58 @@
             .file-name {
                 font-size: 12px;
                 color: #27ae60;
-                margin-top: 4px;
+                margin-top: 8px;
                 font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .file-name.uploaded {
+                background: #d4edda;
+                padding: 8px;
+                border-radius: 6px;
+                border-left: 3px solid #28a745;
+            }
+
+            .prescription-warning {
+                background: #fff3cd;
+                border-left: 4px solid #ffc107;
+                padding: 16px;
+                border-radius: 8px;
+                margin: 20px 0;
+                display: none;
+            }
+
+            .prescription-warning.show {
+                display: block;
+                animation: shake 0.5s;
+            }
+
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+
+            .prescription-warning-text {
+                font-size: 14px;
+                color: #856404;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .prescription-items-list {
+                margin-top: 12px;
+                padding-left: 20px;
+            }
+
+            .prescription-item {
+                font-size: 13px;
+                color: #856404;
+                margin-bottom: 6px;
             }
 
             .remove-btn {
@@ -642,16 +712,29 @@
 
                                             @if($item->product->prescription_required)
                                                 <div class="prescription-upload">
-                                                    <label class="prescription-label">Prescription Required</label>
+                                                    <label class="prescription-label">
+                                                        <i class='bx bx-error-circle'></i>
+                                                        Prescription Required
+                                                        <span class="prescription-required-badge">MUST UPLOAD</span>
+                                                    </label>
                                                     <div class="file-input-wrapper">
-                                                        <input type="file" id="prescription-{{ $item->id }}" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="uploadPrescription({{ $item->id }})">
+                                                        <input type="file" id="prescription-{{ $item->id }}" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="uploadPrescription({{ $item->id }})" data-required="true">
                                                         <label for="prescription-{{ $item->id }}" class="file-btn">
-                                                            <i class='bx bx-upload'></i> Upload
+                                                            <i class='bx bx-upload'></i> 
+                                                            @if($item->prescription_file_path)
+                                                                Change Prescription
+                                                            @else
+                                                                Upload Prescription Now
+                                                            @endif
                                                         </label>
                                                     </div>
-                                                    <div class="file-name" id="file-name-{{ $item->id }}">
-                                                        @if($item->prescription_file)
-                                                            <i class='bx bx-check' style="color: #27ae60;"></i> Uploaded
+                                                    <div class="file-name {{ $item->prescription_file_path ? 'uploaded' : '' }}" id="file-name-{{ $item->id }}">
+                                                        @if($item->prescription_file_path)
+                                                            <i class='bx bx-check-circle' style="color: #27ae60;"></i> 
+                                                            <span>Prescription Uploaded Successfully</span>
+                                                        @else
+                                                            <i class='bx bx-info-circle' style="color: #ffc107;"></i>
+                                                            <span style="color: #856404;">Upload required to proceed</span>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -752,7 +835,19 @@
                                             </div>
                                         </div>
 
-                                        <button type="submit" class="checkout-btn">Proceed to Checkout</button>
+                                        <!-- Prescription Warning Box -->
+                                        <div class="prescription-warning" id="prescription-warning">
+                                            <div class="prescription-warning-text">
+                                                <i class='bx bx-error-circle' style="font-size: 24px;"></i>
+                                                <div>
+                                                    <strong>Prescription Upload Required!</strong>
+                                                    <div style="font-weight: normal; margin-top: 4px;">Please upload prescriptions for the following items before checkout:</div>
+                                                </div>
+                                            </div>
+                                            <ul class="prescription-items-list" id="missing-prescriptions-list"></ul>
+                                        </div>
+
+                                        <button type="submit" class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
                                     </form>
                                 </div>
                             </div>
@@ -827,8 +922,26 @@
             
             if (!file) return;
 
+            // Validate file type
+            const allowedTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png'];
+            if (!allowedTypes.includes(file.type)) {
+                showToast('Please upload a valid file (PDF, JPG, or PNG)', 'error');
+                fileInput.value = '';
+                return;
+            }
+
+            // Validate file size (5MB max)
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('File size must be less than 5MB', 'error');
+                fileInput.value = '';
+                return;
+            }
+
             const formData = new FormData();
             formData.append('prescription', file);
+
+            // Show loading state
+            document.getElementById(`file-name-${itemId}`).innerHTML = '<i class="bx bx-loader-alt bx-spin" style="color: #3498db;"></i> Uploading...';
 
             fetch(`/cart/${itemId}/prescription`, {
                 method: 'POST',
@@ -840,11 +953,59 @@
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    document.getElementById(`file-name-${itemId}`).innerHTML = '<i class="bx bx-check" style="color: #27ae60;"></i> Uploaded';
+                    document.getElementById(`file-name-${itemId}`).innerHTML = '<i class="bx bx-check-circle" style="color: #27ae60;"></i> <span>Prescription Uploaded Successfully</span>';
+                    document.getElementById(`file-name-${itemId}`).classList.add('uploaded');
                     showToast('Prescription uploaded successfully', 'success');
+                    checkPrescriptionRequirements();
+                } else {
+                    showToast(data.message || 'Upload failed', 'error');
+                    document.getElementById(`file-name-${itemId}`).innerHTML = '<i class="bx bx-info-circle" style="color: #ffc107;"></i> <span style="color: #856404;">Upload required to proceed</span>';
                 }
+            })
+            .catch(error => {
+                showToast('Upload failed. Please try again.', 'error');
+                document.getElementById(`file-name-${itemId}`).innerHTML = '<i class="bx bx-info-circle" style="color: #ffc107;"></i> <span style="color: #856404;">Upload required to proceed</span>';
             });
         }
+
+        // Check prescription requirements
+        function checkPrescriptionRequirements() {
+            const prescriptionInputs = document.querySelectorAll('input[data-required="true"]');
+            const warningBox = document.getElementById('prescription-warning');
+            const missingList = document.getElementById('missing-prescriptions-list');
+            const checkoutBtn = document.getElementById('checkout-btn');
+            
+            let missingItems = [];
+            
+            prescriptionInputs.forEach(input => {
+                const itemId = input.id.split('-')[1];
+                const fileName = document.getElementById(`file-name-${itemId}`);
+                
+                if (!fileName.classList.contains('uploaded')) {
+                    const itemElement = document.querySelector(`.cart-item[data-item-id="${itemId}"]`);
+                    const productName = itemElement.querySelector('.item-name').textContent;
+                    missingItems.push(productName);
+                }
+            });
+            
+            if (missingItems.length > 0) {
+                warningBox.classList.add('show');
+                missingList.innerHTML = missingItems.map(item => `<li class="prescription-item">• ${item}</li>`).join('');
+                checkoutBtn.style.opacity = '0.6';
+                checkoutBtn.style.cursor = 'not-allowed';
+                return false;
+            } else {
+                warningBox.classList.remove('show');
+                checkoutBtn.style.opacity = '1';
+                checkoutBtn.style.cursor = 'pointer';
+                return true;
+            }
+        }
+
+        // Run check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkPrescriptionRequirements();
+        });
 
         function removeItem(itemId) {
             fetch(`/cart/${itemId}`, {
@@ -899,6 +1060,15 @@
 
         document.getElementById('checkoutForm').addEventListener('submit', function(e) {
             e.preventDefault();
+
+            // Check prescription requirements before proceeding
+            if (!checkPrescriptionRequirements()) {
+                const warningBox = document.getElementById('prescription-warning');
+                warningBox.classList.add('show');
+                warningBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                showToast('Please upload all required prescriptions before checkout', 'error');
+                return false;
+            }
 
             const address = document.querySelector('textarea[name="address"]').value;
             const deliveryLocation = document.querySelector('select[name="delivery_location"]').value;

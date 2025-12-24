@@ -305,11 +305,21 @@
                 <span class="tooltip">Analytics</span>
             </li>
             <li>
-                <a href="">
-                    <i class='bx bx-folder'></i>
-                    <span class="links_name">Files</span>
+                <a href="{{ route('admin.prescriptions.index') }}" style="position: relative;">
+                    <i class='bx bx-file-blank'></i>
+                    <span class="links_name">Prescriptions</span>
+                    @php
+                        $pendingPrescriptions = \App\Models\Order::where('prescription_required', true)
+                            ->where('prescription_status', 'pending')
+                            ->count();
+                    @endphp
+                    @if($pendingPrescriptions > 0)
+                    <span style="position: absolute; top: 8px; right: 8px; background: #ef4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700;">
+                        {{ $pendingPrescriptions }}
+                    </span>
+                    @endif
                 </a>
-                <span class="tooltip">Files</span>
+                <span class="tooltip">Prescriptions</span>
             </li>
             <li>
                 <a href="">

@@ -17,12 +17,19 @@ class Order extends Model
         'payment_status',
         'order_status',
         'notes',
+        'prescription_required',
+        'prescription_status',
+        'prescription_rejection_reason',
+        'prescription_reviewed_at',
+        'prescription_reviewed_by',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'prescription_required' => 'boolean',
+        'prescription_reviewed_at' => 'datetime',
     ];
 
     public function user()

@@ -5,6 +5,7 @@ use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AnalyticsController;
+use App\Http\Controllers\Admin\PrescriptionApprovalController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProductController;
@@ -129,6 +130,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{feedback}/toggle-pin', [SupportFeedbackController::class, 'togglePin'])->name('toggle-pin');
             Route::post('/{feedback}/toggle-urgent', [SupportFeedbackController::class, 'toggleUrgent'])->name('toggle-urgent');
             Route::delete('/{feedback}', [SupportFeedbackController::class, 'destroy'])->name('destroy');
+        });
+
+        // Prescription Approval routes
+        Route::prefix('prescriptions')->name('prescriptions.')->group(function () {
+            Route::get('/', [PrescriptionApprovalController::class, 'index'])->name('index');
+            Route::get('/{order}', [PrescriptionApprovalController::class, 'show'])->name('show');
+            Route::post('/{order}/approve', [PrescriptionApprovalController::class, 'approve'])->name('approve');
+            Route::post('/{order}/reject', [PrescriptionApprovalController::class, 'reject'])->name('reject');
+            Route::get('/view/{orderItem}', [PrescriptionApprovalController::class, 'viewPrescription'])->name('view');
         });
     });
 });

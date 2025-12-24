@@ -12,6 +12,7 @@ class OrderItem extends Model
         'quantity',
         'price',
         'subtotal',
+        'prescription_file_path',
     ];
 
     protected $casts = [

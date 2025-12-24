@@ -10,7 +10,7 @@ class Cart extends Model
         'user_id',
         'product_id',
         'quantity',
-        'prescription_file',
+        'prescription_file_path',
     ];
 
     protected $casts = [

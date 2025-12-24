@@ -100,13 +100,13 @@ class CartController extends Controller
 
         if ($request->hasFile('prescription')) {
             // Delete old prescription if exists
-            if ($cartItem->prescription_file) {
-                \Storage::disk('public')->delete($cartItem->prescription_file);
+            if ($cartItem->prescription_file_path) {
+                \Storage::disk('public')->delete($cartItem->prescription_file_path);
             }
 
             $file = $request->file('prescription');
             $filePath = $file->store('prescriptions', 'public');
-            $cartItem->update(['prescription_file' => $filePath]);
+            $cartItem->update(['prescription_file_path' => $filePath]);
         }
 
         return response()->json([
