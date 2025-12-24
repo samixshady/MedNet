@@ -14,13 +14,18 @@
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <!-- QuickBuy Section (Original Position) -->
-                <div class="mb-12" style="position: relative; min-height: 380px;">
-                    <x-quick-buy-box />
-                    <!-- Promotional Slider to the Right -->
-                    <x-promotional-slider :promotions="$promotions" />
+        <div class="py-6 sm:py-12">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+                <!-- QuickBuy and Promotional Slider Section -->
+                <div class="mb-8 sm:mb-12 flex flex-col lg:flex-row gap-6 lg:gap-0 lg:relative lg:min-h-[380px]">
+                    <!-- QuickBuy Box -->
+                    <div class="w-full lg:w-auto">
+                        <x-quick-buy-box />
+                    </div>
+                    <!-- Promotional Slider -->
+                    <div class="w-full lg:w-auto">
+                        <x-promotional-slider :promotions="$promotions" />
+                    </div>
                 </div>
 
                 <!-- Discount Carousel Section -->

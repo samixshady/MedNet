@@ -1,6 +1,7 @@
 @props(['discountedProducts' => []])
 
-<div class="w-full mt-12" style="transform: translate(-100px, -150px);">
+<!-- Desktop View (hidden on mobile) -->
+<div class="hidden lg:block w-full mt-12" style="transform: translate(-100px, -150px);">
     <div class="max-w-7xl mx-auto px-4">
         <!-- Header - Centered "Features" -->
         <div class="text-center mb-8">
@@ -116,6 +117,101 @@
             </div>
         @endif
     </div>
+</div>
+
+<!-- Mobile View (shown only on mobile) -->
+<div class="lg:hidden w-full mt-6 px-3">
+    <div class="text-center mb-6">
+        <h2 class="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
+            <span class="text-2xl">✨</span>
+            Featured Deals
+        </h2>
+    </div>
+
+    @if($discountedProducts->count() > 0)
+        <div class="grid grid-cols-2 gap-3">
+            @foreach($discountedProducts->take(8) as $product)
+                <a href="{{ route('medicine.show', $product->id) }}" class="group block">
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden h-full flex flex-col border border-gray-100">
+                        <!-- Product Image -->
+                        <div class="relative h-32 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                            @if($product->image_path)
+                                <img src="{{ asset('storage/' . $product->image_path) }}" 
+                                     alt="{{ $product->name }}" 
+                                     class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center">
+                                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            @endif
+                            
+                            <!-- Discount Badge -->
+                            <div class="absolute top-1.5 right-1.5 bg-gradient-to-r from-red-500 to-pink-500 text-white px-2 py-0.5 rounded-full font-bold text-[10px] shadow-lg">
+                                -{{ $product->discount }}%
+                            </div>
+
+                            <!-- Stock Status Badge -->
+                            <div class="absolute bottom-1.5 left-1.5">
+                                @if($product->stock_status === 'normal')
+                                    <span class="inline-block bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                        In Stock
+                                    </span>
+                                @elseif($product->stock_status === 'low_stock')
+                                    <span class="inline-block bg-yellow-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                        Low
+                                    </span>
+                                @else
+                                    <span class="inline-block bg-gray-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">
+                                        Out
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="p-2.5 flex-1 flex flex-col">
+                            <h3 class="font-semibold text-gray-800 text-[11px] leading-tight line-clamp-2 mb-2 group-hover:text-indigo-600 transition-colors">
+                                {{ $product->name }}
+                            </h3>
+                            
+                            <!-- Pricing -->
+                            <div class="mt-auto">
+                                @if($product->updated_price && $product->updated_price < $product->price)
+                                    <div class="space-y-0.5">
+                                        <div class="flex items-center gap-1">
+                                            <span class="text-sm font-bold text-green-600">৳{{ number_format($product->updated_price, 0) }}</span>
+                                        </div>
+                                        <span class="text-[10px] text-gray-400 line-through">৳{{ number_format($product->price, 0) }}</span>
+                                    </div>
+                                @else
+                                    <span class="text-sm font-bold text-gray-800">৳{{ number_format($product->price, 0) }}</span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            @endforeach
+        </div>
+
+        @if($discountedProducts->count() > 8)
+            <div class="mt-4 text-center">
+                <a href="#" class="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105">
+                    View All Deals
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </a>
+            </div>
+        @endif
+    @else
+        <div class="text-center py-12 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="text-4xl mb-3">🎁</div>
+            <p class="text-gray-600 font-medium text-sm">No featured deals available</p>
+            <p class="text-gray-400 text-xs mt-1">Check back soon!</p>
+        </div>
+    @endif
 </div>
 
 <style>

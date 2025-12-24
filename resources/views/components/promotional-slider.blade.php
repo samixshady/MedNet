@@ -4,12 +4,12 @@
     <link rel="stylesheet" href="{{ asset('css/promotional-slider.css') }}">
 @endonce
 
-<div class="bg-white rounded-xl shadow-lg overflow-hidden promotional-slider-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: 500px; top: -80px; z-index: 10;">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden promotional-slider-container w-full lg:w-[550px] h-[320px] flex flex-col relative lg:absolute lg:left-[500px] lg:top-[-80px] z-10">
     <!-- Header -->
-    <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 flex justify-between items-center flex-shrink-0">
+    <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-3 sm:px-4 py-3 flex justify-between items-center flex-shrink-0">
         <div>
-            <h2 class="text-lg font-bold text-white flex items-center gap-2">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+            <h2 class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" />
                 </svg>
                 Promotions

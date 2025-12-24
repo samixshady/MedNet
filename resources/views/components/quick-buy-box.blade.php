@@ -1,24 +1,24 @@
-<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container" style="width: 550px; height: 320px; display: flex; flex-direction: column; position: absolute; left: -110px; top: -80px; z-index: 10;">
+<div class="bg-white rounded-xl shadow-lg overflow-hidden quick-buy-container w-full lg:w-[550px] h-auto lg:h-[320px] flex flex-col relative lg:absolute lg:left-[-110px] lg:top-[-80px] z-10">
     <!-- Header with Edit Button -->
-    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-4 py-3 flex justify-between items-center flex-shrink-0 gap-2">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-700 px-3 sm:px-4 py-3 flex justify-between items-center flex-shrink-0 gap-2">
         <div>
-            <h2 class="text-lg font-bold text-white">⚡ QuickBuy</h2>
+            <h2 class="text-base sm:text-lg font-bold text-white">⚡ QuickBuy</h2>
         </div>
-        <div class="flex gap-2">
+        <div class="flex gap-1.5 sm:gap-2">
             <button 
                 onclick="addAllToCart()" 
-                class="px-4 py-2 text-sm bg-green-500 text-white hover:bg-green-600 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95"
+                class="px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-green-500 text-white hover:bg-green-600 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95"
             >
-                🛒 Add All to Cart
+                🛒 Add All
             </button>
-            <a href="{{ route('quick-buy.manage') }}" class="px-4 py-2 text-sm bg-white text-blue-600 hover:bg-blue-50 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95">
+            <a href="{{ route('quick-buy.manage') }}" class="px-2 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm bg-white text-blue-600 hover:bg-blue-50 font-bold rounded transition-all duration-200 shadow hover:shadow-md active:scale-95">
                 ✏️ Edit
             </a>
         </div>
     </div>
 
     <!-- QuickBuy Items -->
-    <div class="flex-1 overflow-y-auto" style="font-size: 0.95rem;">
+    <div class="flex-1 overflow-y-auto max-h-[400px] lg:max-h-none" style="font-size: 0.95rem;">
         <div id="quickbuy-dashboard-items">
             <!-- Table will load here -->
             <div class="flex justify-center items-center py-6">

@@ -1,16 +1,16 @@
 <nav x-data="{ open: false }" class="bg-gradient-to-r from-slate-800 via-slate-700 to-slate-800 backdrop-blur-md shadow-2xl border-b border-slate-600/30 fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-6">
         <div class="flex justify-between items-center h-16 lg:h-18">
 
             <!-- Left: MedNet Logo with elegant styling -->
-            <div class="flex-shrink-0 flex items-center">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300">
-                        <svg class="w-6 h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex-shrink-0 flex items-center min-w-0">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-1.5 sm:gap-2 group">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-1.5 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="hidden sm:block font-bold text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300">
+                    <h2 class="hidden sm:block font-bold text-xl sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
@@ -22,7 +22,7 @@
             </div>
 
             <!-- Right Section: Delivery, Cart, Profile -->
-            <div class="flex items-center gap-2 sm:gap-3 lg:gap-4">
+            <div class="flex items-center gap-1.5 sm:gap-2 lg:gap-4 flex-shrink-0">
                 
                 <!-- Delivery Location (Desktop) -->
                 <div class="hidden lg:block">
@@ -40,30 +40,30 @@
                 </div>
 
                 <!-- Search Icon (Mobile) -->
-                <button @click="$dispatch('open-mobile-search')" class="md:hidden p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200 text-white">
+                <button @click="$dispatch('open-mobile-search')" class="md:hidden p-2 sm:p-2.5 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200 text-white flex-shrink-0">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>
                 </button>
 
                 <!-- Cart Icon -->
-                <a href="{{ route('cart.index') }}" class="relative group p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
-                    <svg class="w-5 h-5 lg:w-6 lg:h-6 text-white transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="{{ route('cart.index') }}" class="relative group p-2 sm:p-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 flex-shrink-0">
+                    <svg class="w-5 h-5 text-white transition-transform duration-300 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
                     </svg>
-                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 text-xs font-bold text-white bg-gradient-to-r from-red-500 to-red-600 rounded-full shadow-lg animate-pulse" id="cart-badge" style="display: none;">0</span>
+                    <span class="absolute -top-1 -right-1 inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold text-white bg-gradient-to-r from-red-500 to-red-600 rounded-full shadow-lg" id="cart-badge" style="display: none;">0</span>
                 </a>
 
                 <!-- User Profile Dropdown (Desktop) -->
-                <div class="hidden sm:block">
+                <div class="hidden sm:block flex-shrink-0">
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
-                            <button class="group flex items-center gap-2 px-3 lg:px-4 py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
-                                <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-sm shadow-lg">
+                            <button class="group flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20">
+                                <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-lg flex-shrink-0">
                                     {{ substr(Auth::user()->name, 0, 1) }}
                                 </div>
-                                <span class="hidden lg:block text-white font-medium text-sm">{{ Str::limit(Auth::user()->name, 15) }}</span>
-                                <svg class="w-4 h-4 text-white transition-transform duration-300 group-hover:rotate-180" fill="currentColor" viewBox="0 0 20 20">
+                                <span class="hidden lg:block text-white font-medium text-sm truncate max-w-[100px]">{{ Str::limit(Auth::user()->name, 12) }}</span>
+                                <svg class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-white transition-transform duration-300 group-hover:rotate-180 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/>
                                 </svg>
                             </button>
