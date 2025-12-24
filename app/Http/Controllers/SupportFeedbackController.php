@@ -43,16 +43,127 @@ class SupportFeedbackController extends Controller
     }
 
     /**
-     * Admin: Get all feedback
+     * Admin: Get all feedback with filters
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Check if user is admin (you can customize this based on your auth system)
+        // Check if user is admin
         if (!auth()->check() || !auth()->user()->is_admin) {
             abort(403, 'Unauthorized action.');
         }
 
-        $feedbacks = SupportFeedback::latest()->paginate(15);
+        $query = SupportFeedback::query();
+
+        // Filter by status
+        if ($request->has('status') && $request->status !== 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Filter by urgent
+        if ($request->has('urgent') && $request->urgent == '1') {
+            $query->where('is_urgent', true);
+        }
+
+        // Filter by pinned
+        if ($request->has('pinned') && $request->pinned == '1') {
+            $query->where('is_pinned', true);
+        }
+
+        // Search
+        if ($request->has('search') && $request->search) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%");
+            });
+        }
+
+        // Sorting
+        $sortBy = $request->get('sort_by', 'created_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        // Always show pinned first, then sort by selected criteria
+        $query->orderBy('is_pinned', 'desc')
+              ->orderBy($sortBy, $sortOrder);
+
+        $feedbacks = $query->paginate(20)->withQueryString();
+
         return view('admin.support-feedback', compact('feedbacks'));
+    }
+
+    /**
+     * Toggle feedback status
+     */
+    public function toggleStatus(SupportFeedback $feedback)
+    {
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $feedback->status = $feedback->status === 'pending' ? 'resolved' : 'pending';
+        $feedback->resolved_at = $feedback->status === 'resolved' ? now() : null;
+        $feedback->save();
+
+        return response()->json([
+            'success' => true,
+            'status' => $feedback->status,
+            'message' => 'Status updated successfully.'
+        ]);
+    }
+
+    /**
+     * Toggle pinned status
+     */
+    public function togglePin(SupportFeedback $feedback)
+    {
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $feedback->is_pinned = !$feedback->is_pinned;
+        $feedback->save();
+
+        return response()->json([
+            'success' => true,
+            'is_pinned' => $feedback->is_pinned,
+            'message' => 'Pin status updated successfully.'
+        ]);
+    }
+
+    /**
+     * Toggle urgent status
+     */
+    public function toggleUrgent(SupportFeedback $feedback)
+    {
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $feedback->is_urgent = !$feedback->is_urgent;
+        $feedback->save();
+
+        return response()->json([
+            'success' => true,
+            'is_urgent' => $feedback->is_urgent,
+            'message' => 'Urgent status updated successfully.'
+        ]);
+    }
+
+    /**
+     * Delete feedback
+     */
+    public function destroy(SupportFeedback $feedback)
+    {
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $feedback->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Feedback deleted successfully.'
+        ]);
     }
 }

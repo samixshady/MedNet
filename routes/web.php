@@ -121,6 +121,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Support Feedback routes
         Route::prefix('support-feedback')->name('support-feedback.')->group(function () {
             Route::get('/', [SupportFeedbackController::class, 'index'])->name('index');
+            Route::post('/{feedback}/toggle-status', [SupportFeedbackController::class, 'toggleStatus'])->name('toggle-status');
+            Route::post('/{feedback}/toggle-pin', [SupportFeedbackController::class, 'togglePin'])->name('toggle-pin');
+            Route::post('/{feedback}/toggle-urgent', [SupportFeedbackController::class, 'toggleUrgent'])->name('toggle-urgent');
+            Route::delete('/{feedback}', [SupportFeedbackController::class, 'destroy'])->name('destroy');
         });
     });
 });

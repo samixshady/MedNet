@@ -5,18 +5,41 @@
     .user-management-container {
         background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
         min-height: calc(100vh - 64px);
-        padding: 2rem;
+        padding: 1rem;
     }
+    
+    @media (min-width: 768px) {
+        .user-management-container {
+            padding: 2rem;
+        }
+    }
+    
     .user-card {
         background: white;
         border-radius: 12px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 2rem;
+        margin-bottom: 1rem;
     }
+    
+    @media (min-width: 768px) {
+        .user-card {
+            margin-bottom: 2rem;
+        }
+    }
+    
+    /* Desktop Table View */
     .user-table {
         width: 100%;
         border-collapse: collapse;
+        display: none;
     }
+    
+    @media (min-width: 1024px) {
+        .user-table {
+            display: table;
+        }
+    }
+    
     .user-table thead th {
         background: #f8f9fa;
         padding: 1rem;
@@ -36,6 +59,51 @@
         padding: 1rem;
         color: #333;
     }
+    
+    /* Mobile Card View */
+    .mobile-user-cards {
+        display: block;
+    }
+    
+    @media (min-width: 1024px) {
+        .mobile-user-cards {
+            display: none;
+        }
+    }
+    
+    .mobile-user-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border: 2px solid #e9ecef;
+        transition: all 0.2s;
+    }
+    
+    .mobile-user-card:active {
+        transform: scale(0.98);
+    }
+    
+    .mobile-user-header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.75rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .mobile-user-info {
+        margin-bottom: 0.75rem;
+    }
+    
+    .mobile-user-actions {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
     .avatar {
         display: inline-flex;
         align-items: center;
@@ -46,26 +114,47 @@
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         font-weight: bold;
-        margin-right: 0.75rem;
+        flex-shrink: 0;
     }
+    
+    @media (min-width: 1024px) {
+        .avatar {
+            margin-right: 0.75rem;
+        }
+    }
+    
     .badge-green {
         display: inline-block;
         padding: 0.25rem 0.75rem;
         background: #d4edda;
         color: #155724;
         border-radius: 20px;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         font-weight: 600;
     }
+    
+    @media (min-width: 768px) {
+        .badge-green {
+            font-size: 0.875rem;
+        }
+    }
+    
     .badge-purple {
         display: inline-block;
         padding: 0.25rem 0.75rem;
         background: #e2d5f3;
         color: #5e1ba9;
         border-radius: 20px;
-        font-size: 0.875rem;
+        font-size: 0.75rem;
         font-weight: 600;
     }
+    
+    @media (min-width: 768px) {
+        .badge-purple {
+            font-size: 0.875rem;
+        }
+    }
+    
     .btn-yellow {
         background: #ffc107;
         color: #000;
@@ -74,9 +163,19 @@
         border-radius: 6px;
         cursor: pointer;
         font-weight: 600;
+        font-size: 0.875rem;
         transition: background 0.2s;
-        margin-right: 0.5rem;
+        flex: 1;
+        min-width: 0;
     }
+    
+    @media (min-width: 768px) {
+        .btn-yellow {
+            flex: 0;
+            margin-right: 0.5rem;
+        }
+    }
+    
     .btn-yellow:hover {
         background: #e0a800;
     }
@@ -88,16 +187,35 @@
         border-radius: 6px;
         cursor: pointer;
         font-weight: 600;
+        font-size: 0.875rem;
         transition: background 0.2s;
+        flex: 1;
+        min-width: 0;
     }
+    
+    @media (min-width: 768px) {
+        .btn-red {
+            flex: 0;
+        }
+    }
+    
     .btn-red:hover {
         background: #c82333;
     }
     .search-box {
         display: flex;
-        gap: 1rem;
+        gap: 0.5rem;
         margin-bottom: 1.5rem;
+        flex-direction: column;
     }
+    
+    @media (min-width: 768px) {
+        .search-box {
+            flex-direction: row;
+            gap: 1rem;
+        }
+    }
+    
     .search-box input {
         flex: 1;
         padding: 0.75rem;
@@ -127,6 +245,7 @@
         width: 100%;
         height: 100%;
         background-color: rgba(0, 0, 0, 0.5);
+        padding: 1rem;
     }
     .modal.show {
         display: flex;
@@ -135,18 +254,32 @@
     }
     .modal-content {
         background: white;
-        padding: 2rem;
+        padding: 1.5rem;
         border-radius: 12px;
         max-width: 500px;
-        width: 90%;
+        width: 100%;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
     }
+    
+    @media (min-width: 768px) {
+        .modal-content {
+            padding: 2rem;
+        }
+    }
+    
     .modal-header {
-        font-size: 1.5rem;
+        font-size: 1.25rem;
         font-weight: 700;
         margin-bottom: 1rem;
         color: #333;
     }
+    
+    @media (min-width: 768px) {
+        .modal-header {
+            font-size: 1.5rem;
+        }
+    }
+    
     .modal-body {
         font-size: 1rem;
         color: #666;
@@ -257,6 +390,7 @@
 
         <div class="user-card" style="overflow-x: auto;">
             @if ($users->count() > 0)
+                <!-- Desktop Table View -->
                 <table class="user-table">
                     <thead>
                         <tr>
@@ -297,6 +431,45 @@
                         @endforeach
                     </tbody>
                 </table>
+                
+                <!-- Mobile Card View -->
+                <div class="mobile-user-cards">
+                    @foreach ($users as $user)
+                        <div class="mobile-user-card">
+                            <div class="mobile-user-header">
+                                <div class="avatar">{{ substr($user->name, 0, 1) }}</div>
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 600; color: #333; font-size: 1rem; margin-bottom: 0.25rem;">{{ $user->name }}</div>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                        <span class="badge-green">✓ Active</span>
+                                        @if ($user->is_admin)
+                                            <span class="badge-purple">Admin</span>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mobile-user-info">
+                                <div style="margin-bottom: 0.5rem;">
+                                    <div style="font-size: 0.75rem; color: #999; margin-bottom: 0.25rem;">Email</div>
+                                    <div style="color: #333; font-size: 0.875rem; word-break: break-all;">{{ $user->email }}</div>
+                                </div>
+                                <div>
+                                    <div style="font-size: 0.75rem; color: #999; margin-bottom: 0.25rem;">Registered</div>
+                                    <div style="color: #333; font-size: 0.875rem;">{{ $user->created_at->format('M d, Y · h:i A') }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="mobile-user-actions">
+                                @if (!$user->is_admin)
+                                    <button class="btn-yellow" onclick="openBanModal({{ $user->id }}, '{{ $user->email }}')">Ban User</button>
+                                @endif
+                                <button class="btn-red" onclick="openDeleteModal({{ $user->id }}, '{{ $user->email }}')">Delete</button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                
                 <div style="padding: 1rem; text-align: center; border-top: 1px solid #e9ecef;">
                     {{ $users->links() }}
                 </div>

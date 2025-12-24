@@ -36,7 +36,7 @@
                 <span class="tooltip">Users</span>
             </li>
             <li>
-                <a href="">
+                <a href="{{ route('admin.support-feedback.index') }}">
                     <i class='bx bx-chat'></i>
                     <span class="links_name">Messages</span>
                 </a>
