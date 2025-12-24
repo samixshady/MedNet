@@ -3,14 +3,14 @@
         <div class="flex justify-between items-center h-16 lg:h-18">
 
             <!-- Left: MedNet Logo with elegant styling -->
-            <div class="flex-shrink-0 flex items-center group">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 transition-all duration-300 hover:brightness-110">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-all duration-300">
+            <div class="flex-shrink-0 flex items-center">
+                <a href="{{ route('dashboard') }}" class="flex items-center gap-2 group">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-2 rounded-xl shadow-lg group-hover:shadow-blue-500/50 transition-shadow duration-300">
                         <svg class="w-6 h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="hidden sm:block font-bold text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text transition-all duration-300 group-hover:from-blue-300 group-hover:via-blue-200 group-hover:to-blue-300">
+                    <h2 class="hidden sm:block font-bold text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 bg-clip-text text-transparent leading-tight tracking-tight mednet-text group-hover:opacity-90 transition-opacity duration-300">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
