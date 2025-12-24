@@ -4,7 +4,23 @@
     <link rel="stylesheet" href="{{ asset('css/promotional-slider.css') }}">
 @endonce
 
-<div class="bg-white rounded-xl shadow-lg overflow-hidden promotional-slider-container w-full lg:w-[550px] h-[320px] flex flex-col relative lg:absolute lg:left-[350px] lg:top-[-100px] z-10">
+<div class="promotional-slider-container w-full flex flex-col relative z-10" 
+     style="width: 100%; height: auto; max-width: 550px; position: relative;"
+     data-lg-style="position: absolute; left: 570px; top: -100px; width: 550px; height: 320px;">
+    
+    <style>
+        @media (min-width: 1024px) {
+            .promotional-slider-container {
+                position: absolute !important;
+                left: 570px !important;
+                top: -100px !important;
+                width: 550px !important;
+                height: 320px !important;
+            }
+        }
+    </style>
+    
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden h-full flex flex-col" style="height: 320px;">
     <!-- Header -->
     <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-3 sm:px-4 py-3 flex justify-between items-center flex-shrink-0">
         <div>
@@ -90,6 +106,7 @@
                 <p class="text-gray-400 text-sm">Check back later for exciting offers!</p>
             </div>
         @endif
+    </div>
     </div>
 </div>
 
