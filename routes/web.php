@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AddressController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
+use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\ProductController;
@@ -97,6 +98,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         
         Route::get('dashboard', [AdminDashboardController::class, 'index'])
             ->name('dashboard');
+
+        Route::get('analytics', [AnalyticsController::class, 'index'])
+            ->name('analytics');
 
         Route::get('products/expired', [ProductController::class, 'expiredProducts'])
             ->name('products.expired');
