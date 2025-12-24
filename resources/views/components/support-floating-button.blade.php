@@ -14,19 +14,29 @@
         justify-content: center;
         cursor: pointer;
         box-shadow: 0 4px 20px rgba(102, 126, 234, 0.35);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 9999;
         border: none;
         font-size: 1.75rem;
         outline: none;
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
     }
 
-    .support-button:hover {
+    .support-button.hidden {
+        opacity: 0;
+        visibility: hidden;
+        transform: scale(0);
+        pointer-events: none;
+    }
+
+    .support-button:hover:not(.hidden) {
         transform: scale(1.12) translateY(-4px);
         box-shadow: 0 8px 35px rgba(102, 126, 234, 0.5);
     }
 
-    .support-button:active {
+    .support-button:active:not(.hidden) {
         transform: scale(0.95);
     }
 
@@ -61,14 +71,16 @@
         background-color: rgba(0, 0, 0, 0);
         opacity: 0;
         visibility: hidden;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
         z-index: 9997;
+        pointer-events: none;
     }
 
     .support-backdrop.open {
         background-color: rgba(0, 0, 0, 0.5);
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
     }
 
     /* Support Popup Container */
@@ -80,8 +92,8 @@
         max-height: 85vh;
         background: white;
         border-radius: 24px;
-        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-        transform: scale(0) translate(30px, 30px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+        transform: scale(0.8) translateY(30px);
         transform-origin: bottom right;
         opacity: 0;
         visibility: hidden;
@@ -90,12 +102,14 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
+        pointer-events: none;
     }
 
     .support-popup.open {
-        transform: scale(1) translate(0, 0);
+        transform: scale(1) translateY(0);
         opacity: 1;
         visibility: visible;
+        pointer-events: auto;
     }
 
     /* Popup Header */
@@ -268,26 +282,31 @@
     /* Close Button */
     .support-close-btn {
         position: absolute;
-        top: 1.25rem;
-        right: 1.25rem;
-        background: rgba(255, 255, 255, 0.2);
+        top: 1.5rem;
+        right: 1.5rem;
+        background: rgba(255, 255, 255, 0.25);
         border: none;
         color: white;
-        width: 36px;
-        height: 36px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.25s ease;
+        transition: all 0.3s ease;
         font-size: 1.5rem;
         font-weight: 300;
+        z-index: 10;
     }
 
     .support-close-btn:hover {
-        background: rgba(255, 255, 255, 0.35);
-        transform: rotate(90deg);
+        background: rgba(255, 255, 255, 0.4);
+        transform: rotate(90deg) scale(1.1);
+    }
+
+    .support-close-btn:active {
+        transform: rotate(90deg) scale(0.95);
     }
 
     /* Submit Button */
@@ -383,12 +402,12 @@
 
 <!-- Support Popup Modal -->
 <div id="supportPopup" class="support-popup">
-    <!-- Close Button -->
-    <button type="button" id="supportClose" class="support-close-btn" aria-label="Close support form">
-        ✕
-    </button>
-
     <div class="support-popup-header">
+        <!-- Close Button -->
+        <button type="button" id="supportClose" class="support-close-btn" aria-label="Close support form" title="Close">
+            ✕
+        </button>
+        
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 3 .97 4.29L2.06 20.5 9.21 17.03C10.3 17.65 11.6 18 13 18c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.41 0-2.73-.36-3.88-.98l-.28-.15-2.89.97.97-2.89-.15-.28C4.36 14.73 4 13.41 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/>
         </svg>
@@ -478,21 +497,37 @@
             // Open popup with smooth animation
             supportButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                supportPopup.classList.add('open');
-                supportBackdrop.classList.add('open');
-                document.body.style.overflow = 'hidden';
-                // Focus first input for better UX
+                e.stopPropagation();
+                
+                // Hide the floating button
+                supportButton.classList.add('hidden');
+                
+                // Show popup and backdrop
                 setTimeout(() => {
-                    document.getElementById('supportName').focus();
-                }, 200);
+                    supportPopup.classList.add('open');
+                    supportBackdrop.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Focus first input for better UX
+                    setTimeout(() => {
+                        document.getElementById('supportName').focus();
+                    }, 300);
+                }, 100);
             });
 
             // Close popup function
             function closePopup() {
+                // Hide popup and backdrop
                 supportPopup.classList.remove('open');
                 supportBackdrop.classList.remove('open');
                 document.body.style.overflow = '';
-                setTimeout(clearForm, 300);
+                
+                // Show the floating button again after popup closes
+                setTimeout(() => {
+                    supportButton.classList.remove('hidden');
+                }, 300);
+                
+                setTimeout(clearForm, 400);
             }
 
             // Close button
