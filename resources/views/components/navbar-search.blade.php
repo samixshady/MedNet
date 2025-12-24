@@ -198,7 +198,12 @@
             mobileLoading: false,
             mobileDebounceTimer: null,
 
-            toggleMobileSearch() {
+            init() {
+                // Listen for map open event to close mobile search
+                document.addEventListener('close-mobile-search', () => {
+                    this.mobileSearchOpen = false;
+                });
+            },            toggleMobileSearch() {
                 this.mobileSearchOpen = !this.mobileSearchOpen;
                 this.mobileQuery = '';
                 this.mobileSuggestions = [];

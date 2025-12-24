@@ -180,8 +180,11 @@
             if (mapContainer) {
                 const isShowing = mapContainer.classList.toggle('show');
                 
-                // Trigger map resize when becoming visible
                 if (isShowing) {
+                    // Close mobile search modal when map opens
+                    document.dispatchEvent(new CustomEvent('close-mobile-search'));
+                    
+                    // Trigger map resize when becoming visible
                     setTimeout(function() {
                         const leafletMap = document.querySelector('.openstreetmap-embed');
                         if (leafletMap && leafletMap._leaflet_map) {
