@@ -11,11 +11,15 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\QuickBuyController;
+use App\Http\Controllers\SupportFeedbackController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Support Feedback Route (Public - no auth required)
+Route::post('/support-feedback/store', [SupportFeedbackController::class, 'store'])->name('support-feedback.store');
 
 Route::get('/dashboard', function () {
     $promotions = \App\Models\Promotion::where('is_active', true)
@@ -112,6 +116,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/', [UserManagementController::class, 'index'])->name('index');
             Route::delete('/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
             Route::post('/{user}/ban', [UserManagementController::class, 'ban'])->name('ban');
+        });
+
+        // Support Feedback routes
+        Route::prefix('support-feedback')->name('support-feedback.')->group(function () {
+            Route::get('/', [SupportFeedbackController::class, 'index'])->name('index');
         });
     });
 });

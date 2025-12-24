@@ -36,5 +36,8 @@
                 @endif
             </main>
         </div>
+        
+        <!-- Support Floating Button -->
+        @include('components.support-floating-button')
     </body>
 </html>
