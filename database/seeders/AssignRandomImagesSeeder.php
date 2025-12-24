@@ -13,11 +13,11 @@ class AssignRandomImagesSeeder extends Seeder
     public function run(): void
     {
         $images = [
-            'products/xXpzM80YAEOq0MALbhcJUvzMbFinMLLMnSCQr1oP.jpg',
-            'products/qiiqrhhMOMke5W9Q10sZfkWCZ59O5cquqWVAuBUi.png',
-            'products/ZiUDFpNhr1XalANPqyB4cuVzeeJExwG21JQKw5Uj.png',
-            'products/iyHGxXRFmpLlWkbGRhtMoCyHcI9kqAEbFUvpparc.png',
-            'products/siLr9n6yeJlEF0VyYJKm3zCDynSRAozfVmYvHrzG.png',
+            'products/KDSSwheuVuyCNfC1GRVtJAOQdnNZZmGHQI6QSRCx.jpg',
+            'products/OUGyIydaHThDcJEXfKdU9YShoJWjauYlPArjkmIY.png',
+            'products/AYD6Qo4avMsbjAJsNylgicD0RPPWE5OU4uRRlcaO.png',
+            'products/2JAFulWdGbtXviTuXtnN54MkLQnOpOUbkl4UacEs.png',
+            'products/jvkhJ7uAhLJSwzvQk8dXyjDrjhz4rHcKCQMvdldU.png',
         ];
 
         $this->command->info('Assigning random images to products...');

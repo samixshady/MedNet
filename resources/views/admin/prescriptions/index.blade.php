@@ -131,6 +131,132 @@
         to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Filters Section */
+    .filters-container {
+        background: white;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e2e8f0;
+    }
+
+    .filters-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+    }
+
+    .filter-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .filter-label {
+        font-size: 13px;
+        font-weight: 600;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .filter-label i {
+        font-size: 16px;
+        color: #3b82f6;
+    }
+
+    .filter-select {
+        padding: 10px 14px;
+        border: 2px solid #e2e8f0;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #1e293b;
+        background: white;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+
+    .filter-select:hover {
+        border-color: #cbd5e1;
+    }
+
+    .filter-select:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .filter-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid #e2e8f0;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .clear-filters-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        background: #ef4444;
+        color: white;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .clear-filters-btn:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .clear-filters-btn i {
+        font-size: 16px;
+    }
+
+    .active-filters-text {
+        font-size: 13px;
+        color: #64748b;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .active-filters-text i {
+        color: #3b82f6;
+        font-size: 16px;
+    }
+
+    @media (max-width: 768px) {
+        .filters-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .filter-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .clear-filters-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
     .orders-grid {
         display: grid;
         gap: 20px;
@@ -495,7 +621,7 @@
         box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
     }
 
-    /* Prescription Image Viewer Modal */
+    /* Prescription Image Viewer Modal - Grid Layout */
     .image-viewer-modal {
         display: none;
         position: fixed;
@@ -508,82 +634,331 @@
         align-items: center;
         justify-content: center;
         padding: 20px;
+        backdrop-filter: blur(10px);
     }
 
     .image-viewer-modal.active {
         display: flex;
-        animation: fadeIn 0.3s ease;
+        animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
     }
 
     .image-viewer-content {
-        background: #1a1a1a;
-        border-radius: 12px;
-        max-width: 95vw;
-        max-height: 95vh;
-        width: auto;
-        height: auto;
+        background: white;
+        border-radius: 20px;
+        width: 95vw;
+        max-width: 1400px;
+        max-height: 90vh;
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        box-shadow: 0 25px 80px rgba(0, 0, 0, 0.8);
+        box-shadow: 0 25px 100px rgba(0, 0, 0, 0.4);
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
     }
 
     .image-viewer-header {
-        background: #2d2d2d;
-        padding: 16px 20px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        padding: 24px 28px;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        border-bottom: 1px solid #404040;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     }
 
     .image-viewer-title {
         color: white;
-        font-size: 16px;
-        font-weight: 600;
+        font-size: 20px;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .image-viewer-title i {
+        font-size: 26px;
     }
 
     .image-viewer-close {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.2);
         border: none;
         color: white;
-        font-size: 28px;
+        font-size: 22px;
         cursor: pointer;
-        width: 40px;
-        height: 40px;
+        width: 42px;
+        height: 42px;
         display: flex;
         align-items: center;
         justify-content: center;
-        border-radius: 50%;
-        transition: all 0.3s ease;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        backdrop-filter: blur(10px);
     }
 
     .image-viewer-close:hover {
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(255, 255, 255, 0.3);
+        transform: rotate(90deg);
+    }
+
+    .image-viewer-close:active {
+        transform: scale(0.9) rotate(90deg);
     }
 
     .image-viewer-body {
-        padding: 20px;
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        background: #f8fafc;
+        padding: 28px;
+    }
+
+    .image-viewer-body::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    .image-viewer-body::-webkit-scrollbar-track {
+        background: #e2e8f0;
+    }
+
+    .image-viewer-body::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+    .image-viewer-body::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    /* Grid Layout for Prescription Items */
+    .prescription-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+    }
+
+    .prescription-item-box {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+    }
+
+    .prescription-item-box:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        border-color: #3b82f6;
+    }
+
+    .prescription-item-header {
+        background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+        padding: 16px;
+        border-bottom: 2px solid #e2e8f0;
+    }
+
+    .prescription-item-title {
+        font-size: 14px;
+        font-weight: 700;
+        color: #1e293b;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .prescription-item-title i {
+        color: #3b82f6;
+        font-size: 18px;
+    }
+
+    .prescription-item-subtitle {
+        font-size: 12px;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .prescription-item-body {
+        padding: 16px;
+        min-height: 240px;
         display: flex;
         align-items: center;
         justify-content: center;
-        overflow: auto;
-        max-height: calc(95vh - 70px);
+        background: #ffffff;
+        position: relative;
     }
 
-    .image-viewer-body img {
-        max-width: 100%;
-        max-height: calc(95vh - 110px);
-        height: auto;
+    .prescription-item-body img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
         border-radius: 8px;
-        object-fit: contain;
+        transition: transform 0.3s ease;
     }
 
-    .image-viewer-body iframe {
-        width: 90vw;
-        height: 85vh;
+    .prescription-item-box:hover .prescription-item-body img {
+        transform: scale(1.05);
+    }
+
+    .prescription-item-body iframe {
+        width: 100%;
+        height: 220px;
         border: none;
         border-radius: 8px;
+        background: white;
+    }
+
+    .prescription-item-footer {
+        background: #f8fafc;
+        padding: 12px 16px;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .view-fullscreen-btn {
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        transition: all 0.2s ease;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .view-fullscreen-btn:hover {
+        background: linear-gradient(135deg, #2563eb, #1d4ed8);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+    }
+
+    .view-fullscreen-btn i {
+        font-size: 14px;
+    }
+
+    .viewer-loading {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .viewer-loading i {
+        font-size: 40px;
+        color: #3b82f6;
+        animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .viewer-error {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        color: #ef4444;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .viewer-error i {
+        font-size: 48px;
+        opacity: 0.5;
+    }
+
+    .viewer-error-title {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .viewer-error-text {
+        font-size: 12px;
+        color: #94a3b8;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 1024px) {
+        .prescription-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .image-viewer-modal {
+            padding: 12px;
+        }
+
+        .image-viewer-content {
+            width: 100%;
+            max-height: 95vh;
+            border-radius: 16px;
+        }
+
+        .image-viewer-header {
+            padding: 18px 20px;
+        }
+
+        .image-viewer-title {
+            font-size: 16px;
+        }
+
+        .image-viewer-title i {
+            font-size: 20px;
+        }
+
+        .image-viewer-close {
+            width: 38px;
+            height: 38px;
+            font-size: 20px;
+        }
+
+        .image-viewer-body {
+            padding: 16px;
+        }
+
+        .prescription-grid {
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+
+        .prescription-item-body {
+            min-height: 200px;
+        }
+
+        .prescription-item-body img,
+        .prescription-item-body iframe {
+            height: 180px;
+        }
     }
 
     .reviewed-info {
@@ -691,6 +1066,79 @@
         </button>
     </div>
 
+    <!-- Filters Section -->
+    <div class="filters-container">
+        <form method="GET" action="{{ route('admin.prescriptions.index') }}" id="filtersForm">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class='bx bx-sort-alt-2'></i>
+                        Sort By
+                    </label>
+                    <select name="sort_by" class="filter-select" onchange="this.form.submit()">
+                        <option value="newest" {{ $sortBy === 'newest' ? 'selected' : '' }}>Newest First</option>
+                        <option value="oldest" {{ $sortBy === 'oldest' ? 'selected' : '' }}>Oldest First</option>
+                        <option value="urgent" {{ $sortBy === 'urgent' ? 'selected' : '' }}>Most Urgent</option>
+                        <option value="amount_high" {{ $sortBy === 'amount_high' ? 'selected' : '' }}>Amount: High to Low</option>
+                        <option value="amount_low" {{ $sortBy === 'amount_low' ? 'selected' : '' }}>Amount: Low to High</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class='bx bx-package'></i>
+                        Delivery Type
+                    </label>
+                    <select name="delivery_filter" class="filter-select" onchange="this.form.submit()">
+                        <option value="all" {{ $deliveryFilter === 'all' ? 'selected' : '' }}>All Deliveries</option>
+                        <option value="overnight" {{ $deliveryFilter === 'overnight' ? 'selected' : '' }}>🔴 Overnight (Urgent)</option>
+                        <option value="express" {{ $deliveryFilter === 'express' ? 'selected' : '' }}>🟡 Express</option>
+                        <option value="standard" {{ $deliveryFilter === 'standard' ? 'selected' : '' }}>Standard</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class='bx bx-file-blank'></i>
+                        Prescription Status
+                    </label>
+                    <select name="prescription_filter" class="filter-select" onchange="this.form.submit()">
+                        <option value="all" {{ $prescriptionFilter === 'all' ? 'selected' : '' }}>All Orders</option>
+                        <option value="with_prescription" {{ $prescriptionFilter === 'with_prescription' ? 'selected' : '' }}>✅ With Prescription</option>
+                        <option value="missing_prescription" {{ $prescriptionFilter === 'missing_prescription' ? 'selected' : '' }}>⚠️ Missing Prescription</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">
+                        <i class='bx bx-calendar'></i>
+                        Date Range
+                    </label>
+                    <select name="date_filter" class="filter-select" onchange="this.form.submit()">
+                        <option value="all" {{ $dateFilter === 'all' ? 'selected' : '' }}>All Time</option>
+                        <option value="today" {{ $dateFilter === 'today' ? 'selected' : '' }}>Today</option>
+                        <option value="yesterday" {{ $dateFilter === 'yesterday' ? 'selected' : '' }}>Yesterday</option>
+                        <option value="week" {{ $dateFilter === 'week' ? 'selected' : '' }}>Last 7 Days</option>
+                        <option value="month" {{ $dateFilter === 'month' ? 'selected' : '' }}>Last 30 Days</option>
+                    </select>
+                </div>
+            </div>
+
+            @if($sortBy !== 'newest' || $deliveryFilter !== 'all' || $prescriptionFilter !== 'all' || $dateFilter !== 'all')
+            <div class="filter-actions">
+                <a href="{{ route('admin.prescriptions.index') }}" class="clear-filters-btn">
+                    <i class='bx bx-x'></i>
+                    Clear All Filters
+                </a>
+                <div class="active-filters-text">
+                    <i class='bx bx-filter-alt'></i>
+                    {{ $pendingOrders->count() }} order(s) match your filters
+                </div>
+            </div>
+            @endif
+        </form>
+    </div>
+
     <!-- Pending Orders Tab -->
     <div class="tab-content active" id="pending">
         <div class="orders-grid">
@@ -698,7 +1146,20 @@
             <div class="order-card pending">
                 <div class="order-header">
                     <div>
-                        <div class="order-id">Order #{{ $order->id }}</div>
+                        <div class="order-id">
+                            Order #{{ $order->id }}
+                            @if($order->delivery_option === 'overnight')
+                                <span style="display: inline-flex; align-items: center; gap: 4px; background: #fee2e2; color: #991b1b; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-left: 8px;">
+                                    <i class='bx bx-bolt-circle' style="font-size: 14px;"></i>
+                                    OVERNIGHT
+                                </span>
+                            @elseif($order->delivery_option === 'express')
+                                <span style="display: inline-flex; align-items: center; gap: 4px; background: #fef3c7; color: #92400e; padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; margin-left: 8px;">
+                                    <i class='bx bx-tachometer' style="font-size: 14px;"></i>
+                                    EXPRESS
+                                </span>
+                            @endif
+                        </div>
                         <div class="order-date">{{ $order->created_at->format('M d, Y • h:i A') }}</div>
                     </div>
                     <span class="status-badge pending">Pending Review</span>
@@ -740,11 +1201,25 @@
                 </div>
 
                 <div class="order-actions">
-                    @foreach($order->items()->whereNotNull('prescription_file_path')->get() as $item)
-                    <button class="btn btn-view" onclick="viewPrescription('{{ route('admin.prescriptions.view', $item->id) }}', '{{ $item->product->name ?? 'Prescription' }}')">
-                        <i class='bx bx-image'></i> View Prescription
-                    </button>
-                    @endforeach
+                    @php
+                        $hasPrescriptions = $order->items()->whereNotNull('prescription_file_path')->count() > 0;
+                    @endphp
+                    
+                    @if($hasPrescriptions)
+                        @foreach($order->items()->whereNotNull('prescription_file_path')->get() as $item)
+                        <button class="btn btn-view" onclick="viewPrescription('{{ route('admin.prescriptions.view', $item->id) }}', '{{ $item->product->name ?? 'Prescription' }}')">
+                            <i class='bx bx-image'></i> View Prescription
+                        </button>
+                        @endforeach
+                    @else
+                        <div style="padding: 14px; background: #fff3cd; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-error-circle' style="font-size: 20px; color: #856404;"></i>
+                                <span style="color: #856404; font-weight: 600; font-size: 14px;">Prescription Missing</span>
+                            </div>
+                        </div>
+                    @endif
+                    
                     <button class="btn btn-approve" onclick="approveOrder({{ $order->id }})">
                         <i class='bx bx-check-circle'></i> Approve
                     </button>
@@ -883,13 +1358,15 @@
 <div class="image-viewer-modal" id="imageViewerModal">
     <div class="image-viewer-content">
         <div class="image-viewer-header">
-            <div class="image-viewer-title" id="imageViewerTitle">Prescription Image</div>
+            <div class="image-viewer-title" id="imageViewerTitle">
+                <i class='bx bx-file-blank'></i> Prescription Files
+            </div>
             <button class="image-viewer-close" onclick="closeImageViewer()">
                 <i class='bx bx-x'></i>
             </button>
         </div>
         <div class="image-viewer-body" id="imageViewerBody">
-            <!-- Image or PDF will be loaded here -->
+            <!-- Prescription grid will be loaded here -->
         </div>
     </div>
 </div>
@@ -980,22 +1457,79 @@
         }
     });
 
-    // Prescription image viewer
+    // Prescription viewer with grid layout
     function viewPrescription(url, title) {
         const modal = document.getElementById('imageViewerModal');
         const body = document.getElementById('imageViewerBody');
-        const titleEl = document.getElementById('imageViewerTitle');
         
-        titleEl.textContent = `Prescription - ${title}`;
-        
-        // Check if it's a PDF or image
-        if (url.toLowerCase().includes('.pdf')) {
-            body.innerHTML = `<iframe src="${url}" type="application/pdf"></iframe>`;
-        } else {
-            body.innerHTML = `<img src="${url}" alt="Prescription" />`;
-        }
+        // Show loading
+        body.innerHTML = `
+            <div class="viewer-loading">
+                <i class='bx bx-loader-alt'></i>
+                <span>Loading prescriptions...</span>
+            </div>
+        `;
         
         modal.classList.add('active');
+        
+        // Create grid layout
+        setTimeout(() => {
+            const isPDF = url.toLowerCase().includes('.pdf');
+            const fileType = isPDF ? 'PDF Document' : 'Image';
+            
+            body.innerHTML = `
+                <div class="prescription-grid">
+                    <div class="prescription-item-box">
+                        <div class="prescription-item-header">
+                            <div class="prescription-item-title">
+                                <i class='bx ${isPDF ? 'bxs-file-pdf' : 'bxs-image'}'></i>
+                                ${title}
+                            </div>
+                            <div class="prescription-item-subtitle">${fileType}</div>
+                        </div>
+                        <div class="prescription-item-body" id="prescription-content-1">
+                            <div class="viewer-loading">
+                                <i class='bx bx-loader-alt'></i>
+                                <span>Loading...</span>
+                            </div>
+                        </div>
+                        <div class="prescription-item-footer">
+                            <button class="view-fullscreen-btn" onclick="viewFullscreen('${url}')">
+                                <i class='bx bx-fullscreen'></i>
+                                View Fullscreen
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Load the actual content
+            const contentDiv = document.getElementById('prescription-content-1');
+            
+            if (isPDF) {
+                contentDiv.innerHTML = `<iframe src="${url}" type="application/pdf"></iframe>`;
+            } else {
+                const img = new Image();
+                img.onload = function() {
+                    contentDiv.innerHTML = `<img src="${url}" alt="Prescription" />`;
+                };
+                img.onerror = function() {
+                    contentDiv.innerHTML = `
+                        <div class="viewer-error">
+                            <i class='bx bx-error-circle'></i>
+                            <div class="viewer-error-title">Failed to load</div>
+                            <div class="viewer-error-text">File may be missing or corrupted</div>
+                        </div>
+                    `;
+                };
+                img.src = url;
+            }
+        }, 200);
+    }
+    
+    // View prescription in fullscreen
+    function viewFullscreen(url) {
+        window.open(url, '_blank');
     }
 
     function closeImageViewer() {

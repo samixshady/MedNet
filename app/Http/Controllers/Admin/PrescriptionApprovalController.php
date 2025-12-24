@@ -15,14 +15,78 @@ class PrescriptionApprovalController extends Controller
     /**
      * Display all orders requiring prescription approval
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Get orders that have prescription-required items
-        $pendingOrders = Order::where('prescription_required', true)
+        // Get filter parameters
+        $sortBy = $request->get('sort_by', 'newest');
+        $deliveryFilter = $request->get('delivery_filter', 'all');
+        $prescriptionFilter = $request->get('prescription_filter', 'all');
+        $dateFilter = $request->get('date_filter', 'all');
+
+        // Base query for pending orders
+        $pendingQuery = Order::where('prescription_required', true)
             ->where('prescription_status', 'pending')
-            ->with(['user', 'items.product'])
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->with(['user', 'items.product']);
+
+        // Apply delivery option filter
+        if ($deliveryFilter !== 'all') {
+            $pendingQuery->where('delivery_option', $deliveryFilter);
+        }
+
+        // Apply prescription status filter
+        if ($prescriptionFilter === 'with_prescription') {
+            $pendingQuery->whereHas('items', function($q) {
+                $q->whereNotNull('prescription_file_path');
+            });
+        } elseif ($prescriptionFilter === 'missing_prescription') {
+            $pendingQuery->whereDoesntHave('items', function($q) {
+                $q->whereNotNull('prescription_file_path');
+            });
+        }
+
+        // Apply date filter
+        if ($dateFilter !== 'all') {
+            switch ($dateFilter) {
+                case 'today':
+                    $pendingQuery->whereDate('created_at', today());
+                    break;
+                case 'yesterday':
+                    $pendingQuery->whereDate('created_at', today()->subDay());
+                    break;
+                case 'week':
+                    $pendingQuery->where('created_at', '>=', now()->subWeek());
+                    break;
+                case 'month':
+                    $pendingQuery->where('created_at', '>=', now()->subMonth());
+                    break;
+            }
+        }
+
+        // Apply sorting
+        switch ($sortBy) {
+            case 'oldest':
+                $pendingQuery->orderBy('created_at', 'asc');
+                break;
+            case 'urgent':
+                // Prioritize overnight, then express, then standard
+                $pendingQuery->orderByRaw("CASE 
+                    WHEN delivery_option = 'overnight' THEN 1 
+                    WHEN delivery_option = 'express' THEN 2 
+                    ELSE 3 
+                END")->orderBy('created_at', 'desc');
+                break;
+            case 'amount_high':
+                $pendingQuery->orderBy('total_amount', 'desc');
+                break;
+            case 'amount_low':
+                $pendingQuery->orderBy('total_amount', 'asc');
+                break;
+            default: // newest
+                $pendingQuery->orderBy('created_at', 'desc');
+                break;
+        }
+
+        $pendingOrders = $pendingQuery->get();
 
         $approvedOrders = Order::where('prescription_required', true)
             ->where('prescription_status', 'approved')
@@ -38,13 +102,19 @@ class PrescriptionApprovalController extends Controller
             ->limit(20)
             ->get();
 
-        $pendingCount = $pendingOrders->count();
+        $pendingCount = Order::where('prescription_required', true)
+            ->where('prescription_status', 'pending')
+            ->count();
 
         return view('admin.prescriptions.index', compact(
             'pendingOrders',
             'approvedOrders',
             'rejectedOrders',
-            'pendingCount'
+            'pendingCount',
+            'sortBy',
+            'deliveryFilter',
+            'prescriptionFilter',
+            'dateFilter'
         ));
     }
 
@@ -134,12 +204,17 @@ class PrescriptionApprovalController extends Controller
             abort(404, 'Prescription file not found');
         }
 
-        $path = storage_path('app/private/' . $orderItem->prescription_file_path);
+        $path = storage_path('app/public/' . $orderItem->prescription_file_path);
 
         if (!file_exists($path)) {
-            abort(404, 'Prescription file not found');
+            abort(404, 'Prescription file not found on server');
         }
 
-        return response()->file($path);
+        $mimeType = mime_content_type($path);
+        
+        return response()->file($path, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline'
+        ]);
     }
 }

@@ -46,6 +46,7 @@ class CheckoutController extends Controller
             'payment_method_field' => 'required|in:card,paypal',
             'delivery_address' => 'required|string',
             'delivery_fee' => 'required|numeric|min:0',
+            'delivery_option' => 'nullable|in:standard,express,overnight',
         ]);
 
         $user = auth()->user();
@@ -94,6 +95,7 @@ class CheckoutController extends Controller
                 'delivery_address' => $request->delivery_address,
                 'delivery_latitude' => session('delivery_coords.lat'),
                 'delivery_longitude' => session('delivery_coords.lng'),
+                'delivery_option' => $request->delivery_option ?? 'standard',
                 'payment_method' => $request->payment_method_field,
                 'payment_status' => 'completed',
                 'order_status' => 'pending',

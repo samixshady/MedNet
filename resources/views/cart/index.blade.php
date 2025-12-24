@@ -280,25 +280,30 @@
             }
 
             .file-name {
-                font-size: 12px;
-                color: #27ae60;
+                font-size: 13px;
                 margin-top: 8px;
-                font-weight: 600;
+                font-weight: 500;
                 display: flex;
                 align-items: center;
                 gap: 6px;
             }
 
             .file-name.uploaded {
+                color: #27ae60;
                 background: #d4edda;
-                padding: 8px;
+                padding: 8px 12px;
                 border-radius: 6px;
                 border-left: 3px solid #28a745;
             }
 
+            .file-name.pending {
+                color: #0066cc;
+                padding: 8px 12px;
+            }
+
             .prescription-warning {
-                background: #fff3cd;
-                border-left: 4px solid #ffc107;
+                background: #e7f3ff;
+                border-left: 4px solid #0066cc;
                 padding: 16px;
                 border-radius: 8px;
                 margin: 20px 0;
@@ -318,7 +323,7 @@
 
             .prescription-warning-text {
                 font-size: 14px;
-                color: #856404;
+                color: #004085;
                 font-weight: 600;
                 display: flex;
                 align-items: center;
@@ -332,7 +337,7 @@
 
             .prescription-item {
                 font-size: 13px;
-                color: #856404;
+                color: #004085;
                 margin-bottom: 6px;
             }
 
@@ -642,9 +647,29 @@
             }
 
             @media (max-width: 768px) {
+                .cart-container {
+                    padding: 16px;
+                    margin: 0;
+                    max-width: 100%;
+                }
+
+                .cart-header {
+                    margin-bottom: 16px;
+                }
+
+                .cart-header h1 {
+                    font-size: 24px;
+                }
+
+                .cart-grid {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
                 .cart-item {
                     grid-template-columns: 80px 1fr;
                     gap: 12px;
+                    padding: 16px 12px;
                 }
 
                 .item-controls {
@@ -652,6 +677,8 @@
                     flex-direction: row;
                     justify-content: space-between;
                     align-items: center;
+                    flex-wrap: wrap;
+                    gap: 12px;
                 }
 
                 .item-image {
@@ -661,6 +688,19 @@
 
                 .order-summary {
                     position: static;
+                }
+
+                .prescription-upload {
+                    padding: 12px;
+                }
+
+                .file-btn {
+                    font-size: 13px;
+                    padding: 10px 16px;
+                }
+
+                .prescription-label {
+                    font-size: 13px;
                 }
             }
         </style>
@@ -713,28 +753,23 @@
                                             @if($item->product->prescription_required)
                                                 <div class="prescription-upload">
                                                     <label class="prescription-label">
-                                                        <i class='bx bx-error-circle'></i>
-                                                        Prescription Required
-                                                        <span class="prescription-required-badge">MUST UPLOAD</span>
+                                                        <i class='bx bx-file-blank'></i>
+                                                        Prescription Needed
                                                     </label>
                                                     <div class="file-input-wrapper">
                                                         <input type="file" id="prescription-{{ $item->id }}" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="uploadPrescription({{ $item->id }})" data-required="true">
                                                         <label for="prescription-{{ $item->id }}" class="file-btn">
                                                             <i class='bx bx-upload'></i> 
-                                                            @if($item->prescription_file_path)
-                                                                Change Prescription
-                                                            @else
-                                                                Upload Prescription Now
-                                                            @endif
+                                                            Upload Prescription
                                                         </label>
                                                     </div>
-                                                    <div class="file-name {{ $item->prescription_file_path ? 'uploaded' : '' }}" id="file-name-{{ $item->id }}">
+                                                    <div class="file-name {{ $item->prescription_file_path ? 'uploaded' : 'pending' }}" id="file-name-{{ $item->id }}">
                                                         @if($item->prescription_file_path)
-                                                            <i class='bx bx-check-circle' style="color: #27ae60;"></i> 
-                                                            <span>Prescription Uploaded Successfully</span>
+                                                            <i class='bx bx-check-circle'></i> 
+                                                            <span>Uploaded</span>
                                                         @else
-                                                            <i class='bx bx-info-circle' style="color: #ffc107;"></i>
-                                                            <span style="color: #856404;">Upload required to proceed</span>
+                                                            <i class='bx bx-info-circle'></i>
+                                                            <span>Required for checkout</span>
                                                         @endif
                                                     </div>
                                                 </div>
@@ -838,10 +873,10 @@
                                         <!-- Prescription Warning Box -->
                                         <div class="prescription-warning" id="prescription-warning">
                                             <div class="prescription-warning-text">
-                                                <i class='bx bx-error-circle' style="font-size: 24px;"></i>
+                                                <i class='bx bx-info-circle' style="font-size: 24px;"></i>
                                                 <div>
-                                                    <strong>Prescription Upload Required!</strong>
-                                                    <div style="font-weight: normal; margin-top: 4px;">Please upload prescriptions for the following items before checkout:</div>
+                                                    <strong>Prescription Required</strong>
+                                                    <div style="font-weight: normal; margin-top: 4px;">Upload prescriptions to complete your order:</div>
                                                 </div>
                                             </div>
                                             <ul class="prescription-items-list" id="missing-prescriptions-list"></ul>
