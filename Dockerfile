@@ -1,5 +1,5 @@
-# Use PHP 8.4 with FPM
-FROM php:8.4-fpm
+# Use PHP 8.4 CLI for artisan serve
+FROM php:8.4-cli
 
 # Install system dependencies and Node.js
 RUN apt-get update && apt-get install -y \
@@ -36,6 +36,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Install Node dependencies and build assets
 RUN npm install && npm run build
 
+# Ensure build directory has correct permissions
+RUN chmod -R 755 /app/public/build
+
 # Set permissions
 RUN chown -R www-data:www-data /app \
     && chmod -R 755 /app/storage \
@@ -60,4 +63,5 @@ CMD php artisan storage:link && \
     php artisan migrate --force && \
     php artisan config:cache && \
     php artisan route:cache && \
+    php artisan view:cache && \
     php artisan serve --host=0.0.0.0 --port=8000
