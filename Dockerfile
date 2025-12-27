@@ -61,6 +61,7 @@ EXPOSE 8000
 # Start Laravel server with proper setup
 CMD php artisan storage:link && \
     php artisan migrate --force && \
+    php artisan config:clear && \
     php artisan config:cache && \
     php artisan route:cache && \
     php artisan view:cache && \
