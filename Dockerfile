@@ -1,7 +1,7 @@
-# Use PHP 8.4 CLI for artisan serve
-FROM php:8.4-cli
+# Use PHP 8.4 with FPM and add Nginx
+FROM php:8.4-fpm
 
-# Install system dependencies and Node.js
+# Install system dependencies, Node.js, and Nginx
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -13,7 +13,9 @@ RUN apt-get update && apt-get install -y \
     sqlite3 \
     libsqlite3-dev \
     nodejs \
-    npm
+    npm \
+    nginx \
+    supervisor
 
 # Clear cache
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
@@ -55,14 +57,12 @@ RUN mkdir -p /app/database && \
 #     php artisan route:cache && \
 #     php artisan view:cache
 
+# Copy Nginx configuration
+COPY docker/nginx.conf /etc/nginx/nginx.conf
+COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 # Expose port
 EXPOSE 8000
 
-# Start Laravel server with proper setup
-CMD php artisan storage:link && \
-    php artisan migrate --force && \
-    php artisan config:clear && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan serve --host=0.0.0.0 --port=8000
+# Start services with supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
