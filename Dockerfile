@@ -44,15 +44,20 @@ RUN chown -R www-data:www-data /app \
 # Create database directory if migrations need it
 RUN mkdir -p /app/database && \
     touch /app/database/database.sqlite && \
-    chown -R www-data:www-data /app/database
+    chown -R www-data:www-data /app/database && \
+    chmod -R 775 /app/database
 
-# Cache config for production
-RUN php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache
+# Don't cache config during build - do it at runtime with correct env vars
+# RUN php artisan config:cache && \
+#     php artisan route:cache && \
+#     php artisan view:cache
 
 # Expose port
 EXPOSE 8000
 
-# Start Laravel server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# Start Laravel server with proper setup
+CMD php artisan storage:link && \
+    php artisan migrate --force && \
+    php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan serve --host=0.0.0.0 --port=8000
