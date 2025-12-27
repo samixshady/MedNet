@@ -51,7 +51,7 @@
     <!-- Footer -->
     <div class="sidebar-footer">
         <p class="sidebar-footer-text">MedNet</p>
-        <p class="sidebar-footer-subtext">Your trusted health partner</p>
+        <p class="sidebar-footer-subtext">Made by samixshady</p>
     </div>
 </aside>
 
