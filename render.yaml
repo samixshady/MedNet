@@ -3,6 +3,10 @@ services:
     name: mednet
     runtime: docker
     dockerfilePath: ./Dockerfile
+    disk:
+      name: mednet-storage
+      mountPath: /app/storage
+      sizeGB: 1
     envVars:
       - key: APP_KEY
         value: base64:uzzF3rzQlFnJKHPFAlV7y7w8pN8JYngzFcpaqAvHmwY=

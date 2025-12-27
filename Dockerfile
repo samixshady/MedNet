@@ -41,9 +41,8 @@ RUN npm install && npm run build
 # Ensure build directory has correct permissions
 RUN chmod -R 755 /app/public/build
 
-# Set permissions
+# Set permissions for bootstrap cache (storage will be mounted as persistent disk)
 RUN chown -R www-data:www-data /app \
-    && chmod -R 755 /app/storage \
     && chmod -R 755 /app/bootstrap/cache
 
 # Create database directory if migrations need it
