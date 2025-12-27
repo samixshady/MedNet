@@ -20,10 +20,18 @@
         color: #111827;
         margin-bottom: 10px;
     }
-
+    
+    .dark .promotions-header h1 {
+        color: #f3f4f6;
+    }
+    
     .promotions-header p {
         font-size: 14px;
         color: #6B7280;
+    }
+    
+    .dark .promotions-header p {
+        color: #9ca3af;
     }
 
     .promotions-grid {
@@ -44,11 +52,22 @@
         height: 100%;
         border: 2px solid #E5E7EB;
     }
+    
+    .dark .promo-card {
+        background: #1f2937;
+        border-color: #374151;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    }
 
     .promo-card:hover {
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         border-color: #D1D5DB;
         transform: translateY(-2px);
+    }
+    
+    .dark .promo-card:hover {
+        border-color: #4b5563;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
     }
 
     .promo-image-container {
@@ -60,6 +79,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+    
+    .dark .promo-image-container {
+        background: #374151;
     }
 
     .promo-image-container img {
@@ -108,6 +131,10 @@
         margin-bottom: 4px;
         word-break: break-word;
     }
+    
+    .dark .promo-title {
+        color: #f3f4f6;
+    }
 
     .promo-status {
         font-size: 12px;
@@ -115,6 +142,10 @@
         display: flex;
         align-items: center;
         gap: 6px;
+    }
+    
+    .dark .promo-status {
+        color: #9ca3af;
     }
 
     .status-badge {
@@ -236,6 +267,11 @@
         width: 90%;
         animation: slideUp 0.3s ease;
     }
+    
+    .dark .modal-content {
+        background-color: #1f2937;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    }
 
     @keyframes slideUp {
         from {
@@ -258,6 +294,10 @@
         color: #111827;
         margin: 0;
     }
+    
+    .dark .modal-header h2 {
+        color: #f3f4f6;
+    }
 
     .modal-close {
         position: absolute;
@@ -271,9 +311,17 @@
         transition: color 0.3s ease;
         padding: 0;
     }
+    
+    .dark .modal-close {
+        color: #9ca3af;
+    }
 
     .modal-close:hover {
         color: #111827;
+    }
+    
+    .dark .modal-close:hover {
+        color: #f3f4f6;
     }
 
     .form-group {
@@ -287,6 +335,10 @@
         color: #374151;
         margin-bottom: 8px;
     }
+    
+    .dark .form-group label {
+        color: #d1d5db;
+    }
 
     .form-group input,
     .form-group textarea {
@@ -297,6 +349,13 @@
         font-size: 14px;
         font-family: inherit;
         transition: all 0.3s ease;
+    }
+    
+    .dark .form-group input,
+    .dark .form-group textarea {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f3f4f6;
     }
 
     .form-group input:focus,

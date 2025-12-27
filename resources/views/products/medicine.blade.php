@@ -13,6 +13,10 @@
                 color: #11101D;
                 margin-bottom: 8px;
             }
+            
+            .dark .medicine-header h1 {
+                color: #f3f4f6;
+            }
 
             .medicine-header p {
                 font-size: 16px;
@@ -131,6 +135,10 @@
                 margin-bottom: 4px;
                 line-height: 1.3;
                 min-height: 38px;
+            }
+            
+            .dark .product-name {
+                color: #f3f4f6;
             }
 
             .product-dosage {
@@ -396,10 +404,10 @@
     <!-- Quantity Selection Modal -->
     <div id="quantityModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9998; align-items: center; justify-content: center;">
         <div style="background: white; border-radius: 12px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);">
-            <h3 id="modalProductName" style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #11101D;">Select Quantity</h3>
+            <h3 id="modalProductName" class="dark:text-gray-100" style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #11101D;">Select Quantity</h3>
             <div style="display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 24px;">
                 <button onclick="decreaseQuantityModal()" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 18px; color: #333; transition: all 0.2s;">−</button>
-                <input type="number" id="quantityInput" value="1" min="1" max="50" style="border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; font-size: 16px; padding: 12px; width: 80px; outline: none;">
+                <input type="number" id="quantityInput" class="dark:text-gray-900" value="1" min="1" max="50" style="border: 1px solid #e5e7eb; border-radius: 8px; text-align: center; font-size: 16px; padding: 12px; width: 80px; outline: none;">
                 <button onclick="increaseQuantityModal()" style="background: #f0f0f0; border: none; width: 44px; height: 44px; border-radius: 8px; cursor: pointer; font-size: 18px; color: #333; transition: all 0.2s;">+</button>
             </div>
             <div style="display: flex; gap: 12px;">

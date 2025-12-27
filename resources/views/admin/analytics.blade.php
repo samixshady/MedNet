@@ -10,6 +10,10 @@
         min-height: 100vh;
     }
     
+    .dark .analytics-container {
+        background: #111827;
+    }
+    
     .analytics-header {
         margin-bottom: 32px;
     }
@@ -21,9 +25,17 @@
         margin: 0 0 8px 0;
     }
     
+    .dark .analytics-header h1 {
+        color: #f3f4f6;
+    }
+    
     .analytics-header p {
         color: #718096;
         font-size: 14px;
+    }
+    
+    .dark .analytics-header p {
+        color: #9ca3af;
     }
     
     .stats-grid {
@@ -41,6 +53,11 @@
         transition: all 0.3s ease;
         position: relative;
         overflow: hidden;
+    }
+    
+    .dark .stat-card {
+        background: #1f2937;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
     
     .stat-card::before {
@@ -87,11 +104,19 @@
         margin-bottom: 8px;
     }
     
+    .dark .stat-label {
+        color: #9ca3af;
+    }
+    
     .stat-value {
         font-size: 32px;
         font-weight: 700;
         color: #1a202c;
         margin-bottom: 4px;
+    }
+    
+    .dark .stat-value {
+        color: #f3f4f6;
     }
     
     .stat-change {
@@ -121,6 +146,11 @@
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     }
     
+    .dark .chart-card {
+        background: #1f2937;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+    
     .chart-header {
         margin-bottom: 20px;
         padding-bottom: 12px;
@@ -134,10 +164,18 @@
         margin: 0;
     }
     
+    .dark .chart-title {
+        color: #f3f4f6;
+    }
+    
     .chart-subtitle {
         font-size: 13px;
         color: #718096;
         margin-top: 4px;
+    }
+    
+    .dark .chart-subtitle {
+        color: #9ca3af;
     }
     
     .alert-card {
@@ -146,6 +184,11 @@
         padding: 24px;
         box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         margin-bottom: 24px;
+    }
+    
+    .dark .alert-card {
+        background: #1f2937;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     }
     
     .alert-card.warning {

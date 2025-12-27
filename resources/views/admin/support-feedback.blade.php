@@ -1,55 +1,55 @@
 @extends('layouts.admin')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 py-8 px-4 sm:px-6 lg:px-8">
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
-                    <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
                         <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
                         </svg>
                         Support Messages
                     </h1>
-                    <p class="mt-2 text-gray-600">Manage customer feedback and support requests</p>
+                    <p class="mt-2 text-gray-600 dark:text-gray-400">Manage customer feedback and support requests</p>
                 </div>
                 
                 <!-- Stats -->
                 <div class="flex gap-4 flex-wrap">
-                    <div class="bg-white rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
                         <div class="text-2xl font-bold text-indigo-600">{{ $feedbacks->total() }}</div>
-                        <div class="text-xs text-gray-600">Total</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Total</div>
                     </div>
-                    <div class="bg-white rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
                         <div class="text-2xl font-bold text-amber-600">{{ $feedbacks->where('status', 'pending')->count() }}</div>
-                        <div class="text-xs text-gray-600">Pending</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Pending</div>
                     </div>
-                    <div class="bg-white rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
+                    <div class="bg-white dark:bg-gray-800 rounded-lg shadow px-4 py-2 text-center min-w-[80px]">
                         <div class="text-2xl font-bold text-red-600">{{ $feedbacks->where('is_urgent', true)->count() }}</div>
-                        <div class="text-xs text-gray-600">Urgent</div>
+                        <div class="text-xs text-gray-600 dark:text-gray-400">Urgent</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- Filters & Search -->
-        <div class="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-4 md:p-6 mb-6">
             <form method="GET" action="{{ route('admin.support-feedback.index') }}" class="space-y-4" id="filterForm">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                     <!-- Search -->
                     <div class="lg:col-span-2">
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Search</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search</label>
                         <input type="text" name="search" value="{{ request('search') }}" 
                                placeholder="Search by name, phone, or message..." 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                     </div>
 
                     <!-- Status Filter -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                        <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status</label>
+                        <select name="status" class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm">
                             <option value="all" {{ request('status') == 'all' ? 'selected' : '' }}>All Status</option>
                             <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                             <option value="resolved" {{ request('status') == 'resolved' ? 'selected' : '' }}>Resolved</option>
@@ -102,7 +102,7 @@
         <!-- Messages List -->
         <div class="space-y-4">
             @forelse ($feedbacks as $feedback)
-                <div class="bg-white rounded-xl shadow-lg border-2 border-gray-900 hover:shadow-xl hover:border-indigo-600 transition-all duration-300 overflow-hidden message-card" data-id="{{ $feedback->id }}" data-status="{{ $feedback->status }}" data-pinned="{{ $feedback->is_pinned ? '1' : '0' }}" data-urgent="{{ $feedback->is_urgent ? '1' : '0' }}">
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg border-2 border-gray-900 dark:border-gray-700 hover:shadow-xl hover:border-indigo-600 dark:hover:border-indigo-400 transition-all duration-300 overflow-hidden message-card" data-id="{{ $feedback->id }}" data-status="{{ $feedback->status }}" data-pinned="{{ $feedback->is_pinned ? '1' : '0' }}" data-urgent="{{ $feedback->is_urgent ? '1' : '0' }}">
                     <div class="p-3 sm:p-4">
                         <!-- Desktop: 3 Column Layout | Mobile: Stacked -->
                         <div class="lg:grid lg:grid-cols-12 lg:gap-4">
