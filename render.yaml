@@ -14,6 +14,8 @@ services:
         value: https://mednet-gyfn.onrender.com
       - key: ASSET_URL
         value: https://mednet-gyfn.onrender.com
+      - key: FORCE_HTTPS
+        value: true
       - key: LOG_CHANNEL
         value: stderr
       - key: SESSION_DRIVER
