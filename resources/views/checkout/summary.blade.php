@@ -24,7 +24,12 @@
             <div class="lg:col-span-2">
                 <!-- Order Summary -->
                 <div class="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 mb-6 sm:mb-8">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3" style="color: #111;">
+                    <style>
+                        .bg-white, .bg-white * {
+                            color: #111 !important;
+                        }
+                    </style>
                         <svg class="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M9 2C7.89543 2 7 2.89543 7 4V20C7 21.1046 7.89543 22 9 22H15C16.1046 22 17 21.1046 17 20V4C17 2.89543 16.1046 2 15 2H9Z"/>
                         </svg>

@@ -21,7 +21,7 @@
 
         <!-- Order Summary Preview -->
         <div class="bg-white rounded-xl shadow-md p-6 mb-8">
-            <div class="flex justify-between items-center">
+            <div class="flex justify-between items-center" style="color: #111;">
                 <div>
                     <p class="text-sm text-gray-600">Order Total (with delivery)</p>
                     <p class="text-3xl font-bold text-gray-900">৳{{ number_format($total, 2) }}</p>
@@ -49,7 +49,12 @@
 
         <!-- Payment Method Selection -->
         <div class="bg-white rounded-2xl shadow-lg p-8 mb-8">
-            <h2 class="text-2xl font-bold text-gray-900 mb-8">Order Confirmation</h2>
+            <h2 class="text-2xl font-bold text-gray-900 mb-8" style="color: #111;">Order Confirmation</h2>
+            <style>
+                .bg-white, .bg-white * {
+                    color: #111 !important;
+                }
+            </style>
 
             <form id="paymentForm" method="POST" action="{{ route('checkout.process-payment') }}" class="space-y-6">
                 @csrf

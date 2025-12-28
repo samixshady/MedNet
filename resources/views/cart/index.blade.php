@@ -89,6 +89,11 @@
                 border-radius: 12px;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
                 border: 1px solid #f0f0f0;
+                color: #111;
+            }
+            .cart-item * {
+                color: #111 !important;
+            }
             }
 
             @media (min-width: 640px) {
@@ -439,6 +444,10 @@
                 padding: 24px;
                 position: sticky;
                 top: 20px;
+                color: #111;
+            }
+            .order-summary * {
+                color: #111 !important;
             }
 
             .summary-title {
