@@ -110,5 +110,20 @@
                 {{ __('Register') }}
             </x-primary-button>
         </div>
+
+        <!-- Shop Registration Banner -->
+        <div class="mt-6 p-4 bg-gradient-to-r from-purple-50 to-indigo-50 dark:from-purple-900/20 dark:to-indigo-900/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+            <div class="flex items-start gap-3">
+                <i class='bx bx-store-alt text-3xl text-purple-600 dark:text-purple-400'></i>
+                <div class="flex-1">
+                    <h3 class="font-semibold text-gray-900 dark:text-white mb-1">Own a Pharmacy?</h3>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Register your pharmacy and start selling on MedNet marketplace</p>
+                    <a href="{{ route('shop.register') }}" class="inline-flex items-center px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm font-medium rounded-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                        <i class='bx bx-user-plus mr-2'></i>
+                        Register Your Pharmacy
+                    </a>
+                </div>
+            </div>
+        </div>
     </form>
 </x-guest-layout>

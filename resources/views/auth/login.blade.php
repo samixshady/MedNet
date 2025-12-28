@@ -44,9 +44,13 @@
             </x-primary-button>
         </div>
 
-        <div class="flex items-center justify-end mt-3">
+        <div class="flex items-center justify-end mt-3 gap-2">
             <x-primary-button type="button" class="ms-3" onclick="window.location='{{ route('admin.login') }}'">
                 {{ __('Admin') }}
+            </x-primary-button>
+            <x-primary-button type="button" class="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700" onclick="window.location='{{ route('shop.login') }}'">
+                <i class='bx bx-store mr-1'></i>
+                {{ __('Shop Login') }}
             </x-primary-button>
         </div>
     </form>
