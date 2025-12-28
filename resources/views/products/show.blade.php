@@ -54,6 +54,13 @@
             .product-info-section {
                 display: flex;
                 flex-direction: column;
+                color: #111;
+            }
+            .product-info-section * {
+                color: #111 !important;
+            }
+            .discount-badge, .btn-add-to-cart, .btn-add-to-cart * {
+                color: white !important;
             }
 
             .product-title {

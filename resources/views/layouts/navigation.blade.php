@@ -15,12 +15,12 @@
 
                 <!-- MedNet Logo -->
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-1 sm:gap-2 group flex-shrink-0 overflow-hidden">
-                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-purple-500 dark:to-purple-600 p-1.5 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 dark:group-hover:shadow-purple-500/50 transition-shadow duration-300 flex-shrink-0">
+                    <div class="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-purple-500 dark:to-purple-600 p-1 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 dark:group-hover:shadow-purple-500/50 transition-shadow duration-300 flex-shrink-0">
                         <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
                         </svg>
                     </div>
-                    <h2 class="hidden xs:block font-bold text-sm sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 dark:from-purple-400 dark:via-purple-300 dark:to-purple-400 bg-clip-text text-transparent leading-none tracking-tight group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap mednet-mobile">
+                    <h2 class="hidden xs:block font-bold text-xs xs:text-sm sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 dark:from-purple-400 dark:via-purple-300 dark:to-purple-400 bg-clip-text text-transparent leading-none tracking-tight group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap mednet-mobile-mobile">
                         {{ __('MedNet') }}
                     </h2>
                 </a>
@@ -67,7 +67,7 @@
 
                 <!-- User Profile Dropdown (Desktop) -->
                 <div class="hidden sm:block flex-shrink-0">
-                    <x-dropdown align="right" width="48">
+                    <x-dropdown align="right" width="48" contentClasses="py-1 bg-white sm:w-48 w-11/12 max-w-xs">
                         <x-slot name="trigger">
                             <button class="group flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 lg:px-4 py-2 sm:py-2.5 bg-white/10 hover:bg-white/20 dark:bg-gray-700/50 dark:hover:bg-gray-600/50 backdrop-blur-sm border border-white/20 dark:border-gray-600/30 rounded-lg sm:rounded-xl transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/20 dark:hover:shadow-purple-500/20">
                                 <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-purple-400 dark:to-purple-600 flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-lg flex-shrink-0">
@@ -131,13 +131,13 @@
     >
         <!-- Mobile User Profile Section -->
         <div class="px-4 py-5 border-b border-slate-700/50 dark:border-gray-700/50">
-            <div class="flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-purple-400 dark:to-purple-600 flex items-center justify-center text-white font-bold text-xl shadow-lg ring-4 ring-blue-500/30 dark:ring-purple-500/30">
+            <div class="flex items-center gap-3 sm:gap-4">
+                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 dark:from-purple-400 dark:to-purple-600 flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-lg ring-4 ring-blue-500/30 dark:ring-purple-500/30">
                     {{ substr(Auth::user()->name, 0, 1) }}
                 </div>
-                <div class="flex-1">
-                    <div class="font-bold text-lg text-white">{{ Auth::user()->name }}</div>
-                    <div class="text-blue-300 dark:text-purple-300 text-sm">{{ Auth::user()->email }}</div>
+                <div class="flex-1 min-w-0">
+                    <div class="font-bold text-base sm:text-lg text-white truncate">{{ Auth::user()->name }}</div>
+                    <div class="text-blue-300 dark:text-purple-300 text-xs sm:text-sm truncate">{{ Auth::user()->email }}</div>
                 </div>
             </div>
         </div>
@@ -164,14 +164,14 @@
 
         <!-- Mobile Navigation Links -->
         <div class="px-4 py-3 space-y-1">
-            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
+            <a href="{{ route('profile.edit') }}" class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
                 <svg class="w-5 h-5 text-blue-400 dark:text-purple-400 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                 </svg>
                 <span class="font-medium">{{ __('Profile') }}</span>
             </a>
 
-            <a href="{{ route('profile.addresses') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
+            <a href="{{ route('profile.addresses') }}" class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
                 <svg class="w-5 h-5 text-blue-400 dark:text-purple-400 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -179,7 +179,7 @@
                 <span class="font-medium">{{ __('Addresses') }}</span>
             </a>
 
-            <a href="{{ route('profile.orders') }}" class="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
+            <a href="{{ route('profile.orders') }}" class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
                 <svg class="w-5 h-5 text-blue-400 dark:text-purple-400 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                 </svg>
@@ -188,7 +188,7 @@
 
             <form method="POST" action="{{ route('logout') }}" class="mt-2">
                 @csrf
-                <button type="submit" class="w-full flex items-center gap-3 px-4 py-3 text-red-300 hover:bg-red-500/10 dark:hover:bg-pink-500/10 rounded-xl transition-all duration-200 group">
+                <button type="submit" class="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-red-300 hover:bg-red-500/10 dark:hover:bg-pink-500/10 rounded-xl transition-all duration-200 group">
                     <svg class="w-5 h-5 text-red-400 dark:text-pink-400 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                     </svg>
@@ -268,6 +268,15 @@
     </script>
 
     <style>
+                /* Responsive dropdown for mobile profile menu */
+                @media (max-width: 639px) {
+                    .dropdown-menu-mobile {
+                        width: 96vw !important;
+                        max-width: 360px !important;
+                        left: 2vw !important;
+                        right: 2vw !important;
+                    }
+                }
         /* Custom breakpoint for extra small devices */
         @media (min-width: 380px) {
             .hidden.xs\:block {
@@ -276,22 +285,20 @@
         }
 
         /* Mobile MedNet text optimization */
-        .mednet-mobile {
+        .mednet-mobile-mobile {
             display: block;
-            font-size: 2.625rem; /* 42px - 3x bigger than original 14px */
-            line-height: 1;
-            letter-spacing: -0.02em;
+            font-size: 1.1rem;
+            line-height: 1.1;
+            letter-spacing: -0.01em;
         }
-
         @media (min-width: 380px) {
-            .mednet-mobile {
-                font-size: 3rem; /* 48px - 3x bigger than original 16px */
+            .mednet-mobile-mobile {
+                font-size: 1.25rem;
             }
         }
-
         @media (min-width: 640px) {
-            .mednet-mobile {
-                font-size: 1.5rem; /* 24px */
+            .mednet-mobile-mobile {
+                font-size: 1.5rem;
                 letter-spacing: -0.025em;
             }
         }

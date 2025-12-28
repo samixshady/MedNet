@@ -125,6 +125,10 @@
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
+                color: #111;
+            }
+            .product-info * {
+                color: #111 !important;
             }
 
             .product-name {

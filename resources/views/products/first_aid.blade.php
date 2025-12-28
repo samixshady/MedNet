@@ -125,6 +125,10 @@
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
+                color: #111;
+            }
+            .product-info * {
+                color: #111 !important;
             }
 
             .product-name {
@@ -134,10 +138,6 @@
                 margin-bottom: 4px;
                 line-height: 1.3;
                 min-height: 38px;
-            }
-            
-            .dark .product-name {
-                color: #f3f4f6;
             }
 
             .product-dosage {
