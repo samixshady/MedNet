@@ -1,6 +1,42 @@
 # Release Notes
 
-## [Unreleased](https://github.com/laravel/laravel/compare/v12.10.1...12.x)
+## [Unreleased](https://github.com/laravel/laravel/compare/Stable...main)
+
+## [Stable](https://github.com/laravel/laravel/compare/v12.10.1...Stable) - 2025-12-28
+
+Mednet Version 1 marks the first official stable release of the platform. This release introduces the core foundation of Mednet, delivering essential functionalities, improved performance, and a smooth user experience. Version 1 focuses on reliability, secure workflows, and a clean UI to ensure users can confidently start using the platform in real environments.
+
+✨ New Features
+
+- Core Mednet platform fully implemented
+- Secure user authentication and role management
+- Optimized dashboard with clean UI/UX
+- Core modules completed (management, tracking, analytics)
+- Mobile and desktop responsive support
+- Notification / alert features
+
+⚙️ Improvements
+🔧 Performance optimization across major sections
+🛡️ Security enhancements and validation improvements
+🎨 UI consistency and design polish
+⚡ Faster loading and smoother navigation
+
+🐞 Bug Fixes
+Fixed layout issues on smaller screens
+Resolved authentication edge-case errors
+General stability fixes and code cleanup
+
+📥 Installation / Setup
+Clone the repository
+Install dependencies
+Configure environment variables
+Run project
+
+🚀 What’s Next
+Mednet v1.x roadmap will focus on:
+Feature expansion
+More automation
+User feedback improvements
 
 ## [v12.10.1](https://github.com/laravel/laravel/compare/v12.10.0...v12.10.1) - 2025-11-06
 
