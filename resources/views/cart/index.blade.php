@@ -53,6 +53,10 @@
                 font-weight: 700;
                 color: #11101D;
             }
+            
+            .dark .cart-header h1 {
+                color: #f3f4f6;
+            }
 
             .cart-badge {
                 background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
@@ -138,6 +142,10 @@
                 color: #11101D;
                 line-height: 1.4;
             }
+            
+            .dark .item-name {
+                color: #f3f4f6;
+            }
 
             .item-generic {
                 font-size: 13px;
@@ -202,6 +210,10 @@
                 font-weight: 700;
                 font-size: 15px;
                 color: #11101D;
+            }
+            
+            .dark .qty-input {
+                color: #111827;
             }
 
             .qty-input::-webkit-outer-spin-button,
@@ -436,6 +448,10 @@
                 margin-bottom: 20px;
                 padding-bottom: 16px;
                 border-bottom: 2px solid #e5e5e5;
+            }
+            
+            .dark .summary-title {
+                color: #f3f4f6;
             }
 
             .summary-row {

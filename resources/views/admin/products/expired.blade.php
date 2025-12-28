@@ -52,6 +52,10 @@
         font-size: 28px;
         font-weight: 600;
     }
+    
+    .dark .products-header h1 {
+        color: #f3f4f6;
+    }
 
     .back-btn {
         background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);

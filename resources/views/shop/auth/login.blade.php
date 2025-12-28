@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - MedNet</title>
+    <title>Pharmacy Login - MedNet</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,11 +20,11 @@
         }
         .input-focus:focus {
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(99, 102, 241, 0.2);
+            box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
         }
         .btn-hover:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
         }
         @keyframes fadeInUp {
             from {
@@ -41,7 +41,7 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 flex items-center justify-center p-4">
+<body class="min-h-screen bg-gradient-to-br from-green-600 via-emerald-600 to-teal-700 flex items-center justify-center p-4">
     
     <!-- Home Button -->
     <a href="{{ url('/') }}" class="fixed top-6 left-6 z-50 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 group" title="Back to Home">
@@ -55,32 +55,32 @@
             <div class="max-w-md">
                 <div class="mb-4">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-lg rounded-2xl mb-3">
-                        <i class='bx bx-shield-alt-2 text-4xl'></i>
+                        <i class='bx bxs-store text-4xl'></i>
                     </div>
-                    <h1 class="text-3xl lg:text-4xl font-bold mb-2">Admin Portal</h1>
-                    <p class="text-base text-indigo-100 mb-4">Secure access to the MedNet administration dashboard.</p>
+                    <h1 class="text-3xl lg:text-4xl font-bold mb-2">Pharmacy Portal</h1>
+                    <p class="text-base text-green-100 mb-4">Access your pharmacy dashboard and manage your products, orders, and inventory.</p>
                 </div>
                 
                 <div class="space-y-2">
                     <div class="flex items-start space-x-3">
                         <i class='bx bx-check-circle text-xl text-green-300'></i>
                         <div>
-                            <h3 class="font-semibold text-sm">Manage Platform</h3>
-                            <p class="text-xs text-indigo-100">Full control over the system</p>
+                            <h3 class="font-semibold text-sm">Manage Products</h3>
+                            <p class="text-xs text-green-100">Add and update your inventory</p>
                         </div>
                     </div>
                     <div class="flex items-start space-x-3">
                         <i class='bx bx-check-circle text-xl text-green-300'></i>
                         <div>
-                            <h3 class="font-semibold text-sm">User Management</h3>
-                            <p class="text-xs text-indigo-100">Oversee all user accounts</p>
+                            <h3 class="font-semibold text-sm">Process Orders</h3>
+                            <p class="text-xs text-green-100">Handle customer orders efficiently</p>
                         </div>
                     </div>
                     <div class="flex items-start space-x-3">
                         <i class='bx bx-check-circle text-xl text-green-300'></i>
                         <div>
-                            <h3 class="font-semibold text-sm">Analytics</h3>
-                            <p class="text-xs text-indigo-100">Track performance metrics</p>
+                            <h3 class="font-semibold text-sm">Business Insights</h3>
+                            <p class="text-xs text-green-100">Track sales and performance</p>
                         </div>
                     </div>
                 </div>
@@ -93,47 +93,47 @@
                 
                 <!-- Header -->
                 <div class="text-center mb-4">
-                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl mb-2">
-                        <i class='bx bx-shield text-white text-2xl'></i>
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-green-600 to-emerald-600 rounded-2xl mb-2">
+                        <i class='bx bx-store text-white text-2xl'></i>
                     </div>
-                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Admin Login</h2>
-                    <p class="text-sm text-gray-600">Authorized personnel only</p>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-1">Pharmacy Login</h2>
+                    <p class="text-sm text-gray-600">Access your pharmacy dashboard</p>
                 </div>
 
                 <!-- Demo Credentials -->
-                <div class="mb-3 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg">
+                <div class="mb-3 p-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg">
                     <div class="flex items-center gap-2 mb-2">
-                        <i class='bx bx-shield text-blue-600 text-lg'></i>
-                        <h3 class="text-xs font-semibold text-blue-900">Admin Demo Account</h3>
+                        <i class='bx bx-store text-green-600 text-lg'></i>
+                        <h3 class="text-xs font-semibold text-green-900">Demo Pharmacy Account</h3>
                     </div>
                     <div class="space-y-2">
-                        <div class="flex items-center justify-between gap-3 p-2 bg-white rounded-lg hover:bg-blue-50 transition-colors cursor-pointer group" 
-                             onclick="fillAdminCredentials('admin@admin.com', 'adminadmin')"
+                        <div class="flex items-center justify-between gap-3 p-2 bg-white rounded-lg hover:bg-green-50 transition-colors cursor-pointer group" 
+                             onclick="fillShopCredentials('shop@shop.com', 'ShopShop123')"
                              title="Click to paste credentials">
                             <div class="flex-1">
                                 <p class="text-xs text-gray-500">Email</p>
-                                <p class="text-sm font-mono text-gray-800 font-medium">admin@admin.com</p>
+                                <p class="text-sm font-mono text-gray-800 font-medium">shop@shop.com</p>
                             </div>
-                            <i class='bx bx-copy text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity'></i>
+                            <i class='bx bx-copy text-green-600 opacity-0 group-hover:opacity-100 transition-opacity'></i>
                         </div>
-                        <div class="flex items-center justify-between gap-3 p-2 bg-white rounded-lg hover:bg-blue-50 transition-colors cursor-pointer group" 
-                             onclick="fillAdminCredentials('admin@admin.com', 'adminadmin')"
+                        <div class="flex items-center justify-between gap-3 p-2 bg-white rounded-lg hover:bg-green-50 transition-colors cursor-pointer group" 
+                             onclick="fillShopCredentials('shop@shop.com', 'ShopShop123')"
                              title="Click to paste credentials">
                             <div class="flex-1">
                                 <p class="text-xs text-gray-500">Password</p>
-                                <p class="text-sm font-mono text-gray-800 font-medium">adminadmin</p>
+                                <p class="text-sm font-mono text-gray-800 font-medium">ShopShop123</p>
                             </div>
-                            <i class='bx bx-copy text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity'></i>
+                            <i class='bx bx-copy text-green-600 opacity-0 group-hover:opacity-100 transition-opacity'></i>
                         </div>
                     </div>
-                    <p class="text-xs text-blue-700 mt-1 text-center">Click on credentials to auto-fill</p>
+                    <p class="text-xs text-green-700 mt-1 text-center">Click on credentials to auto-fill</p>
                 </div>
 
-                <!-- Session Status -->
-                @if(session('status'))
+                <!-- Success Messages -->
+                @if(session('success'))
                     <div class="mb-3 p-3 bg-green-50 border-l-4 border-green-500 rounded-lg flex items-start">
                         <i class='bx bx-check-circle text-green-600 text-lg mr-2 mt-0.5'></i>
-                        <p class="text-xs text-green-700">{{ session('status') }}</p>
+                        <p class="text-xs text-green-700">{{ session('success') }}</p>
                     </div>
                 @endif
 
@@ -151,26 +151,59 @@
                     </div>
                 @endif
 
+                <!-- Status-based Messages -->
+                @if(session('error_type') === 'pending')
+                    <div class="mb-3 p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded-lg">
+                        <div class="flex items-start">
+                            <i class='bx bx-time-five text-yellow-600 text-lg mr-2 mt-0.5'></i>
+                            <div>
+                                <p class="text-xs font-semibold text-yellow-800 mb-0.5">Application Pending</p>
+                                <p class="text-xs text-yellow-700">Your pharmacy registration is under review. Please wait for admin approval.</p>
+                            </div>
+                        </div>
+                    </div>
+                @elseif(session('error_type') === 'rejected')
+                    <div class="mb-3 p-3 bg-orange-50 border-l-4 border-orange-500 rounded-lg">
+                        <div class="flex items-start">
+                            <i class='bx bx-x-circle text-orange-600 text-lg mr-2 mt-0.5'></i>
+                            <div>
+                                <p class="text-xs font-semibold text-orange-800 mb-0.5">Application Rejected</p>
+                                <p class="text-xs text-orange-700">Your registration was not approved. Please contact support for more information.</p>
+                            </div>
+                        </div>
+                    </div>
+                @elseif(session('error_type') === 'banned')
+                    <div class="mb-3 p-3 bg-red-50 border-l-4 border-red-600 rounded-lg">
+                        <div class="flex items-start">
+                            <i class='bx bx-block text-red-600 text-lg mr-2 mt-0.5'></i>
+                            <div>
+                                <p class="text-xs font-semibold text-red-800 mb-0.5">Account Banned</p>
+                                <p class="text-xs text-red-700">Your pharmacy account has been suspended. Contact admin for assistance.</p>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Login Form -->
-                <form method="POST" action="{{ route('admin.login.store') }}" class="space-y-4">
+                <form method="POST" action="{{ route('shop.login') }}" class="space-y-4">
                     @csrf
 
-                    <!-- Email or Username -->
+                    <!-- Email -->
                     <div>
-                        <label for="login" class="block text-xs font-semibold text-gray-700 mb-1">
-                            Email or Username
+                        <label for="email" class="block text-xs font-semibold text-gray-700 mb-1">
+                            Email Address
                         </label>
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                                <i class='bx bx-user-circle text-gray-400 text-lg'></i>
+                                <i class='bx bx-envelope text-gray-400 text-lg'></i>
                             </div>
                             <input 
-                                type="text" 
-                                id="login" 
-                                name="login" 
-                                value="{{ old('login') }}"
-                                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 input-focus"
-                                placeholder="admin@mednet.com"
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                value="{{ old('email') }}"
+                                class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 input-focus"
+                                placeholder="pharmacy@example.com"
                                 required 
                                 autofocus
                             >
@@ -190,7 +223,7 @@
                                 type="password" 
                                 id="password" 
                                 name="password" 
-                                class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 input-focus"
+                                class="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-300 input-focus"
                                 placeholder="••••••••"
                                 required
                             >
@@ -211,37 +244,38 @@
                             <input 
                                 type="checkbox" 
                                 name="remember" 
-                                class="w-3.5 h-3.5 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500 cursor-pointer"
+                                class="w-3.5 h-3.5 text-green-600 border-gray-300 rounded focus:ring-green-500 cursor-pointer"
                             >
-                            <span class="ml-2 text-xs text-gray-600">Keep me signed in</span>
+                            <span class="ml-2 text-xs text-gray-600">Remember me</span>
                         </label>
                     </div>
 
                     <!-- Login Button -->
                     <button 
                         type="submit" 
-                        class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold py-2.5 rounded-xl hover:from-indigo-700 hover:to-purple-700 transition-all duration-300 btn-hover flex items-center justify-center space-x-2"
+                        class="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-2.5 rounded-xl hover:from-green-700 hover:to-emerald-700 transition-all duration-300 btn-hover flex items-center justify-center space-x-2"
                     >
-                        <i class='bx bx-log-in text-lg'></i>
-                        <span class="text-sm">Admin Sign In</span>
+                        <span class="text-sm">Sign In</span>
+                        <i class='bx bx-right-arrow-alt text-lg'></i>
                     </button>
 
-                    <!-- Security Notice -->
-                    <div class="mt-3 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                        <div class="flex items-start">
-                            <i class='bx bx-info-circle text-yellow-600 text-base mr-2 mt-0.5'></i>
-                            <p class="text-xs text-yellow-800">
-                                This area is restricted to authorized administrators only. All login attempts are logged and monitored.
-                            </p>
-                        </div>
-                    </div>
+                    <!-- Links -->
+                    <div class="space-y-2 mt-3">
+                        <!-- Register Link -->
+                        <p class="text-center text-xs text-gray-600">
+                            Don't have an account? 
+                            <a href="{{ route('shop.register') }}" class="text-green-600 hover:text-green-700 font-semibold transition-colors text-xs">
+                                Register your pharmacy
+                            </a>
+                        </p>
 
-                    <!-- Back to Customer Login -->
-                    <div class="text-center mt-3">
-                        <a href="{{ route('login') }}" class="inline-flex items-center text-xs text-indigo-600 hover:text-indigo-700 font-medium transition-colors">
-                            <i class='bx bx-left-arrow-alt text-base mr-1'></i>
-                            Back to Customer Login
-                        </a>
+                        <!-- Back to Customer Login -->
+                        <div class="text-center">
+                            <a href="{{ route('login') }}" class="inline-flex items-center text-xs text-gray-500 hover:text-gray-700 transition-colors">
+                                <i class='bx bx-left-arrow-alt text-base mr-1'></i>
+                                Back to Customer Login
+                            </a>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -249,19 +283,19 @@
     </div>
 
 <script>
-    function fillAdminCredentials(username, password) {
-        document.getElementById('login').value = username;
+    function fillShopCredentials(email, password) {
+        document.getElementById('email').value = email;
         document.getElementById('password').value = password;
         
-        const loginInput = document.getElementById('login');
+        const emailInput = document.getElementById('email');
         const passwordInput = document.getElementById('password');
         
-        loginInput.classList.add('ring-2', 'ring-blue-500');
-        passwordInput.classList.add('ring-2', 'ring-blue-500');
+        emailInput.classList.add('ring-2', 'ring-green-500');
+        passwordInput.classList.add('ring-2', 'ring-green-500');
         
         setTimeout(() => {
-            loginInput.classList.remove('ring-2', 'ring-blue-500');
-            passwordInput.classList.remove('ring-2', 'ring-blue-500');
+            emailInput.classList.remove('ring-2', 'ring-green-500');
+            passwordInput.classList.remove('ring-2', 'ring-green-500');
         }, 1000);
     }
     

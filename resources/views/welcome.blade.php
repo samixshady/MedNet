@@ -109,6 +109,12 @@
                     <p class="font-mono text-gray-800 dark:text-gray-200">admin@admin.com</p>
                     <p class="font-mono text-gray-800 dark:text-gray-200">adminadmin</p>
                 </div>
+
+                <div class="space-y-1">
+                    <p class="font-mono text-gray-800 dark:text-gray-200">Shop Account:</p>
+                    <p class="font-mono text-gray-800 dark:text-gray-200">shop@shop.com</p>
+                    <p class="font-mono text-gray-800 dark:text-gray-200">ShopShop123</p>
+                </div>
             </div>
         </div>
         

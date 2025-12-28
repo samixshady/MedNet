@@ -9,6 +9,10 @@
         background: #f8f9fa;
         min-height: 100vh;
     }
+    
+    .dark .prescription-container {
+        background: #111827;
+    }
 
     .prescription-header {
         display: flex;
@@ -24,6 +28,10 @@
         font-weight: 700;
         color: #1a202c;
         margin: 0;
+    }
+    
+    .dark .prescription-header h1 {
+        color: #f3f4f6;
     }
 
     .alert-banner {
@@ -75,6 +83,11 @@
         gap: 8px;
         flex-wrap: wrap;
     }
+    
+    .dark .tabs-container {
+        background: #1f2937;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
 
     .tab-button {
         flex: 1;
@@ -92,6 +105,10 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
+    }
+    
+    .dark .tab-button {
+        color: #9ca3af;
     }
 
     .tab-button:hover {
@@ -140,6 +157,12 @@
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         border: 1px solid #e2e8f0;
     }
+    
+    .dark .filters-container {
+        background: #1f2937;
+        border-color: #374151;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
 
     .filters-grid {
         display: grid;
@@ -161,12 +184,16 @@
         align-items: center;
         gap: 6px;
     }
-
+    
+    .dark .filter-label {
+        color: #9ca3af;
+    }
+    
     .filter-label i {
         font-size: 16px;
         color: #3b82f6;
     }
-
+    
     .filter-select {
         padding: 10px 14px;
         border: 2px solid #e2e8f0;
@@ -178,6 +205,12 @@
         cursor: pointer;
         transition: all 0.2s ease;
         outline: none;
+    }
+    
+    .dark .filter-select {
+        background: #374151;
+        border-color: #4b5563;
+        color: #f3f4f6;
     }
 
     .filter-select:hover {

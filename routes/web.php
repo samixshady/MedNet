@@ -8,6 +8,10 @@ use App\Http\Controllers\Admin\AnalyticsController;
 use App\Http\Controllers\Admin\PrescriptionApprovalController;
 use App\Http\Controllers\Admin\PromoController;
 use App\Http\Controllers\Admin\UserManagementController;
+use App\Http\Controllers\Admin\PharmacyController;
+use App\Http\Controllers\Shop\ShopAuthController;
+use App\Http\Controllers\Shop\ShopDashboardController;
+use App\Http\Controllers\Shop\ShopProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
@@ -139,6 +143,42 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('/{order}/approve', [PrescriptionApprovalController::class, 'approve'])->name('approve');
             Route::post('/{order}/reject', [PrescriptionApprovalController::class, 'reject'])->name('reject');
             Route::get('/view/{orderItem}', [PrescriptionApprovalController::class, 'viewPrescription'])->name('view');
+        });
+
+        // Pharmacy Management routes
+        Route::prefix('pharmacy')->name('pharmacy.')->group(function () {
+            Route::get('/', [PharmacyController::class, 'index'])->name('index');
+            Route::get('/create', [PharmacyController::class, 'create'])->name('create');
+            Route::post('/', [PharmacyController::class, 'store'])->name('store');
+            Route::post('/{id}/approve', [PharmacyController::class, 'approve'])->name('approve');
+            Route::post('/{id}/reject', [PharmacyController::class, 'reject'])->name('reject');
+            Route::post('/{id}/ban', [PharmacyController::class, 'ban'])->name('ban');
+            Route::post('/{id}/unban', [PharmacyController::class, 'unban'])->name('unban');
+            Route::delete('/{id}', [PharmacyController::class, 'destroy'])->name('destroy');
+        });
+    });
+});
+
+// Shop/Pharmacy Routes
+Route::prefix('shop')->name('shop.')->group(function () {
+    Route::middleware('guest:pharmacy')->group(function () {
+        Route::get('login', [ShopAuthController::class, 'showLoginForm'])->name('login');
+        Route::post('login', [ShopAuthController::class, 'login'])->name('login.post');
+        Route::get('register', [ShopAuthController::class, 'showRegistrationForm'])->name('register');
+        Route::post('register', [ShopAuthController::class, 'register'])->name('register.post');
+    });
+
+    Route::middleware('auth:pharmacy')->group(function () {
+        Route::post('logout', [ShopAuthController::class, 'logout'])->name('logout');
+        Route::get('dashboard', [ShopDashboardController::class, 'index'])->name('dashboard');
+        
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/', [ShopProductController::class, 'index'])->name('index');
+            Route::get('/create', [ShopProductController::class, 'create'])->name('create');
+            Route::post('/', [ShopProductController::class, 'store'])->name('store');
+            Route::get('/{id}/edit', [ShopProductController::class, 'edit'])->name('edit');
+            Route::put('/{id}', [ShopProductController::class, 'update'])->name('update');
+            Route::delete('/{id}', [ShopProductController::class, 'destroy'])->name('destroy');
         });
     });
 });

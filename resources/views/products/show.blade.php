@@ -62,6 +62,10 @@
                 color: #11101D;
                 margin-bottom: 12px;
             }
+            
+            .dark .product-title {
+                color: #f3f4f6;
+            }
 
             .product-meta {
                 display: flex;
@@ -90,6 +94,10 @@
                 font-weight: 600;
                 color: #11101D;
             }
+            
+            .dark .meta-value {
+                color: #f3f4f6;
+            }
 
             .product-description {
                 margin-bottom: 24px;
@@ -102,6 +110,10 @@
                 font-weight: 700;
                 color: #11101D;
                 margin-bottom: 12px;
+            }
+            
+            .dark .product-description h3 {
+                color: #f3f4f6;
             }
 
             .pricing-section {
@@ -192,6 +204,10 @@
                 font-size: 16px;
                 font-weight: 600;
                 color: #11101D;
+            }
+            
+            .dark .detail-value {
+                color: #f3f4f6;
             }
 
             .actions {

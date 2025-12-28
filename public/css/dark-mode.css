@@ -1,0 +1,429 @@
+/* ========================================
+   DARK MODE STYLES
+   ======================================== */
+
+/* Base Dark Mode Transitions */
+* {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Product Cards Dark Mode */
+.dark .product-card {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+}
+
+.dark .product-card:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+    border-color: rgba(139, 92, 246, 0.5);
+}
+
+.dark .product-image-wrapper {
+    background: #0f172a;
+    border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+}
+
+.dark .product-image-placeholder {
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    color: #6b7280;
+}
+
+/* Product Info Dark Mode */
+.dark .product-info {
+    background: rgba(17, 24, 39, 0.5);
+}
+
+.dark .product-name,
+.dark .medicine-header h1 {
+    color: #f3f4f6 !important;
+}
+
+.dark .product-generic,
+.dark .medicine-header p {
+    color: #9ca3af !important;
+}
+
+.dark .product-type-badge {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #e9d5ff;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.dark .product-price {
+    color: #a78bfa !important;
+}
+
+.dark .product-old-price {
+    color: #6b7280 !important;
+}
+
+.dark .product-discount-badge {
+    background: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
+    color: #fce7f3;
+}
+
+/* Stock Status Dark Mode */
+.dark .stock-status.in-stock {
+    background: rgba(16, 185, 129, 0.15);
+    color: #6ee7b7;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.dark .stock-status.low-stock {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fcd34d;
+    border-color: rgba(245, 158, 11, 0.3);
+}
+
+.dark .stock-status.out-of-stock {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Buttons Dark Mode */
+.dark .add-to-cart-btn {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #f3f4f6;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.dark .add-to-cart-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+}
+
+.dark .add-to-cart-btn:disabled {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    color: #6b7280;
+}
+
+/* Sidebar Dark Mode */
+.dark .sidebar {
+    background: linear-gradient(180deg, #111827 0%, #0f172a 100%);
+    border-right: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .sidebar-link {
+    color: #d1d5db;
+    background: rgba(31, 41, 55, 0.5);
+}
+
+.dark .sidebar-link:hover {
+    background: rgba(55, 65, 81, 0.7);
+    color: #a78bfa;
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.dark .sidebar-link.active {
+    background: linear-gradient(135deg, rgba(124, 58, 237, 0.2) 0%, rgba(91, 33, 182, 0.2) 100%);
+    color: #c4b5fd;
+    border-color: #8b5cf6;
+}
+
+/* Cart Dark Mode */
+.dark .cart-item {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .cart-item:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+.dark .cart-summary {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+/* Checkout Dark Mode */
+.dark .checkout-section {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .checkout-summary {
+    background: linear-gradient(135deg, #0f172a 0%, #020617 100%);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+}
+
+/* Form Elements Dark Mode */
+.dark input,
+.dark select,
+.dark textarea {
+    background: #1f2937;
+    border-color: rgba(75, 85, 99, 0.5);
+    color: #f3f4f6;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+    background: #374151;
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #6b7280;
+}
+
+/* Modal Dark Mode */
+.dark .modal-content {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+}
+
+.dark .modal-header {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #f3f4f6;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.dark .modal-backdrop {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+/* Table Dark Mode */
+.dark table {
+    background: #1f2937;
+    border-color: rgba(75, 85, 99, 0.3);
+}
+
+.dark thead {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+}
+
+.dark th {
+    color: #e5e7eb;
+    border-color: rgba(75, 85, 99, 0.4);
+}
+
+.dark td {
+    color: #d1d5db;
+    border-color: rgba(75, 85, 99, 0.2);
+}
+
+.dark tr:hover {
+    background: rgba(55, 65, 81, 0.3);
+}
+
+/* Badge Dark Mode */
+.dark .badge {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #e9d5ff;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.dark .badge-success {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #d1fae5;
+}
+
+.dark .badge-warning {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: #fef3c7;
+}
+
+.dark .badge-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: #fee2e2;
+}
+
+/* Alert Dark Mode */
+.dark .alert {
+    background: rgba(31, 41, 55, 0.8);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    color: #e5e7eb;
+}
+
+.dark .alert-success {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #6ee7b7;
+}
+
+.dark .alert-warning {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: rgba(245, 158, 11, 0.4);
+    color: #fcd34d;
+}
+
+.dark .alert-danger {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
+}
+
+/* Scrollbar Dark Mode */
+.dark ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+}
+
+.dark ::-webkit-scrollbar-track {
+    background: #1f2937;
+    border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #7c3aed 0%, #5b21b6 100%);
+    border-radius: 10px;
+    border: 2px solid #1f2937;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #8b5cf6 0%, #7c3aed 100%);
+}
+
+/* Loading Spinner Dark Mode */
+.dark .spinner {
+    border-color: rgba(139, 92, 246, 0.2);
+    border-top-color: #8b5cf6;
+}
+
+/* Quick Buy Dark Mode */
+.dark .quickbuy-container {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .quickbuy-item {
+    background: rgba(31, 41, 55, 0.5);
+    border: 1px solid rgba(75, 85, 99, 0.2);
+}
+
+.dark .quickbuy-item:hover {
+    background: rgba(55, 65, 81, 0.7);
+    border-color: rgba(139, 92, 246, 0.4);
+}
+
+/* Promotional Slider Dark Mode */
+.dark .promo-slide {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .promo-slide:hover {
+    border-color: rgba(139, 92, 246, 0.5);
+    box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.2);
+}
+
+/* Dashboard Cards Dark Mode */
+.dark .dashboard-card {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .dashboard-card:hover {
+    background: linear-gradient(135deg, #374151 0%, #1f2937 100%);
+    border-color: rgba(139, 92, 246, 0.4);
+    box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.2);
+}
+
+.dark .stat-card {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #f3f4f6;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Support Button Dark Mode */
+.dark .support-button {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    box-shadow: 0 10px 15px -3px rgba(139, 92, 246, 0.4);
+}
+
+.dark .support-button:hover {
+    background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+    box-shadow: 0 20px 25px -5px rgba(139, 92, 246, 0.5);
+}
+
+/* Search Bar Dark Mode */
+.dark .search-bar {
+    background: rgba(31, 41, 55, 0.8);
+    border-color: rgba(75, 85, 99, 0.5);
+}
+
+.dark .search-bar:focus-within {
+    background: rgba(55, 65, 81, 0.9);
+    border-color: #8b5cf6;
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+}
+
+.dark .search-results {
+    background: #1f2937;
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.dark .search-result-item:hover {
+    background: rgba(55, 65, 81, 0.7);
+}
+
+/* Pagination Dark Mode */
+.dark .pagination {
+    background: #1f2937;
+    border: 1px solid rgba(75, 85, 99, 0.3);
+}
+
+.dark .pagination-link {
+    background: rgba(31, 41, 55, 0.5);
+    color: #d1d5db;
+    border-color: rgba(75, 85, 99, 0.3);
+}
+
+.dark .pagination-link:hover {
+    background: rgba(124, 58, 237, 0.2);
+    color: #c4b5fd;
+    border-color: #8b5cf6;
+}
+
+.dark .pagination-link.active {
+    background: linear-gradient(135deg, #7c3aed 0%, #5b21b6 100%);
+    color: #f3f4f6;
+    border-color: #8b5cf6;
+}
+
+/* Dropdown Dark Mode */
+.dark .dropdown-menu {
+    background: #1f2937;
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+}
+
+.dark .dropdown-item {
+    color: #d1d5db;
+}
+
+.dark .dropdown-item:hover {
+    background: rgba(55, 65, 81, 0.7);
+    color: #a78bfa;
+}
+
+/* Toast Notification Dark Mode */
+.dark .toast {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    border: 1px solid rgba(75, 85, 99, 0.4);
+    color: #f3f4f6;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.4);
+}
+
+.dark .toast-success {
+    border-left: 4px solid #10b981;
+}
+
+.dark .toast-error {
+    border-left: 4px solid #ef4444;
+}
+
+.dark .toast-info {
+    border-left: 4px solid #3b82f6;
+}
+
+.dark .toast-warning {
+    border-left: 4px solid #f59e0b;
+}

@@ -9,6 +9,10 @@ body {
     background-color: #e4e9f7;
 }
 
+.dark body {
+    background-color: #111827;
+}
+
 .product-container {
     padding: 30px;
     background-color: white;
@@ -18,6 +22,11 @@ body {
     max-width: 900px;
     width: 100%;
     box-sizing: border-box;
+}
+
+.dark .product-container {
+    background-color: #1f2937;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .product-header {
@@ -31,9 +40,17 @@ body {
     margin-bottom: 8px;
 }
 
+.dark .product-header h1 {
+    color: #f3f4f6;
+}
+
 .product-header p {
     color: #666;
     font-size: 14px;
+}
+
+.dark .product-header p {
+    color: #9ca3af;
 }
 
 /* Form Styling */
@@ -72,6 +89,10 @@ body {
     gap: 4px;
 }
 
+.dark .form-group label {
+    color: #d1d5db;
+}
+
 .required {
     color: #e74c3c;
     font-weight: 600;
@@ -87,6 +108,14 @@ body {
     font-family: "Poppins", sans-serif;
     color: #333;
     transition: all 0.3s ease;
+}
+
+.dark .form-group input,
+.dark .form-group textarea,
+.dark .form-group select {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: #f3f4f6;
 }
 
 .form-group input:focus,
