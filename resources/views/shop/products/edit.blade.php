@@ -1,42 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Product - MedNet</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+@extends('layouts.shop')
+
+@section('title', 'Edit Product')
+
+@section('content')
     <style>
-        .shop-sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 280px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .shop-sidebar {
-                transform: translateX(-100%);
-            }
-            .shop-sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            .shop-content {
-                margin-left: 0 !important;
-            }
-        }
-
-        .shop-content {
-            margin-left: 280px;
-            padding: 24px;
-            min-height: 100vh;
-        }
-
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-10px); }
@@ -65,61 +32,8 @@
             object-fit: cover;
         }
     </style>
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
-    <!-- Mobile Menu Toggle -->
-    <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-purple-600 text-white rounded-lg shadow-lg">
-        <i class='bx bx-menu text-2xl'></i>
-    </button>
-
-    <!-- Shop Sidebar -->
-    <div class="shop-sidebar" id="shopSidebar">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-white">{{ Auth::guard('pharmacy')->user()->shop_name }}</h1>
-            <p class="text-purple-200 text-sm">Pharmacy Dashboard</p>
-        </div>
-
-        <nav class="space-y-2">
-            <a href="{{ route('shop.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-white rounded-lg hover:bg-white/20 transition-colors">
-                <i class='bx bx-grid-alt text-xl'></i>
-                <span class="font-medium">Dashboard</span>
-            </a>
-            <a href="{{ route('shop.products.index') }}" class="flex items-center gap-3 px-4 py-3 text-white bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
-                <i class='bx bx-package text-xl'></i>
-                <span class="font-medium">My Products</span>
-            </a>
-            <a href="{{ route('shop.products.create') }}" class="flex items-center gap-3 px-4 py-3 text-white rounded-lg hover:bg-white/20 transition-colors">
-                <i class='bx bx-plus-circle text-xl'></i>
-                <span class="font-medium">Add Product</span>
-            </a>
-        </nav>
-
-        <div class="absolute bottom-6 left-6 right-6">
-            <div class="p-4 bg-white/10 backdrop-blur rounded-lg">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 bg-purple-300 rounded-full flex items-center justify-center">
-                        <i class='bx bx-user text-purple-700 text-xl'></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-white font-medium text-sm">{{ Auth::guard('pharmacy')->user()->owner_name }}</p>
-                        <p class="text-purple-200 text-xs truncate">{{ Auth::guard('pharmacy')->user()->email }}</p>
-                    </div>
-                </div>
-                <form action="{{ route('shop.logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-sm font-medium">
-                        <i class='bx bx-log-out'></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="shop-content">
-        <!-- Coming Soon Banner -->
+    <!-- Coming Soon Banner -->
         <div class="gradient-banner rounded-lg shadow-lg p-4 mb-6 flex items-center gap-3 text-white">
             <i class='bx bx-barcode text-3xl'></i>
             <div>
@@ -183,7 +97,7 @@
                     <!-- Price -->
                     <div>
                         <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            <i class='bx bx-money'></i> Price (₱) <span class="text-red-500">*</span>
+                            <i class='bx bx-money'></i> Price (৳) <span class="text-red-500">*</span>
                         </label>
                         <input type="number" 
                                name="price" 
@@ -267,16 +181,95 @@
                         @enderror
                     </div>
 
+                    <!-- Manufacturer -->
+                    <div>
+                        <label for="manufacturer" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <i class='bx bx-building'></i> Manufacturer <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="manufacturer" 
+                               id="manufacturer" 
+                               value="{{ old('manufacturer', $product->manufacturer) }}"
+                               placeholder="e.g., Bayer, Pfizer"
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white @error('manufacturer') border-red-500 shake @enderror"
+                               required>
+                        @error('manufacturer')
+                        <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Dosage -->
+                    <div>
+                        <label for="dosage" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <i class='bx bx-capsule'></i> Dosage <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" 
+                               name="dosage" 
+                               id="dosage" 
+                               value="{{ old('dosage', $product->dosage) }}"
+                               placeholder="e.g., 500mg tablet"
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white @error('dosage') border-red-500 shake @enderror"
+                               required>
+                        @error('dosage')
+                        <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Expiry Date -->
+                    <div>
+                        <label for="expiry_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <i class='bx bx-calendar'></i> Expiry Date <span class="text-red-500">*</span>
+                        </label>
+                        <input type="date" 
+                               name="expiry_date" 
+                               id="expiry_date" 
+                               value="{{ old('expiry_date', $product->expiry_date ? date('Y-m-d', strtotime($product->expiry_date)) : '') }}"
+                               min="{{ date('Y-m-d') }}"
+                               class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white @error('expiry_date') border-red-500 shake @enderror"
+                               required>
+                        @error('expiry_date')
+                        <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Prescription Required -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            <i class='bx bx-note'></i> Prescription Required <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex gap-4 mt-3">
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" 
+                                       name="requires_prescription" 
+                                       value="1" 
+                                       {{ old('requires_prescription', $product->requires_prescription) == '1' ? 'checked' : '' }}
+                                       class="w-4 h-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">Yes</span>
+                            </label>
+                            <label class="flex items-center cursor-pointer">
+                                <input type="radio" 
+                                       name="requires_prescription" 
+                                       value="0" 
+                                       {{ old('requires_prescription', $product->requires_prescription) == '0' ? 'checked' : '' }}
+                                       class="w-4 h-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600">
+                                <span class="ml-2 text-gray-700 dark:text-gray-300">No</span>
+                            </label>
+                        </div>
+                        @error('requires_prescription')
+                        <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                        @enderror
+                    </div>
+
                     <!-- Image Upload -->
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             <i class='bx bx-image'></i> Product Image
                         </label>
                         
-                        @if($product->image)
+                        @if($product->image_path)
                         <div class="mb-3">
                             <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Current Image:</p>
-                            <img src="{{ asset('storage/' . $product->image) }}" 
+                            <img src="{{ asset('storage/' . $product->image_path) }}" 
                                  alt="{{ $product->name }}" 
                                  class="current-image-preview rounded-lg border border-gray-300 dark:border-gray-600">
                         </div>
@@ -307,6 +300,39 @@
                     @error('description')
                     <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
                     @enderror
+                </div>
+
+                <!-- Side Effects (Optional) -->
+                <div class="mt-6">
+                    <label for="side_effects" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <i class='bx bx-error-alt'></i> Side Effects (Optional)
+                    </label>
+                    <textarea name="side_effects" 
+                              id="side_effects" 
+                              rows="3"
+                              placeholder="List any known side effects..."
+                              class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white @error('side_effects') border-red-500 shake @enderror">{{ old('side_effects', $product->side_effects) }}</textarea>
+                    @error('side_effects')
+                    <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Low Stock Threshold -->
+                <div class="mt-6">
+                    <label for="low_stock_threshold" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <i class='bx bx-error-circle'></i> Low Stock Threshold (Optional)
+                    </label>
+                    <input type="number" 
+                           name="low_stock_threshold" 
+                           id="low_stock_threshold" 
+                           value="{{ old('low_stock_threshold', $product->low_stock_threshold ?? 10) }}"
+                           min="0"
+                           placeholder="10"
+                           class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white @error('low_stock_threshold') border-red-500 shake @enderror">
+                    @error('low_stock_threshold')
+                    <p class="mt-1 text-sm text-red-500"><i class='bx bx-error-circle'></i> {{ $message }}</p>
+                    @enderror
+                    <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Get notified when stock falls below this amount (default: 10)</p>
                 </div>
 
                 <!-- Form Actions -->
@@ -353,3 +379,13 @@
     </script>
 </body>
 </html>
+
+    <script>
+        // Remove shake animation after it completes
+        document.querySelectorAll('.shake').forEach(element => {
+            element.addEventListener('animationend', () => {
+                element.classList.remove('shake');
+            });
+        });
+    </script>
+@endsection

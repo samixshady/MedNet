@@ -1,42 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Products - MedNet</title>
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+@extends('layouts.shop')
+
+@section('title', 'My Products')
+
+@section('content')
     <style>
-        .shop-sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 280px;
-            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            padding: 20px;
-            z-index: 1000;
-            transition: transform 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .shop-sidebar {
-                transform: translateX(-100%);
-            }
-            .shop-sidebar.mobile-open {
-                transform: translateX(0);
-            }
-            .shop-content {
-                margin-left: 0 !important;
-            }
-        }
-
-        .shop-content {
-            margin-left: 280px;
-            padding: 24px;
-            min-height: 100vh;
-        }
-
         .product-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
@@ -46,61 +13,8 @@
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
     </style>
-</head>
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
 
-    <!-- Mobile Menu Toggle -->
-    <button id="mobileMenuBtn" class="md:hidden fixed top-4 left-4 z-50 p-2 bg-purple-600 text-white rounded-lg shadow-lg">
-        <i class='bx bx-menu text-2xl'></i>
-    </button>
-
-    <!-- Shop Sidebar -->
-    <div class="shop-sidebar" id="shopSidebar">
-        <div class="mb-8">
-            <h1 class="text-2xl font-bold text-white">{{ Auth::guard('pharmacy')->user()->shop_name }}</h1>
-            <p class="text-purple-200 text-sm">Pharmacy Dashboard</p>
-        </div>
-
-        <nav class="space-y-2">
-            <a href="{{ route('shop.dashboard') }}" class="flex items-center gap-3 px-4 py-3 text-white rounded-lg hover:bg-white/20 transition-colors">
-                <i class='bx bx-grid-alt text-xl'></i>
-                <span class="font-medium">Dashboard</span>
-            </a>
-            <a href="{{ route('shop.products.index') }}" class="flex items-center gap-3 px-4 py-3 text-white bg-white/20 rounded-lg hover:bg-white/30 transition-colors">
-                <i class='bx bx-package text-xl'></i>
-                <span class="font-medium">My Products</span>
-            </a>
-            <a href="{{ route('shop.products.create') }}" class="flex items-center gap-3 px-4 py-3 text-white rounded-lg hover:bg-white/20 transition-colors">
-                <i class='bx bx-plus-circle text-xl'></i>
-                <span class="font-medium">Add Product</span>
-            </a>
-        </nav>
-
-        <div class="absolute bottom-6 left-6 right-6">
-            <div class="p-4 bg-white/10 backdrop-blur rounded-lg">
-                <div class="flex items-center gap-3 mb-3">
-                    <div class="w-10 h-10 bg-purple-300 rounded-full flex items-center justify-center">
-                        <i class='bx bx-user text-purple-700 text-xl'></i>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-white font-medium text-sm">{{ Auth::guard('pharmacy')->user()->owner_name }}</p>
-                        <p class="text-purple-200 text-xs truncate">{{ Auth::guard('pharmacy')->user()->email }}</p>
-                    </div>
-                </div>
-                <form action="{{ route('shop.logout') }}" method="POST">
-                    @csrf
-                    <button type="submit" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors text-sm font-medium">
-                        <i class='bx bx-log-out'></i>
-                        Logout
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="shop-content">
-        <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+    <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
             <div>
                 <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">My Products</h2>
                 <p class="text-gray-600 dark:text-gray-400">Manage your pharmacy inventory</p>
@@ -135,8 +49,8 @@
                 @foreach($products as $product)
                     <div class="product-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden">
                         <div class="relative h-48 bg-gray-200 dark:bg-gray-700">
-                            @if($product->image)
-                                <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
+                            @if($product->image_path)
+                                <img src="{{ asset('storage/' . $product->image_path) }}" alt="{{ $product->name }}" class="w-full h-full object-cover">
                             @else
                                 <div class="w-full h-full flex items-center justify-center">
                                     <i class='bx bx-package text-6xl text-gray-400 dark:text-gray-500'></i>
@@ -208,29 +122,4 @@
                 @endforeach
             </div>
         @endif
-    </div>
-
-    <script>
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            document.documentElement.classList.add('dark');
-        }
-
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const shopSidebar = document.getElementById('shopSidebar');
-        
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                shopSidebar.classList.toggle('mobile-open');
-            });
-        }
-
-        document.addEventListener('click', (e) => {
-            if (window.innerWidth < 768) {
-                if (!shopSidebar.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
-                    shopSidebar.classList.remove('mobile-open');
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+@endsection

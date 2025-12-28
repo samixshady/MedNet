@@ -28,17 +28,16 @@ class ShopProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'generic_name' => 'required|string|max:255',
+            'generic_name' => 'nullable|string|max:255',
             'batch_number' => 'required|string|max:255',
-            'manufacturer' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
-            'quantity' => 'required|integer|min:0',
-            'category' => 'required|in:medicine,supplement,first_aid',
-            'requires_prescription' => 'required|boolean',
+            'stock' => 'required|integer|min:0',
+            'category' => 'required|in:medicine,supplement,first_aid',            'manufacturer' => 'required|string|max:255',
+            'dosage' => 'required|string|max:255',
             'expiry_date' => 'required|date|after:today',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'requires_prescription' => 'required|boolean',            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $imagePath = null;
@@ -51,20 +50,38 @@ class ShopProductController extends Controller
             $updatedPrice = $request->price - ($request->price * ($request->discount / 100));
         }
 
+        // Determine stock status
+        $quantity = $request->stock;
+        $lowStockThreshold = $request->low_stock_threshold ?? 10;
+        
+        if ($quantity == 0) {
+            $stockStatus = 'out_of_stock';
+        } elseif ($quantity <= $lowStockThreshold) {
+            $stockStatus = 'low_stock';
+        } else {
+            $stockStatus = 'normal';
+        }
+
         Product::create([
             'pharmacy_id' => $pharmacy->id,
             'name' => $request->name,
             'generic_name' => $request->generic_name,
             'batch_number' => $request->batch_number,
-            'manufacturer' => $request->manufacturer,
             'description' => $request->description,
             'price' => $request->price,
             'discount' => $request->discount,
             'updated_price' => $updatedPrice,
-            'quantity' => $request->quantity,
+            'quantity' => $quantity,
             'category' => $request->category,
-            'requires_prescription' => $request->requires_prescription,
+            'tag' => $request->category,
+            'manufacturer' => $request->manufacturer,
+            'dosage' => $request->dosage,
             'expiry_date' => $request->expiry_date,
+            'prescription_required' => $request->requires_prescription,
+            'requires_prescription' => $request->requires_prescription,
+            'side_effects' => $request->side_effects,
+            'low_stock_threshold' => $lowStockThreshold,
+            'stock_status' => $stockStatus,
             'image_path' => $imagePath,
         ]);
 
@@ -85,17 +102,20 @@ class ShopProductController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'generic_name' => 'required|string|max:255',
+            'generic_name' => 'nullable|string|max:255',
             'batch_number' => 'required|string|max:255',
-            'manufacturer' => 'required|string|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric|min:0',
             'discount' => 'nullable|numeric|min:0|max:100',
-            'quantity' => 'required|integer|min:0',
+            'stock' => 'required|integer|min:0',
             'category' => 'required|in:medicine,supplement,first_aid',
-            'requires_prescription' => 'required|boolean',
+            'manufacturer' => 'required|string|max:255',
+            'dosage' => 'required|string|max:255',
             'expiry_date' => 'required|date|after:today',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'requires_prescription' => 'required|boolean',            'side_effects' => 'nullable|string',
+            'low_stock_threshold' => 'nullable|integer|min:0',            'side_effects' => 'nullable|string',
+            'low_stock_threshold' => 'nullable|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         if ($request->hasFile('image')) {
@@ -111,20 +131,47 @@ class ShopProductController extends Controller
             $updatedPrice = $request->price - ($request->price * ($request->discount / 100));
         }
 
-        $product->update([
+        // Determine stock status
+        $quantity = $request->stock;
+        $lowStockThreshold = $request->low_stock_threshold ?? 10;
+        
+        if ($quantity == 0) {
+            $stockStatus = 'out_of_stock';
+        } elseif ($quantity <= $lowStockThreshold) {
+            $stockStatus = 'low_stock';
+        } else {
+            $stockStatus = 'normal';
+        }
+
+        $updateData = [
             'name' => $request->name,
             'generic_name' => $request->generic_name,
             'batch_number' => $request->batch_number,
-            'manufacturer' => $request->manufacturer,
             'description' => $request->description,
             'price' => $request->price,
             'discount' => $request->discount,
             'updated_price' => $updatedPrice,
-            'quantity' => $request->quantity,
+            'quantity' => $quantity,
             'category' => $request->category,
-            'requires_prescription' => $request->requires_prescription,
+            'tag' => $request->category,
+            'manufacturer' => $request->manufacturer,
+            'dosage' => $request->dosage,
             'expiry_date' => $request->expiry_date,
-        ]);
+            'prescription_required' => $request->requires_prescription,
+            'requires_prescription' => $request->requires_prescription,
+            'side_effects' => $request->side_effects,
+            'low_stock_threshold' => $lowStockThreshold,
+            'stock_status' => $stockStatus,
+        ];
+
+        if ($request->hasFile('image')) {
+            if ($product->image_path) {
+                Storage::disk('public')->delete($product->image_path);
+            }
+            $updateData['image_path'] = $request->file('image')->store('products', 'public');
+        }
+
+        $product->update($updateData);
 
         return redirect()->route('shop.products.index')->with('success', 'Product updated successfully!');
     }
