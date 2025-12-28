@@ -12,9 +12,71 @@
             transform: translateY(-4px);
             box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
         }
+
+        .sort-btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            border: 1px solid #e5e7eb;
+            background: white;
+            color: #4b5563;
+        }
+
+        .dark .sort-btn {
+            background: #374151;
+            color: #e5e7eb;
+            border-color: #4b5563;
+        }
+
+        .sort-btn:hover {
+            background: #f3f4f6;
+            border-color: #a78bfa;
+        }
+
+        .dark .sort-btn:hover {
+            background: #4b5563;
+            border-color: #a78bfa;
+        }
+
+        .sort-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 40px 10px 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .dark .search-box input {
+            background: #374151;
+            border-color: #4b5563;
+            color: #e5e7eb;
+        }
+
+        .search-box i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+        }
     </style>
 
-    <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+    <div class="mb-6">
+        <div class="flex items-center justify-between flex-wrap gap-4 mb-6">
             <div>
                 <h2 class="text-3xl font-bold text-gray-800 dark:text-white mb-2">My Products</h2>
                 <p class="text-gray-600 dark:text-gray-400">Manage your pharmacy inventory</p>
@@ -24,6 +86,39 @@
                 Add New Product
             </a>
         </div>
+
+        <!-- Search and Sort Controls -->
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 mb-6">
+            <form method="GET" action="{{ route('shop.products.index') }}" class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                <div class="search-box">
+                    <input type="text" 
+                           name="search" 
+                           value="{{ $search }}"
+                           placeholder="Search by name, generic name, manufacturer, or batch..." 
+                           class="text-gray-900 dark:text-white">
+                    <i class='bx bx-search'></i>
+                </div>
+
+                <div class="flex items-center gap-3 flex-wrap">
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Sort by:</span>
+                    <a href="{{ route('shop.products.index', ['sort' => 'name', 'search' => $search]) }}" 
+                       class="sort-btn {{ $sort === 'name' ? 'active' : '' }}">
+                        <i class='bx bx-sort-alt-2'></i> Product Name
+                    </a>
+                    <a href="{{ route('shop.products.index', ['sort' => 'expiry', 'search' => $search]) }}" 
+                       class="sort-btn {{ $sort === 'expiry' ? 'active' : '' }}">
+                        <i class='bx bx-calendar'></i> Expiry Date
+                    </a>
+                    @if($search)
+                        <a href="{{ route('shop.products.index') }}" 
+                           class="text-sm text-purple-600 dark:text-purple-400 hover:underline">
+                            Clear Search
+                        </a>
+                    @endif
+                </div>
+            </form>
+        </div>
+    </div>
 
         @if(session('success'))
             <div class="mb-6 p-4 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg flex items-start">

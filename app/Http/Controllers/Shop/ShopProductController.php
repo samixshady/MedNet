@@ -10,11 +10,32 @@ use Illuminate\Support\Facades\Storage;
 
 class ShopProductController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $pharmacy = Auth::guard('pharmacy')->user();
-        $products = Product::where('pharmacy_id', $pharmacy->id)->orderBy('created_at', 'desc')->get();
-        return view('shop.products.index', compact('products'));
+        $sort = $request->get('sort', 'name');
+        $search = $request->get('search', '');
+        
+        $query = Product::where('pharmacy_id', $pharmacy->id);
+        
+        // Apply search filter
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('generic_name', 'like', '%' . $search . '%')
+                  ->orWhere('manufacturer', 'like', '%' . $search . '%')
+                  ->orWhere('batch_number', 'like', '%' . $search . '%');
+            });
+        }
+        
+        // Apply sorting
+        if ($sort === 'expiry') {
+            $products = $query->orderBy('expiry_date', 'asc')->get();
+        } else {
+            $products = $query->orderBy('name', 'asc')->get();
+        }
+        
+        return view('shop.products.index', compact('products', 'sort', 'search'));
     }
 
     public function create()
