@@ -460,6 +460,11 @@
     @yield('extra-css')
 </head>
 <body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-300">
+    <!-- Home Button -->
+    <a href="{{ url('/') }}" class="fixed top-6 right-6 z-[9999] w-14 h-14 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 group" title="Back to Home">
+        <i class='bx bx-home text-2xl group-hover:scale-110 transition-transform'></i>
+    </a>
+
     <div class="sidebar bg-gradient-to-b from-slate-900 to-slate-800 dark:from-gray-950 dark:to-gray-900 transition-colors duration-300" id="adminSidebar">
         <div class="logo-details">
             <div class="logo_name text-white dark:text-purple-300">MedNet</div>
