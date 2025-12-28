@@ -5,7 +5,7 @@
     <div class="max-w-7xl mx-auto px-4">
         <!-- Header - Centered "Features" -->
         <div class="text-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-800">✨ Featured Deals</h2>
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white">✨ Featured Deals</h2>
         </div>
 
         @if($discountedProducts->count() > 0)
@@ -122,7 +122,7 @@
 <!-- Mobile View (shown only on mobile) -->
 <div class="lg:hidden w-full mt-0 px-0">
     <div class="text-center mb-4 px-3">
-        <h2 class="text-xl font-bold text-gray-800 flex items-center justify-center gap-2">
+        <h2 class="text-xl font-bold text-gray-800 dark:text-white flex items-center justify-center gap-2">
             <span class="text-2xl">✨</span>
             Featured Deals
         </h2>

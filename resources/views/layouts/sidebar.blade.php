@@ -51,7 +51,7 @@
     <!-- Footer -->
     <div class="sidebar-footer">
         <p class="sidebar-footer-text">MedNet</p>
-        <p class="sidebar-footer-subtext">Made by samixshady</p>
+        <p class="sidebar-footer-subtext">Made by <a href="https://github.com/samixshady" target="_blank" rel="noopener noreferrer" class="underline text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 transition">samixshady</a></p>
     </div>
 </aside>
 
