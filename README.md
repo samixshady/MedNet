@@ -19,8 +19,7 @@
 
 MedNet is a modern, full-featured online pharmacy platform built with Laravel 12. It provides a complete e-commerce solution for selling medicines, supplements, and first-aid products with advanced features like prescription management, inventory tracking, promotional campaigns, and comprehensive admin analytics.
 Live Deployed Server Link:
-**
-https://mednet-gyfn.onrender.com**
+**https://mednet-gyfn.onrender.com**
 
 ## ✨ Features
 
