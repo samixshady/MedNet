@@ -204,6 +204,14 @@
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
                 margin-bottom: 0.75rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .filter-section h3 i {
+                color: var(--primary-color);
+                font-size: 1rem;
             }
 
             html.dark .filter-section h3 {
@@ -245,19 +253,22 @@
             }
 
             .tag-chip {
-                padding: 0.5rem 0.75rem;
-                border-radius: 6px;
+                padding: 0.625rem 1rem;
+                border-radius: 20px;
                 font-size: 0.8rem;
-                font-weight: 600;
+                font-weight: 700;
                 cursor: pointer;
-                transition: all 0.3s ease;
-                border: 2px solid;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                border: 2.5px solid;
+                text-transform: capitalize;
             }
 
             .tag-chip.active {
                 background-color: var(--primary-color);
                 color: white;
                 border-color: var(--primary-color);
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+                transform: scale(1.05);
             }
 
             .tag-chip:not(.active) {
@@ -266,10 +277,27 @@
                 border-color: #e5e7eb;
             }
 
+            .tag-chip:not(.active):hover {
+                background-color: #e5e7eb;
+                border-color: var(--primary-color);
+                transform: translateY(-2px);
+            }
+
             html.dark .tag-chip:not(.active) {
                 background-color: rgba(51, 65, 85, 0.5);
                 color: #cbd5e1;
                 border-color: var(--dark-border);
+            }
+
+            html.dark .tag-chip:not(.active):hover {
+                background-color: rgba(51, 65, 85, 0.8);
+                border-color: #60a5fa;
+            }
+
+            html.dark .tag-chip.active {
+                background-color: #60a5fa;
+                border-color: #60a5fa;
+                box-shadow: 0 4px 12px rgba(96, 165, 250, 0.4);
             }
 
             .sort-select {
@@ -281,12 +309,25 @@
                 background: white;
                 color: #111;
                 cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .sort-select:focus {
+                outline: none;
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+                background: white;
             }
 
             html.dark .sort-select {
                 background: var(--dark-bg);
                 border-color: var(--dark-border);
                 color: #f1f5f9;
+            }
+
+            html.dark .sort-select:focus {
+                border-color: #60a5fa;
+                box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
             }
 
             .prescription-list {
@@ -302,17 +343,36 @@
                 padding: 1rem;
                 cursor: pointer;
                 transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .prescription-card::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 4px;
+                height: 0%;
+                background: linear-gradient(180deg, var(--primary-color), var(--primary-dark));
+                transition: height 0.3s ease;
+            }
+
+            .prescription-card:hover::before {
+                height: 100%;
             }
 
             .prescription-card:hover {
                 border-color: var(--primary-color);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                transform: translateY(-2px);
+                box-shadow: 0 8px 24px rgba(59, 130, 246, 0.15);
+                transform: translateY(-4px);
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.02), rgba(59, 130, 246, 0.01));
             }
 
             .prescription-card.active {
                 border-color: var(--primary-color);
-                background: rgba(59, 130, 246, 0.05);
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.04));
+                box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
             }
 
             html.dark .prescription-card {
@@ -322,12 +382,14 @@
 
             html.dark .prescription-card:hover {
                 border-color: #60a5fa;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+                box-shadow: 0 8px 24px rgba(96, 165, 250, 0.2);
+                background: rgba(30, 41, 59, 0.8);
             }
 
             html.dark .prescription-card.active {
                 border-color: #60a5fa;
                 background: rgba(96, 165, 250, 0.1);
+                box-shadow: 0 8px 24px rgba(96, 165, 250, 0.25);
             }
 
             .prescription-card-title {
@@ -397,22 +459,38 @@
 
             .prescription-detail {
                 display: none;
+                opacity: 0;
             }
 
             .prescription-detail.active {
                 display: block;
-                animation: fadeIn 0.3s ease;
+                animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             }
 
-            @keyframes fadeIn {
+            @keyframes slideInUp {
                 from {
                     opacity: 0;
-                    transform: translateY(10px);
+                    transform: translateY(40px);
                 }
                 to {
                     opacity: 1;
                     transform: translateY(0);
                 }
+            }
+
+            @keyframes slideOutDown {
+                from {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateY(40px);
+                }
+            }
+
+            .prescription-detail.closing {
+                animation: slideOutDown 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
             }
 
             .prescription-detail-header {
@@ -421,7 +499,8 @@
                 align-items: start;
                 margin-bottom: 1.5rem;
                 padding-bottom: 1.5rem;
-                border-bottom: 1px solid #e5e7eb;
+                border-bottom: 2px solid #e5e7eb;
+                gap: 1rem;
             }
 
             html.dark .prescription-detail-header {
@@ -429,9 +508,10 @@
             }
 
             .prescription-detail-title {
-                font-size: 1.5rem;
-                font-weight: 700;
+                font-size: 1.75rem;
+                font-weight: 800;
                 color: #111;
+                letter-spacing: -0.5px;
             }
 
             html.dark .prescription-detail-title {
@@ -440,52 +520,98 @@
 
             .btn-group {
                 display: flex;
-                gap: 0.5rem;
+                gap: 0.75rem;
+                flex-wrap: wrap;
             }
 
             .btn-small {
-                padding: 0.5rem 0.75rem;
-                border: 1px solid;
-                border-radius: 6px;
-                font-size: 0.8rem;
-                font-weight: 600;
+                padding: 0.625rem 1rem;
+                border: 2px solid;
+                border-radius: 8px;
+                font-size: 0.85rem;
+                font-weight: 700;
                 cursor: pointer;
-                transition: all 0.3s ease;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                white-space: nowrap;
+                position: relative;
+                overflow: hidden;
+            }
+
+            .btn-small i {
+                font-size: 1rem;
+                transition: transform 0.3s ease;
             }
 
             .btn-primary-small {
-                background: var(--primary-color);
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
                 color: white;
-                border-color: var(--primary-color);
+                border-color: var(--primary-dark);
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             }
 
             .btn-primary-small:hover {
-                background: var(--primary-dark);
-                border-color: var(--primary-dark);
+                background: linear-gradient(135deg, var(--primary-dark), #1e3a8a);
+                border-color: #1e3a8a;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+            }
+
+            .btn-primary-small:active {
+                transform: translateY(0);
             }
 
             .btn-danger-small {
                 background: transparent;
                 color: var(--danger-color);
                 border-color: var(--danger-color);
+                transition: all 0.3s ease;
             }
 
             .btn-danger-small:hover {
                 background: var(--danger-color);
                 color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+            }
+
+            .btn-danger-small:active {
+                transform: translateY(0);
             }
 
             .detail-section {
-                margin-bottom: 1.5rem;
+                margin-bottom: 1.75rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .detail-section:last-child {
+                border-bottom: none;
+                padding-bottom: 0;
+                margin-bottom: 0;
+            }
+
+            html.dark .detail-section {
+                border-color: rgba(100, 116, 139, 0.3);
             }
 
             .detail-label {
-                font-size: 0.8rem;
-                font-weight: 700;
+                font-size: 0.75rem;
+                font-weight: 800;
                 color: #6b7280;
                 text-transform: uppercase;
-                letter-spacing: 0.05em;
-                margin-bottom: 0.5rem;
+                letter-spacing: 0.1em;
+                margin-bottom: 0.75rem;
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            .detail-label i {
+                color: var(--primary-color);
+                font-size: 0.95rem;
             }
 
             html.dark .detail-label {
@@ -493,8 +619,10 @@
             }
 
             .detail-value {
-                font-size: 0.95rem;
+                font-size: 1rem;
                 color: #111;
+                font-weight: 500;
+                line-height: 1.6;
             }
 
             html.dark .detail-value {
@@ -511,36 +639,180 @@
             .file-item {
                 display: flex;
                 align-items: center;
-                gap: 0.5rem;
-                padding: 0.75rem;
-                background: #f3f4f6;
-                border-radius: 6px;
-                font-size: 0.8rem;
+                gap: 0.75rem;
+                padding: 0.875rem;
+                background: linear-gradient(135deg, #f0f9ff, #f0fdf4);
+                border-radius: 8px;
+                font-size: 0.85rem;
+                border: 2px solid #e0f2fe;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                cursor: pointer;
+                text-decoration: none;
+                color: #111;
+                font-weight: 600;
+                user-select: none;
+            }
+
+            .file-item:hover {
+                background: linear-gradient(135deg, #e0f2fe, #dcfce7);
+                border-color: var(--primary-color);
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+            }
+
+            .file-item:active {
+                transform: translateY(-1px);
             }
 
             html.dark .file-item {
-                background: rgba(51, 65, 85, 0.5);
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(16, 185, 129, 0.1));
+                border-color: rgba(59, 130, 246, 0.3);
+                color: #e2e8f0;
+            }
+
+            html.dark .file-item:hover {
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+                border-color: #60a5fa;
+                box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            }
+
+            /* File Preview Modal */
+            .file-preview-modal {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.6);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                z-index: 9000;
+                padding: 1rem;
+                backdrop-filter: blur(4px);
+                animation: fadeInBackdrop 0.3s ease;
+            }
+
+            @keyframes fadeInBackdrop {
+                from {
+                    opacity: 0;
+                    backdrop-filter: blur(0px);
+                }
+                to {
+                    opacity: 1;
+                    backdrop-filter: blur(4px);
+                }
+            }
+
+            .file-preview-modal.active {
+                display: flex;
+            }
+
+            .file-preview-modal.closing {
+                animation: fadeOutBackdrop 0.3s ease forwards;
+            }
+
+            @keyframes fadeOutBackdrop {
+                from {
+                    opacity: 1;
+                    backdrop-filter: blur(4px);
+                }
+                to {
+                    opacity: 0;
+                    backdrop-filter: blur(0px);
+                }
+            }
+
+            .file-preview-content {
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+                overflow: hidden;
+                max-width: 90vw;
+                max-height: 90vh;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+
+            html.dark .file-preview-content {
+                background: #1f2937;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            }
+
+            .file-preview-content.closing {
+                animation: scaleOut 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+            }
+
+            @keyframes scaleIn {
+                from {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+            }
+
+            @keyframes scaleOut {
+                from {
+                    opacity: 1;
+                    transform: scale(1) translateY(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: scale(0.9) translateY(20px);
+                }
             }
 
             .file-icon {
-                font-size: 1.25rem;
+                font-size: 1.5rem;
+                flex-shrink: 0;
             }
 
             .upcoming-reminder {
-                background: #fef3c7;
-                border-left: 4px solid var(--warning-color);
-                padding: 1rem;
-                border-radius: 6px;
+                background: linear-gradient(135deg, #fffbeb, #fef3c7);
+                border-left: 5px solid var(--warning-color);
+                padding: 1.25rem;
+                border-radius: 8px;
                 margin-bottom: 1rem;
+                box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15);
+                transition: all 0.3s ease;
+            }
+
+            .upcoming-reminder:hover {
+                box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25);
+                transform: translateY(-2px);
             }
 
             html.dark .upcoming-reminder {
-                background: rgba(245, 158, 11, 0.1);
+                background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.1));
+                border-left-color: #fbbf24;
             }
 
             .reminder-text {
                 color: #92400e;
                 font-size: 0.9rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+            }
+
+            .reminder-text i {
+                font-size: 1.25rem;
+                animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            }
+
+            @keyframes pulse {
+                0%, 100% {
+                    opacity: 1;
+                }
+                50% {
+                    opacity: 0.7;
+                }
             }
 
             html.dark .reminder-text {
@@ -557,6 +829,74 @@
             @keyframes loading {
                 0% { background-position: 200% 0; }
                 100% { background-position: -200% 0; }
+            }
+
+            .btn-back-modern {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 0.5rem;
+                padding: 0.75rem 1.25rem;
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.05));
+                color: var(--primary-color);
+                border: 2px solid var(--primary-color);
+                border-radius: 10px;
+                cursor: pointer;
+                font-weight: 700;
+                font-size: 0.95rem;
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 1.5rem;
+            }
+
+            .btn-back-modern::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -100%;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+                transition: left 0.5s ease;
+            }
+
+            .btn-back-modern:hover {
+                background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+                border-color: var(--primary-dark);
+                transform: translateX(-4px);
+                box-shadow: -4px 8px 16px rgba(59, 130, 246, 0.25);
+                color: var(--primary-dark);
+            }
+
+            .btn-back-modern:hover::before {
+                left: 100%;
+            }
+
+            .btn-back-modern:active {
+                transform: translateX(-2px);
+            }
+
+            .btn-back-modern i {
+                font-size: 1.1rem;
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+
+            .btn-back-modern:hover i {
+                transform: translateX(-2px);
+            }
+
+            html.dark .btn-back-modern {
+                background: linear-gradient(135deg, rgba(96, 165, 250, 0.15), rgba(96, 165, 250, 0.05));
+                border-color: #60a5fa;
+                color: #60a5fa;
+            }
+
+            html.dark .btn-back-modern:hover {
+                background: linear-gradient(135deg, rgba(96, 165, 250, 0.25), rgba(96, 165, 250, 0.15));
+                border-color: #93c5fd;
+                color: #93c5fd;
+                box-shadow: -4px 8px 16px rgba(96, 165, 250, 0.3);
             }
 
             @media (max-width: 767px) {
@@ -587,29 +927,77 @@
                 .prescription-detail.active {
                     display: block;
                     position: fixed;
-                    inset: 0;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
                     z-index: 35;
                     overflow-y: auto;
                     background: white;
                     border-radius: 0;
                     padding: 1rem;
+                    padding-top: max(1rem, env(safe-area-inset-top));
+                    padding-bottom: max(6rem, env(safe-area-inset-bottom));
                 }
 
                 html.dark .prescription-detail.active {
                     background: var(--dark-card);
                 }
 
-                .btn-back {
+                .btn-back-modern {
+                    position: fixed;
+                    bottom: 2rem;
+                    left: 1rem;
+                    right: 1rem;
+                    width: calc(100% - 2rem);
+                    justify-content: center;
                     display: flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.5rem;
-                    margin-bottom: 1rem;
-                    color: var(--primary-color);
-                    background: none;
+                    padding: 0.875rem 1.25rem;
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    color: white;
                     border: none;
-                    cursor: pointer;
+                    font-size: 0.95rem;
+                    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+                    border-radius: 12px;
+                    gap: 0.5rem;
                     font-weight: 600;
+                    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+                    align-items: center;
+                    flex-shrink: 0;
+                    z-index: 40;
+                    margin: 0;
+                }
+
+                .btn-back-modern:hover {
+                    background: linear-gradient(135deg, #2563eb, #1e40af);
+                    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+                    transform: translateY(-2px);
+                }
+
+                .btn-back-modern:active {
+                    transform: translateY(0);
+                }
+
+                html.dark .btn-back-modern {
+                    background: linear-gradient(135deg, #2563eb, #1e40af);
+                    border: none;
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+                }
+
+                html.dark .btn-back-modern:hover {
+                    background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+                    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+                }
+
+                /* Draggable Prescription Detail */
+                .prescription-detail.active {
+                    transform: translateY(0);
+                    will-change: transform;
+                }
+
+                .prescription-detail.dragging {
+                    transition: none !important;
                 }
             }
 
@@ -694,6 +1082,88 @@
                 100% {
                     opacity: 1;
                 }
+            }
+
+            /* Modern Header Styling */
+            .prescription-header {
+                background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+                padding: 2rem 0;
+                border-bottom: 2px solid #e5e7eb;
+                margin-bottom: 2rem;
+            }
+
+            html.dark .prescription-header {
+                background: linear-gradient(135deg, var(--dark-card) 0%, rgba(30, 41, 59, 0.7) 100%);
+                border-bottom-color: var(--dark-border);
+            }
+
+            .prescription-header h1 {
+                background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                transition: all 0.3s ease;
+            }
+
+            .prescription-header h1 i {
+                font-size: 2rem;
+                color: var(--primary-color);
+            }
+
+            /* Smooth animations */
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .prescription-card {
+                animation: slideInUp 0.3s ease-out;
+            }
+
+            /* Scrollbar styling */
+            ::-webkit-scrollbar {
+                width: 8px;
+                height: 8px;
+            }
+
+            ::-webkit-scrollbar-track {
+                background: #f1f5f9;
+            }
+
+            html.dark ::-webkit-scrollbar-track {
+                background: var(--dark-bg);
+            }
+
+            ::-webkit-scrollbar-thumb {
+                background: #cbd5e1;
+                border-radius: 4px;
+            }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #94a3b8;
+            }
+
+            html.dark ::-webkit-scrollbar-thumb {
+                background: #475569;
+            }
+
+            html.dark ::-webkit-scrollbar-thumb:hover {
+                background: #64748b;
+            }
+
+            /* Smooth transitions */
+            * {
+                --transition-speed: 0.3s;
+            }
+
+            button, select, input, textarea {
+                transition: all var(--transition-speed) cubic-bezier(0.34, 1.56, 0.64, 1);
             }
         </style>
     </x-slot>
@@ -803,6 +1273,8 @@
                             class="prescription-card" 
                             onclick="selectPrescription(this, {{ $prescription->id }})"
                             data-prescription-id="{{ $prescription->id }}"
+                            data-prescription-date="{{ $prescription->prescription_date }}"
+                            data-next-visit-date="{{ $prescription->next_visit_date ?? '9999-12-31' }}"
                         >
                             <div class="prescription-card-title">
                                 {{ $prescription->title }}
@@ -837,8 +1309,8 @@
 
                     <!-- Prescription Detail View -->
                     <div id="prescriptionDetail" class="prescription-detail">
-                        <button class="btn-back" onclick="backToPrescriptionList()">
-                            <i class='bx bx-chevron-left'></i> Back
+                        <button class="btn-back-modern" onclick="backToPrescriptionList()">
+                            <i class='bx bx-chevron-left'></i> Back to List
                         </button>
                         <div id="detailContent"></div>
                     </div>
@@ -846,6 +1318,145 @@
             </div>
         </div>
     </div>
+
+    <!-- File Preview Modal -->
+    <div id="filePreviewModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" style="display: none;">
+        <div class="bg-white dark:bg-slate-800 rounded-20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300" style="animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
+            <!-- Header -->
+            <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+                        <i id="filePreviewIcon" class="bx bx-file text-white text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 id="filePreviewName" class="font-bold text-lg text-gray-900 dark:text-white">File Name</h3>
+                        <p id="filePreviewType" class="text-sm text-gray-500 dark:text-gray-400">File Type</p>
+                    </div>
+                </div>
+                <button onclick="closeFilePreview()" class="close-preview-button">
+                    <span class="X"></span>
+                    <span class="Y"></span>
+                    <div class="close">Close</div>
+                </button>
+            </div>
+
+            <!-- Content with Zoom Controls -->
+            <div class="p-6 relative">
+                <!-- Zoom Controls -->
+                <div class="absolute top-8 right-8 flex gap-2 bg-white dark:bg-slate-700 rounded-lg shadow-md p-2 z-10">
+                    <button onclick="zoomOut()" class="w-10 h-10 rounded bg-gray-100 dark:bg-slate-600 hover:bg-blue-500 hover:text-white text-gray-700 dark:text-gray-200 transition-all flex items-center justify-center font-bold">−</button>
+                    <div id="zoomLevel" class="w-12 h-10 rounded bg-gray-100 dark:bg-slate-600 text-gray-700 dark:text-gray-200 flex items-center justify-center font-bold text-sm">100%</div>
+                    <button onclick="zoomIn()" class="w-10 h-10 rounded bg-gray-100 dark:bg-slate-600 hover:bg-blue-500 hover:text-white text-gray-700 dark:text-gray-200 transition-all flex items-center justify-center font-bold">+</button>
+                    <button onclick="resetZoom()" class="w-10 h-10 rounded bg-gray-100 dark:bg-slate-600 hover:bg-blue-500 hover:text-white text-gray-700 dark:text-gray-200 transition-all flex items-center justify-center font-bold" title="Reset">↺</button>
+                </div>
+
+                <div id="filePreviewContent" class="rounded-lg overflow-hidden bg-gray-50 dark:bg-slate-900 flex items-center justify-center min-h-96">
+                    <!-- Placeholder for image or PDF -->
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex gap-3 p-6 border-t border-gray-200 dark:border-slate-700 bg-gray-50 dark:bg-slate-900">
+                <button onclick="printFile()" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-95">
+                    <i class='bx bx-printer text-lg'></i>
+                    <span>Print</span>
+                </button>
+                <button onclick="downloadFile()" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-95">
+                    <i class='bx bx-download text-lg'></i>
+                    <span>Download</span>
+                </button>
+                <button onclick="closeFilePreview()" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-200 dark:bg-slate-700 hover:bg-gray-300 dark:hover:bg-slate-600 text-gray-800 dark:text-white rounded-lg font-semibold transition-all duration-200 hover:shadow-lg hover:scale-[1.02] active:scale-95">
+                    <i class='bx bx-x text-lg'></i>
+                    <span>Close</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .close-preview-button {
+            position: relative;
+            width: 4em;
+            height: 4em;
+            border: none;
+            background: rgba(180, 83, 107, 0.11);
+            border-radius: 5px;
+            transition: background 0.5s;
+            cursor: pointer;
+        }
+
+        .close-preview-button .X {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2em;
+            height: 1.5px;
+            background-color: rgb(255, 255, 255);
+            transform: translateX(-50%) rotate(45deg);
+        }
+
+        .close-preview-button .Y {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2em;
+            height: 1.5px;
+            background-color: #fff;
+            transform: translateX(-50%) rotate(-45deg);
+        }
+
+        .close-preview-button .close {
+            position: absolute;
+            display: flex;
+            padding: 0.8rem 1.5rem;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(-50%);
+            top: -70%;
+            left: 50%;
+            width: 3em;
+            height: 1.7em;
+            font-size: 12px;
+            background-color: rgb(19, 22, 24);
+            color: rgb(187, 229, 236);
+            border: none;
+            border-radius: 3px;
+            pointer-events: none;
+            opacity: 0;
+            white-space: nowrap;
+        }
+
+        .close-preview-button:hover {
+            background-color: rgb(211, 21, 21);
+        }
+
+        .close-preview-button:active {
+            background-color: rgb(130, 0, 0);
+        }
+
+        .close-preview-button:hover > .close {
+            animation: closeLabel 0.2s forwards 0.25s;
+        }
+
+        @keyframes closeLabel {
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
 
     <!-- Add/Edit Modal -->
     <div id="prescriptionModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
@@ -1203,11 +1814,373 @@
 
         function backToPrescriptionList() {
             document.getElementById('prescriptionList').style.display = 'flex';
-            document.getElementById('prescriptionDetail').classList.remove('active');
+            const detailElement = document.getElementById('prescriptionDetail');
+            detailElement.classList.add('closing');
+            detailElement.style.transform = 'translateY(0)';
+            setTimeout(() => {
+                detailElement.classList.remove('active');
+                detailElement.classList.remove('closing');
+            }, 500);
             document.querySelectorAll('.prescription-card').forEach(card => {
                 card.classList.remove('active');
             });
         }
+
+        // Drag and hold functionality for prescription detail
+        let detailDragStartY = 0;
+        let detailCurrentY = 0;
+        let detailIsDragging = false;
+        let detailCanDrag = false;
+        let detailDragVelocity = 0;
+        let detailLastY = 0;
+        let detailLastTime = 0;
+        let detailHoldTimer = null;
+        const HOLD_DELAY = 400; // 400ms hold time before dragging is enabled
+
+        const prescriptionDetail = document.getElementById('prescriptionDetail');
+
+        prescriptionDetail.addEventListener('touchstart', (e) => {
+            if (window.innerWidth > 767) return; // Only on mobile
+            detailDragStartY = e.touches[0].clientY;
+            detailLastY = detailDragStartY;
+            detailLastTime = Date.now();
+            detailCanDrag = false;
+            detailIsDragging = false;
+            detailCurrentY = parseInt(prescriptionDetail.style.transform.match(/-?\d+/) || '0') || 0;
+            
+            // Set timer for hold detection
+            detailHoldTimer = setTimeout(() => {
+                detailCanDrag = true;
+                prescriptionDetail.classList.add('dragging');
+            }, HOLD_DELAY);
+        }, false);
+
+        prescriptionDetail.addEventListener('touchmove', (e) => {
+            if (!detailCanDrag || window.innerWidth > 767) return;
+            e.preventDefault();
+
+            detailIsDragging = true;
+            const currentY = e.touches[0].clientY;
+            const deltaY = currentY - detailDragStartY;
+            
+            // Only allow dragging down (closing)
+            if (deltaY > 0) {
+                prescriptionDetail.style.transform = `translateY(${deltaY}px)`;
+                
+                // Calculate velocity
+                const timeDelta = Date.now() - detailLastTime;
+                if (timeDelta > 0) {
+                    detailDragVelocity = (currentY - detailLastY) / timeDelta;
+                }
+                detailLastY = currentY;
+                detailLastTime = Date.now();
+            }
+        }, { passive: false });
+
+        prescriptionDetail.addEventListener('touchend', (e) => {
+            if (window.innerWidth > 767) return;
+            
+            // Clear hold timer if touch ended before hold time
+            if (detailHoldTimer) {
+                clearTimeout(detailHoldTimer);
+                detailHoldTimer = null;
+            }
+
+            if (!detailCanDrag) {
+                detailIsDragging = false;
+                return;
+            }
+
+            detailIsDragging = false;
+            detailCanDrag = false;
+            prescriptionDetail.classList.remove('dragging');
+
+            const deltaY = parseInt(prescriptionDetail.style.transform.match(/-?\d+/) || '0') || 0;
+            const threshold = window.innerHeight * 0.3;
+            const shouldClose = deltaY > threshold || (detailDragVelocity > 0.5 && deltaY > 50);
+
+            if (shouldClose) {
+                prescriptionDetail.style.transform = `translateY(${window.innerHeight}px)`;
+                setTimeout(() => {
+                    backToPrescriptionList();
+                }, 300);
+            } else {
+                prescriptionDetail.style.transform = 'translateY(0)';
+                prescriptionDetail.classList.remove('dragging');
+            }
+        }, false);
+
+        // Mouse support for desktop testing
+        prescriptionDetail.addEventListener('mousedown', (e) => {
+            if (window.innerWidth > 767) return;
+            detailDragStartY = e.clientY;
+            detailLastY = detailDragStartY;
+            detailLastTime = Date.now();
+            detailCanDrag = false;
+            detailIsDragging = false;
+            detailCurrentY = parseInt(prescriptionDetail.style.transform.match(/-?\d+/) || '0') || 0;
+            
+            // Set timer for hold detection
+            detailHoldTimer = setTimeout(() => {
+                detailCanDrag = true;
+                prescriptionDetail.classList.add('dragging');
+            }, HOLD_DELAY);
+        }, false);
+
+        document.addEventListener('mousemove', (e) => {
+            if (!detailCanDrag || window.innerWidth > 767) return;
+
+            detailIsDragging = true;
+            const currentY = e.clientY;
+            const deltaY = currentY - detailDragStartY;
+            
+            if (deltaY > 0) {
+                prescriptionDetail.style.transform = `translateY(${deltaY}px)`;
+                
+                const timeDelta = Date.now() - detailLastTime;
+                if (timeDelta > 0) {
+                    detailDragVelocity = (currentY - detailLastY) / timeDelta;
+                }
+                detailLastY = currentY;
+                detailLastTime = Date.now();
+            }
+        }, false);
+
+        document.addEventListener('mouseup', (e) => {
+            if (window.innerWidth > 767) return;
+            
+            // Clear hold timer if mouse up before hold time
+            if (detailHoldTimer) {
+                clearTimeout(detailHoldTimer);
+                detailHoldTimer = null;
+            }
+
+            if (!detailCanDrag) {
+                detailIsDragging = false;
+                return;
+            }
+
+            detailIsDragging = false;
+            detailCanDrag = false;
+            prescriptionDetail.classList.remove('dragging');
+
+            const deltaY = parseInt(prescriptionDetail.style.transform.match(/-?\d+/) || '0') || 0;
+            const threshold = window.innerHeight * 0.3;
+            const shouldClose = deltaY > threshold || (detailDragVelocity > 0.5 && deltaY > 50);
+
+            if (shouldClose) {
+                prescriptionDetail.style.transform = `translateY(${window.innerHeight}px)`;
+                setTimeout(() => {
+                    backToPrescriptionList();
+                }, 300);
+            } else {
+                prescriptionDetail.style.transform = 'translateY(0)';
+                prescriptionDetail.classList.remove('dragging');
+            }
+        }, false);
+
+        let currentFileUrl = '';
+        let currentFileName = '';
+        let currentFileType = '';
+
+        function openFilePreview(fileUrl, fileName, fileType) {
+            currentFileUrl = fileUrl;
+            currentFileName = fileName;
+            currentFileType = fileType;
+            currentZoom = 100;
+            panX = 0;
+            panY = 0;
+
+            document.getElementById('filePreviewName').textContent = fileName;
+            document.getElementById('filePreviewType').textContent = fileType === 'pdf' ? 'PDF Document' : 'Image File';
+            document.getElementById('filePreviewModal').style.display = 'flex';
+            document.getElementById('zoomLevel').textContent = '100%';
+
+            const contentDiv = document.getElementById('filePreviewContent');
+            contentDiv.innerHTML = '';
+
+            if (fileType === 'pdf') {
+                document.getElementById('filePreviewIcon').className = 'bx bx-file text-white text-xl';
+                contentDiv.innerHTML = `<embed src="${fileUrl}" type="application/pdf" width="100%" height="100%" />`;
+            } else {
+                document.getElementById('filePreviewIcon').className = 'bx bx-image text-white text-xl';
+                contentDiv.innerHTML = `<img src="${fileUrl}" alt="${fileName}" class="max-w-full max-h-96 object-contain" />`;
+            }
+
+            // Remove old event listeners if they exist
+            contentDiv.removeEventListener('wheel', handleZoomScroll);
+            contentDiv.removeEventListener('mousedown', startDrag);
+            contentDiv.removeEventListener('mousemove', doDrag);
+            contentDiv.removeEventListener('mouseup', stopDrag);
+            contentDiv.removeEventListener('mouseleave', stopDrag);
+            contentDiv.removeEventListener('touchstart', startDrag);
+            contentDiv.removeEventListener('touchmove', doDrag);
+            contentDiv.removeEventListener('touchend', stopDrag);
+
+            // Add event listeners
+            contentDiv.addEventListener('wheel', handleZoomScroll, { passive: false });
+            contentDiv.addEventListener('mousedown', startDrag);
+            contentDiv.addEventListener('mousemove', doDrag);
+            contentDiv.addEventListener('mouseup', stopDrag);
+            contentDiv.addEventListener('mouseleave', stopDrag);
+            contentDiv.addEventListener('touchstart', startDrag);
+            contentDiv.addEventListener('touchmove', doDrag, { passive: false });
+            contentDiv.addEventListener('touchend', stopDrag);
+        }
+
+        function handleZoomScroll(event) {
+            event.preventDefault();
+            if (event.deltaY < 0) {
+                zoomIn();
+            } else {
+                zoomOut();
+            }
+        }
+
+        function closeFilePreview() {
+            document.getElementById('filePreviewModal').style.display = 'none';
+            document.getElementById('filePreviewContent').innerHTML = '';
+            currentZoom = 100;
+            panX = 0;
+            panY = 0;
+            isDragging = false;
+            document.getElementById('zoomLevel').textContent = '100%';
+        }
+
+        let currentZoom = 100;
+        let panX = 0;
+        let panY = 0;
+        let isDragging = false;
+        let dragStartX = 0;
+        let dragStartY = 0;
+        let dragStartPanX = 0;
+        let dragStartPanY = 0;
+        const minZoom = 50;
+        const maxZoom = 300;
+
+        function zoomIn() {
+            currentZoom = Math.min(currentZoom + 25, maxZoom);
+            updateZoom();
+        }
+
+        function zoomOut() {
+            currentZoom = Math.max(currentZoom - 25, minZoom);
+            updateZoom();
+        }
+
+        function resetZoom() {
+            currentZoom = 100;
+            panX = 0;
+            panY = 0;
+            updateZoom();
+        }
+
+        function updateZoom() {
+            const content = document.getElementById('filePreviewContent');
+            const img = content.querySelector('img');
+            const embed = content.querySelector('embed');
+
+            document.getElementById('zoomLevel').textContent = currentZoom + '%';
+
+            const transformValue = `scale(${currentZoom / 100}) translate(${panX}px, ${panY}px)`;
+
+            if (img) {
+                img.style.transform = transformValue;
+                img.style.transition = isDragging ? 'none' : 'transform 0.2s ease-in-out';
+                img.style.cursor = currentZoom > 100 ? 'grab' : 'default';
+            }
+            if (embed) {
+                embed.style.transform = transformValue;
+                embed.style.transformOrigin = 'top left';
+                embed.style.transition = isDragging ? 'none' : 'transform 0.2s ease-in-out';
+                embed.style.cursor = currentZoom > 100 ? 'grab' : 'default';
+            }
+        }
+
+        function startDrag(e) {
+            if (currentZoom <= 100) return;
+            isDragging = true;
+            dragStartX = e.clientX || e.touches?.[0]?.clientX;
+            dragStartY = e.clientY || e.touches?.[0]?.clientY;
+            dragStartPanX = panX;
+            dragStartPanY = panY;
+            
+            const content = document.getElementById('filePreviewContent');
+            if (content.querySelector('img')) {
+                content.querySelector('img').style.cursor = 'grabbing';
+            }
+            if (content.querySelector('embed')) {
+                content.querySelector('embed').style.cursor = 'grabbing';
+            }
+        }
+
+        function doDrag(e) {
+            if (!isDragging || currentZoom <= 100) return;
+            e.preventDefault();
+            
+            const currentX = e.clientX || e.touches?.[0]?.clientX;
+            const currentY = e.clientY || e.touches?.[0]?.clientY;
+            
+            const deltaX = currentX - dragStartX;
+            const deltaY = currentY - dragStartY;
+            
+            panX = dragStartPanX + deltaX;
+            panY = dragStartPanY + deltaY;
+            
+            updateZoom();
+        }
+
+        function stopDrag() {
+            isDragging = false;
+            const content = document.getElementById('filePreviewContent');
+            if (content.querySelector('img')) {
+                content.querySelector('img').style.cursor = 'grab';
+            }
+            if (content.querySelector('embed')) {
+                content.querySelector('embed').style.cursor = 'grab';
+            }
+        }
+
+        function downloadFile() {
+            if (!currentFileUrl) return;
+            const a = document.createElement('a');
+            a.href = currentFileUrl;
+            a.download = currentFileName || 'file';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('File downloaded successfully!', 'success');
+        }
+
+        function printFile() {
+            if (!currentFileUrl) return;
+            const printWindow = window.open(currentFileUrl, '_blank');
+            if (printWindow) {
+                printWindow.addEventListener('load', function() {
+                    setTimeout(() => {
+                        printWindow.print();
+                    }, 250);
+                });
+            }
+            showToast('Opening print dialog...', 'success');
+        }
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const modal = document.getElementById('filePreviewModal');
+                if (modal.classList.contains('active')) {
+                    closeFilePreview();
+                }
+            }
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('filePreviewModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeFilePreview();
+            }
+        });
 
         async function loadPrescriptionDetail(id) {
             try {
@@ -1277,7 +2250,7 @@
                                 <div class="detail-label">Attached Files</div>
                                 <div class="file-preview">
                                     ${prescription.files.map(file => `
-                                        <a href="${file.file_url || ''}" target="_blank" class="file-item" download="${file.original_name || 'file'}">
+                                        <a href="javascript:void(0)" class="file-item" onclick="openFilePreview('${file.file_url || ''}', '${file.original_name || 'File'}', '${file.file_type || 'unknown'}')">
                                             <span class="file-icon">
                                                 ${file.file_type === 'pdf' ? '📄' : '🖼️'}
                                             </span>
@@ -1459,11 +2432,64 @@
 
         function filterByTag(tagId, button) {
             button.classList.toggle('active');
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const activeTags = Array.from(document.querySelectorAll('.tag-chip.active')).map(btn => btn.dataset.tagId);
+            const cards = document.querySelectorAll('.prescription-card');
+
+            cards.forEach(card => {
+                const cardTags = Array.from(card.querySelectorAll('.prescription-card-tag')).map((tag, idx) => {
+                    // Get the tag ID from the data attribute or by matching tag names
+                    return card.dataset.prescriptionId + '-' + idx;
+                });
+
+                if (activeTags.length === 0) {
+                    card.style.display = '';
+                } else {
+                    const hasActiveTag = cardTags.some(tag => activeTags.includes(tag));
+                    card.style.display = hasActiveTag ? '' : 'none';
+                }
+            });
         }
 
         function sortPrescriptions(sortBy) {
-            // Implement sorting logic
-            console.log('Sort by:', sortBy);
+            const prescriptionList = document.getElementById('prescriptionList');
+            const cards = Array.from(prescriptionList.querySelectorAll('.prescription-card'));
+
+            // Sort cards based on selected option
+            cards.sort((a, b) => {
+                const dateA = new Date(a.dataset.prescriptionDate || 0);
+                const dateB = new Date(b.dataset.prescriptionDate || 0);
+
+                switch(sortBy) {
+                    case 'newest':
+                        return dateB - dateA;
+                    case 'oldest':
+                        return dateA - dateB;
+                    case 'upcoming':
+                        // Sort by next visit date (closest upcoming first)
+                        const nextVisitA = new Date(a.dataset.nextVisitDate || '9999-12-31');
+                        const nextVisitB = new Date(b.dataset.nextVisitDate || '9999-12-31');
+                        return nextVisitA - nextVisitB;
+                    default:
+                        return 0;
+                }
+            });
+
+            // Clear and re-append sorted cards with smooth animation
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(10px)';
+                prescriptionList.appendChild(card);
+                
+                setTimeout(() => {
+                    card.style.transition = 'all 0.3s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 50);
+            });
         }
 
         function showToast(message, type = 'success') {
@@ -1500,6 +2526,15 @@
             if (event.key === 'Escape') {
                 closeModal();
                 backToPrescriptionList();
+            }
+        });
+
+        // Initialize sorting on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default sort to newest first
+            const sortSelect = document.querySelector('.sort-select');
+            if (sortSelect && sortSelect.value === 'newest') {
+                sortPrescriptions('newest');
             }
         });
     </script>
