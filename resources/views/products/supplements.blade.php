@@ -17,6 +17,7 @@
             .dark .supplements-header h1 {
                 color: #f3f4f6;
             }
+
             .supplements-header p {
                 font-size: 16px;
                 color: #666;
@@ -35,6 +36,7 @@
                 gap: 24px;
                 margin-bottom: 40px;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             @media (max-width: 1200px) {
@@ -48,9 +50,11 @@
                 .products-grid {
                     grid-template-columns: repeat(2, 1fr);
                     gap: 10px;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0 8px;
+                    margin-left: -8px;
+                    margin-right: -8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    width: calc(100% + 16px);
                 }
             }
 
@@ -58,9 +62,11 @@
                 .products-grid {
                     grid-template-columns: repeat(2, 1fr);
                     gap: 8px;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0 8px;
+                    margin-left: -8px;
+                    margin-right: -8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    width: calc(100% + 16px);
                 }
             }
 
@@ -140,10 +146,6 @@
                 margin-bottom: 4px;
                 line-height: 1.3;
                 min-height: 38px;
-            }
-            
-            .dark .product-name {
-                color: #f3f4f6;
             }
 
             .product-dosage {
@@ -314,6 +316,23 @@
             .empty-state p {
                 font-size: 16px;
             }
+
+            @media (max-width: 768px) {
+                .max-w-7xl {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+                
+                .py-6 {
+                    padding-top: 1.5rem !important;
+                    padding-bottom: 1.5rem !important;
+                }
+                
+                .main-content {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+            }
         </style>
     </x-slot>
 
@@ -326,6 +345,7 @@
                     <h1>Supplement Products</h1>
                     <p class="text-gray-600">Browse our collection of supplements</p>
                 </div>
+
                 @if($products->count() > 0)
                     <div class="products-grid">
                         @foreach($products as $product)

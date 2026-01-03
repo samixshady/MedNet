@@ -17,6 +17,7 @@
             .dark .first-aid-header h1 {
                 color: #f3f4f6;
             }
+
             .first-aid-header p {
                 font-size: 16px;
                 color: #666;
@@ -35,6 +36,7 @@
                 gap: 24px;
                 margin-bottom: 40px;
                 width: 100%;
+                box-sizing: border-box;
             }
 
             @media (max-width: 1200px) {
@@ -48,9 +50,11 @@
                 .products-grid {
                     grid-template-columns: repeat(2, 1fr);
                     gap: 10px;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0 8px;
+                    margin-left: -8px;
+                    margin-right: -8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    width: calc(100% + 16px);
                 }
             }
 
@@ -58,9 +62,11 @@
                 .products-grid {
                     grid-template-columns: repeat(2, 1fr);
                     gap: 8px;
-                    margin-left: 0;
-                    margin-right: 0;
-                    padding: 0 8px;
+                    margin-left: -8px;
+                    margin-right: -8px;
+                    padding-left: 8px;
+                    padding-right: 8px;
+                    width: calc(100% + 16px);
                 }
             }
 
@@ -309,6 +315,13 @@
 
             .empty-state p {
                 font-size: 16px;
+            }
+
+            @media (max-width: 768px) {
+                .max-w-7xl {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
             }
         </style>
     </x-slot>
