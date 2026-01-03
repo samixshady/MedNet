@@ -43,71 +43,85 @@ class PrescriptionController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'notes' => 'nullable|string|max:1000',
-            'doctor_name' => 'nullable|string|max:255',
-            'prescription_date' => 'required|date',
-            'next_visit_date' => 'nullable|date|after_or_equal:prescription_date',
-            'tags' => 'nullable|array',
-            'files' => 'nullable|array',
-            'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:10240',
-            'reminder_date' => 'nullable|date_format:Y-m-d H:i',
-            'reminder_note' => 'nullable|string|max:500',
-        ]);
+        try {
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'notes' => 'nullable|string|max:1000',
+                'doctor_name' => 'nullable|string|max:255',
+                'prescription_date' => 'required|date',
+                'next_visit_date' => 'nullable|date|after_or_equal:prescription_date',
+                'tags.*' => 'sometimes|exists:prescription_tags,id',
+                'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:10240',
+                'reminder_date' => 'nullable|date_format:Y-m-d H:i',
+                'reminder_note' => 'nullable|string|max:500',
+            ]);
 
-        $prescription = auth()->user()->prescriptions()->create([
-            'title' => $validated['title'],
-            'notes' => $validated['notes'] ?? null,
-            'doctor_name' => $validated['doctor_name'] ?? null,
-            'prescription_date' => $validated['prescription_date'],
-            'next_visit_date' => $validated['next_visit_date'] ?? null,
-        ]);
+            $prescription = auth()->user()->prescriptions()->create([
+                'title' => $validated['title'],
+                'notes' => $validated['notes'] ?? null,
+                'doctor_name' => $validated['doctor_name'] ?? null,
+                'prescription_date' => $validated['prescription_date'],
+                'next_visit_date' => $validated['next_visit_date'] ?? null,
+            ]);
 
-        // Attach tags
-        if (!empty($validated['tags'])) {
-            $tags = [];
-            foreach ($validated['tags'] as $tagId) {
-                $tag = PrescriptionTag::where('id', $tagId)
-                    ->where('user_id', auth()->id())
-                    ->first();
-                if ($tag) {
-                    $tags[] = $tagId;
+            // Attach tags
+            $tags = $request->input('tags', []);
+            if (!empty($tags) && is_array($tags)) {
+                $validTags = [];
+                foreach ($tags as $tagId) {
+                    $tag = PrescriptionTag::where('id', $tagId)
+                        ->where('user_id', auth()->id())
+                        ->first();
+                    if ($tag) {
+                        $validTags[] = $tagId;
+                    }
+                }
+                if (!empty($validTags)) {
+                    $prescription->tags()->attach($validTags);
                 }
             }
-            if (!empty($tags)) {
-                $prescription->tags()->attach($tags);
-            }
-        }
 
-        // Upload files
-        if ($request->hasFile('files')) {
-            foreach ($request->file('files') as $file) {
-                $path = $file->store('prescriptions/' . auth()->id(), 'public');
-                PrescriptionFile::create([
+            // Upload files
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $path = $file->store('prescriptions/' . auth()->id(), 'public');
+                    PrescriptionFile::create([
+                        'prescription_id' => $prescription->id,
+                        'file_path' => $path,
+                        'file_type' => $file->getClientOriginalExtension(),
+                        'original_name' => $file->getClientOriginalName(),
+                        'file_size' => $file->getSize(),
+                    ]);
+                }
+            }
+
+            // Create reminder if provided
+            if (!empty($validated['reminder_date'])) {
+                PrescriptionReminder::create([
                     'prescription_id' => $prescription->id,
-                    'file_path' => $path,
-                    'file_type' => $file->getClientOriginalExtension(),
-                    'original_name' => $file->getClientOriginalName(),
-                    'file_size' => $file->getSize(),
+                    'reminder_note' => $validated['reminder_note'] ?? null,
+                    'reminder_date' => $validated['reminder_date'],
                 ]);
             }
-        }
 
-        // Create reminder if provided
-        if (!empty($validated['reminder_date'])) {
-            PrescriptionReminder::create([
-                'prescription_id' => $prescription->id,
-                'reminder_note' => $validated['reminder_note'] ?? null,
-                'reminder_date' => $validated['reminder_date'],
+            return response()->json([
+                'success' => true,
+                'message' => 'Prescription saved successfully!',
+                'prescription' => $prescription->load('files', 'tags'),
             ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Exception $e) {
+            \Log::error('Prescription save error: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error saving prescription: ' . $e->getMessage(),
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Prescription saved successfully!',
-            'prescription' => $prescription->load('files', 'tags'),
-        ]);
     }
 
     /**
@@ -115,40 +129,66 @@ class PrescriptionController extends Controller
      */
     public function update(Request $request, Prescription $prescription)
     {
-        $this->authorize('update', $prescription);
+        try {
+            $this->authorize('update', $prescription);
 
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'notes' => 'nullable|string|max:1000',
-            'doctor_name' => 'nullable|string|max:255',
-            'prescription_date' => 'required|date',
-            'next_visit_date' => 'nullable|date|after_or_equal:prescription_date',
-            'tags' => 'nullable|array',
-        ]);
+            $validated = $request->validate([
+                'title' => 'required|string|max:255',
+                'notes' => 'nullable|string|max:1000',
+                'doctor_name' => 'nullable|string|max:255',
+                'prescription_date' => 'required|date',
+                'next_visit_date' => 'nullable|date|after_or_equal:prescription_date',
+                'tags.*' => 'sometimes|exists:prescription_tags,id',
+            ]);
 
-        $prescription->update([
-            'title' => $validated['title'],
-            'notes' => $validated['notes'] ?? null,
-            'doctor_name' => $validated['doctor_name'] ?? null,
-            'prescription_date' => $validated['prescription_date'],
-            'next_visit_date' => $validated['next_visit_date'] ?? null,
-        ]);
+            $prescription->update([
+                'title' => $validated['title'],
+                'notes' => $validated['notes'] ?? null,
+                'doctor_name' => $validated['doctor_name'] ?? null,
+                'prescription_date' => $validated['prescription_date'],
+                'next_visit_date' => $validated['next_visit_date'] ?? null,
+            ]);
 
-        // Update tags
-        if (isset($validated['tags'])) {
-            $tags = array_filter($validated['tags'], function ($tagId) {
-                return PrescriptionTag::where('id', $tagId)
-                    ->where('user_id', auth()->id())
-                    ->exists();
-            });
-            $prescription->tags()->sync($tags);
+            // Update tags
+            $tags = $request->input('tags', []);
+            if (!empty($tags) && is_array($tags)) {
+                $validTags = [];
+                foreach ($tags as $tagId) {
+                    $tag = PrescriptionTag::where('id', $tagId)
+                        ->where('user_id', auth()->id())
+                        ->first();
+                    if ($tag) {
+                        $validTags[] = $tagId;
+                    }
+                }
+                $prescription->tags()->sync($validTags);
+            } else {
+                $prescription->tags()->sync([]);
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Prescription updated successfully!',
+                'prescription' => $prescription->load('files', 'tags'),
+            ]);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors(),
+            ], 422);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to update this prescription',
+            ], 403);
+        } catch (\Exception $e) {
+            \Log::error('Error updating prescription: ' . $e->getMessage() . ' | Stack: ' . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating prescription',
+            ], 500);
         }
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Prescription updated successfully!',
-            'prescription' => $prescription->load('files', 'tags'),
-        ]);
     }
 
     /**
@@ -156,19 +196,34 @@ class PrescriptionController extends Controller
      */
     public function destroy(Prescription $prescription)
     {
-        $this->authorize('delete', $prescription);
+        try {
+            $this->authorize('delete', $prescription);
 
-        // Delete files
-        foreach ($prescription->files as $file) {
-            Storage::disk('public')->delete($file->file_path);
+            // Delete files from storage
+            if ($prescription->files) {
+                foreach ($prescription->files as $file) {
+                    Storage::disk('public')->delete($file->file_path);
+                }
+            }
+
+            $prescription->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Prescription deleted successfully!',
+            ]);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this prescription',
+            ], 403);
+        } catch (\Exception $e) {
+            \Log::error('Error deleting prescription: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error deleting prescription',
+            ], 500);
         }
-
-        $prescription->delete();
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Prescription deleted successfully!',
-        ]);
     }
 
     /**
@@ -267,12 +322,36 @@ class PrescriptionController extends Controller
      */
     public function show(Prescription $prescription)
     {
-        $this->authorize('view', $prescription);
+        try {
+            // Check authorization
+            $this->authorize('view', $prescription);
 
-        return response()->json([
-            'success' => true,
-            'prescription' => $prescription->load('files', 'tags', 'reminders'),
-        ]);
+            // Load relationships
+            $prescription->load('files', 'tags', 'reminders');
+            
+            // Add file URLs to files
+            if ($prescription->files && $prescription->files->count() > 0) {
+                $prescription->files->each(function ($file) {
+                    $file->file_url = asset('storage/' . $file->file_path);
+                });
+            }
+
+            return response()->json([
+                'success' => true,
+                'prescription' => $prescription,
+            ]);
+        } catch (\Illuminate\Auth\Access\AuthorizationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to view this prescription',
+            ], 403);
+        } catch (\Exception $e) {
+            \Log::error('Error fetching prescription: ' . $e->getMessage() . ' Stack: ' . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error loading prescription',
+            ], 500);
+        }
     }
 
     /**

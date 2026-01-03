@@ -852,7 +852,7 @@
         <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl shadow-2xl my-auto overflow-hidden flex flex-col">
             <div class="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 p-6 flex justify-between items-center">
                 <div>
-                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                    <h2 class="prescription-modal-title text-2xl font-bold text-white flex items-center gap-2">
                         <i class='bx bx-plus-circle'></i> Add New Prescription
                     </h2>
                     <p class="text-blue-100 text-sm mt-1">Organize your medical documents</p>
@@ -960,7 +960,7 @@
                         <p class="text-gray-700 dark:text-gray-300 mt-1 font-medium text-xs">Click to upload or drag and drop</p>
                         <p class="text-xs text-gray-600 dark:text-gray-400">JPG, PNG, PDF up to 10MB</p>
                     </div>
-                    <input type="file" id="fileInput" name="files" multiple accept=".jpg,.jpeg,.png,.pdf" style="display: none;" onchange="updateFileList()">
+                    <input type="file" id="fileInput" name="files" multiple accept=".jpg,.jpeg,.png,.pdf" style="display: none;" onchange="addFilesToList()">
                     <div id="fileList" class="mt-1 space-y-0.5"></div>
                 </div>
 
@@ -1000,11 +1000,69 @@
             document.getElementById('prescriptionForm').reset();
             document.getElementById('fileList').innerHTML = '';
             document.getElementById('reminderSection').style.display = 'none';
+            selectedFiles = [];
+            currentEditingId = null;
+
+            // Reset modal title
+            document.querySelector('.prescription-modal-title').textContent = 'Add New Prescription';
+
+            // Reset form submission to create
+            const form = document.getElementById('prescriptionForm');
+            form.onsubmit = async (e) => {
+                e.preventDefault();
+                // This will be handled by the main form submission event listener
+            };
         }
 
         function toggleReminder() {
             const toggle = document.getElementById('reminderToggle').checked;
             document.getElementById('reminderSection').style.display = toggle ? 'block' : 'none';
+        }
+
+        // Store files separately to manage removals
+        let selectedFiles = [];
+
+        function addFilesToList() {
+            const fileInput = document.getElementById('fileInput');
+            
+            // Add new files to the selected files array
+            Array.from(fileInput.files).forEach(file => {
+                const exists = selectedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (!exists) {
+                    selectedFiles.push(file);
+                }
+            });
+
+            renderFileList();
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+            renderFileList();
+        }
+
+        function renderFileList() {
+            const fileList = document.getElementById('fileList');
+            fileList.innerHTML = '';
+
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'flex items-center justify-between gap-2 px-3 py-2 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded border border-green-200 dark:border-green-800 hover:bg-green-100 dark:hover:bg-green-900 dark:hover:bg-opacity-30 transition duration-150';
+                fileItem.innerHTML = `
+                    <div class="flex items-center gap-2 flex-1 min-w-0">
+                        <i class='bx bx-file' style="color: #10b981; font-size: 1.1rem; flex-shrink: 0;"></i>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-gray-700 dark:text-gray-300 font-medium truncate text-xs">${file.name}</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">${(file.size / 1024).toFixed(2)} KB</p>
+                        </div>
+                        <span class="text-green-600 dark:text-green-400 text-sm flex-shrink-0"><i class='bx bx-check-circle'></i></span>
+                    </div>
+                    <button type="button" onclick="removeFile(${index})" class="flex-shrink-0 px-2 py-1 bg-red-100 dark:bg-red-900 dark:bg-opacity-30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900 dark:hover:bg-opacity-50 rounded transition duration-150" title="Remove file">
+                        <i class='bx bx-x' style="font-size: 1rem;"></i>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+            });
         }
 
         function updateFileList() {
@@ -1065,7 +1123,39 @@
         document.getElementById('prescriptionForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
+            // If in edit mode, use updatePrescription instead
+            if (currentEditingId) {
+                await updatePrescription(currentEditingId);
+                return;
+            }
+            
+            // Validate required fields
+            const title = document.querySelector('input[name="title"]').value.trim();
+            const prescriptionDate = document.querySelector('input[name="prescription_date"]').value;
+            
+            if (!title) {
+                showToast('Please enter a prescription title', 'error');
+                return;
+            }
+            
+            if (!prescriptionDate) {
+                showToast('Please select a prescription date', 'error');
+                return;
+            }
+            
             const formData = new FormData(e.target);
+            
+            // Ensure tags is always an array
+            const tagsCheckboxes = document.querySelectorAll('input[name="tags"]:checked');
+            formData.delete('tags');
+            tagsCheckboxes.forEach(checkbox => {
+                formData.append('tags[]', checkbox.value);
+            });
+            
+            // Add files from selectedFiles array
+            selectedFiles.forEach((file) => {
+                formData.append('files[]', file);
+            });
             
             try {
                 const response = await fetch('{{ route("prescription.store") }}', {
@@ -1083,7 +1173,12 @@
                     closeModal();
                     location.reload();
                 } else {
-                    showToast(data.message || 'Error saving prescription', 'error');
+                    if (data.errors) {
+                        const errorMessages = Object.values(data.errors).flat().join(', ');
+                        showToast(errorMessages || 'Error saving prescription', 'error');
+                    } else {
+                        showToast(data.message || 'Error saving prescription', 'error');
+                    }
                 }
             } catch (error) {
                 console.error(error);
@@ -1117,9 +1212,14 @@
         async function loadPrescriptionDetail(id) {
             try {
                 const response = await fetch(`/prescriptions/${id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
                 const data = await response.json();
 
-                if (data.success) {
+                if (data.success && data.prescription) {
                     const prescription = data.prescription;
                     const html = `
                         <div class="prescription-detail-header">
@@ -1152,12 +1252,12 @@
                             <div class="detail-value">${prescription.doctor_name || 'Not specified'}</div>
                         </div>
 
-                        ${prescription.tags.length > 0 ? `
+                        ${prescription.tags && prescription.tags.length > 0 ? `
                             <div class="detail-section">
                                 <div class="detail-label">Tags</div>
                                 <div class="flex flex-wrap gap-2">
                                     ${prescription.tags.map(tag => `
-                                        <span class="prescription-card-tag" style="background-color: ${tag.color}">
+                                        <span class="prescription-card-tag" style="background-color: ${tag.color || '#3b82f6'}">
                                             ${tag.name}
                                         </span>
                                     `).join('')}
@@ -1172,16 +1272,16 @@
                             </div>
                         ` : ''}
 
-                        ${prescription.files.length > 0 ? `
+                        ${prescription.files && prescription.files.length > 0 ? `
                             <div class="detail-section">
                                 <div class="detail-label">Attached Files</div>
                                 <div class="file-preview">
                                     ${prescription.files.map(file => `
-                                        <a href="${file.file_url}" target="_blank" class="file-item">
+                                        <a href="${file.file_url || ''}" target="_blank" class="file-item" download="${file.original_name || 'file'}">
                                             <span class="file-icon">
                                                 ${file.file_type === 'pdf' ? '📄' : '🖼️'}
                                             </span>
-                                            <span>${file.original_name}</span>
+                                            <span>${file.original_name || 'File'}</span>
                                         </a>
                                     `).join('')}
                                 </div>
@@ -1190,10 +1290,133 @@
                     `;
 
                     document.getElementById('detailContent').innerHTML = html;
+                } else {
+                    showToast('Error loading prescription details', 'error');
+                }
+            } catch (error) {
+                console.error('Error loading prescription:', error);
+                showToast('Error loading prescription details: ' + error.message, 'error');
+            }
+        }
+
+        let currentEditingId = null;
+
+        async function editPrescription(id) {
+            try {
+                // Fetch the prescription data
+                const response = await fetch(`/prescriptions/${id}`);
+                const data = await response.json();
+
+                if (!data.success) {
+                    showToast('Error loading prescription for edit', 'error');
+                    return;
+                }
+
+                const prescription = data.prescription;
+                currentEditingId = id;
+
+                // Update modal title
+                document.querySelector('.prescription-modal-title').textContent = 'Edit Prescription';
+
+                // Fill form with existing data
+                document.querySelector('input[name="title"]').value = prescription.title || '';
+                document.querySelector('input[name="prescription_date"]').value = prescription.prescription_date || '';
+                document.querySelector('input[name="next_visit_date"]').value = prescription.next_visit_date || '';
+                document.querySelector('input[name="doctor_name"]').value = prescription.doctor_name || '';
+                document.querySelector('textarea[name="notes"]').value = prescription.notes || '';
+
+                // Reset and select tags
+                document.querySelectorAll('input[name="tags"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                if (prescription.tags && prescription.tags.length > 0) {
+                    prescription.tags.forEach(tag => {
+                        const checkbox = document.querySelector(`input[name="tags"][value="${tag.id}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                        }
+                    });
+                }
+
+                // Clear files list
+                selectedFiles = [];
+                renderFileList();
+
+                // Update form submission to edit instead of create
+                const form = document.getElementById('prescriptionForm');
+                form.onsubmit = async (e) => {
+                    e.preventDefault();
+                    await updatePrescription(id);
+                };
+
+                // Open modal
+                document.getElementById('prescriptionModal').style.display = 'flex';
+            } catch (error) {
+                console.error('Error loading prescription for edit:', error);
+                showToast('Error loading prescription for edit', 'error');
+            }
+        }
+
+        async function updatePrescription(id) {
+            // Validate required fields
+            const title = document.querySelector('input[name="title"]').value.trim();
+            const prescriptionDate = document.querySelector('input[name="prescription_date"]').value;
+            
+            if (!title) {
+                showToast('Please enter a prescription title', 'error');
+                return;
+            }
+            
+            if (!prescriptionDate) {
+                showToast('Please select a prescription date', 'error');
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('doctor_name', document.querySelector('input[name="doctor_name"]').value);
+            formData.append('prescription_date', prescriptionDate);
+            formData.append('next_visit_date', document.querySelector('input[name="next_visit_date"]').value);
+            formData.append('notes', document.querySelector('textarea[name="notes"]').value);
+            
+            // Ensure tags is always an array
+            const tagsCheckboxes = document.querySelectorAll('input[name="tags"]:checked');
+            tagsCheckboxes.forEach(checkbox => {
+                formData.append('tags[]', checkbox.value);
+            });
+            
+            // Add new files from selectedFiles array
+            selectedFiles.forEach((file) => {
+                formData.append('files[]', file);
+            });
+            
+            try {
+                const response = await fetch(`/prescriptions/${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    },
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Prescription updated successfully!', 'success');
+                    closeModal();
+                    currentEditingId = null;
+                    location.reload();
+                } else {
+                    if (data.errors) {
+                        const errorMessages = Object.values(data.errors).flat().join(', ');
+                        showToast(errorMessages || 'Error updating prescription', 'error');
+                    } else {
+                        showToast(data.message || 'Error updating prescription', 'error');
+                    }
                 }
             } catch (error) {
                 console.error(error);
-                showToast('Error loading prescription details', 'error');
+                showToast('Error updating prescription', 'error');
             }
         }
 
