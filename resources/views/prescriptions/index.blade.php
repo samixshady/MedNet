@@ -1,5 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
+        <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
         <style>
             * {
                 --primary-color: #3b82f6;
@@ -77,25 +78,117 @@
                 justify-content: center;
                 gap: 0.5rem;
                 font-size: 0.95rem;
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
             }
 
             .btn-add-prescription:hover {
                 transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+                box-shadow: 0 6px 16px rgba(59, 130, 246, 0.5);
+            }
+
+            .btn-add-prescription:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
             }
 
             @media (max-width: 1023px) {
                 .btn-add-prescription {
-                    position: fixed;
-                    bottom: 1.5rem;
-                    right: 1.5rem;
+                    display: none !important;
+                }
+            }
+
+            /* Custom Add Prescription Button */
+            .Btn-Container {
+                display: flex;
+                width: 190px;
+                height: fit-content;
+                background: linear-gradient(135deg, #1e40af 0%, #1e3a8a 100%);
+                border-radius: 40px;
+                box-shadow: 0 8px 16px rgba(59, 130, 246, 0.3);
+                justify-content: space-between;
+                align-items: center;
+                border: 2px solid #3b82f6;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                padding: 0;
+            }
+
+            .Btn-Container:hover {
+                box-shadow: 0 12px 24px rgba(59, 130, 246, 0.5);
+                transform: translateY(-2px);
+                border-color: #60a5fa;
+            }
+
+            .Btn-Container:active {
+                transform: translateY(0);
+                box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            }
+
+            .icon-Container {
+                width: 50px;
+                height: 50px;
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                border: 3px solid #1e40af;
+                flex-shrink: 0;
+            }
+
+            .text {
+                width: calc(190px - 50px);
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 1rem;
+                letter-spacing: 0.5px;
+                font-weight: 600;
+            }
+
+            .icon-Container svg {
+                transition-duration: 1.5s;
+                width: 18px;
+                height: 18px;
+            }
+
+            .icon-Container svg circle {
+                fill: white;
+                transition: all 0.3s ease;
+            }
+
+            .Btn-Container:hover .icon-Container svg {
+                animation: arrow 1s linear infinite;
+            }
+
+            @keyframes arrow {
+                0% {
+                    opacity: 0;
+                    transform: translateX(-5px);
+                }
+                50% {
+                    opacity: 1;
+                }
+                100% {
+                    opacity: 1;
+                    transform: translateX(8px);
+                }
+            }
+
+            @media (max-width: 640px) {
+                .Btn-Container {
                     width: auto;
-                    padding: 1rem;
-                    border-radius: 50%;
-                    z-index: 40;
+                    padding: 0.5rem;
                 }
 
-                .btn-add-prescription span {
+                .icon-Container {
+                    width: 40px;
+                    height: 40px;
+                }
+
+                .text {
                     display: none;
                 }
             }
@@ -529,24 +622,119 @@
                     padding: 1rem;
                 }
             }
+
+            /* Custom Close Button */
+            .close-button {
+                position: relative;
+                width: 2.5rem;
+                height: 2.5rem;
+                border: none;
+                background: rgba(180, 83, 107, 0.11);
+                border-radius: 5px;
+                transition: background 0.5s;
+                cursor: pointer;
+            }
+
+            .close-button .X {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1.5em;
+                height: 1.5px;
+                background-color: rgb(255, 255, 255);
+                transform: translateX(-50%) rotate(45deg);
+            }
+
+            .close-button .Y {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 1.5em;
+                height: 1.5px;
+                background-color: #fff;
+                transform: translateX(-50%) rotate(-45deg);
+            }
+
+            .close-button .close-label {
+                position: absolute;
+                display: flex;
+                padding: 0.6rem 1rem;
+                align-items: center;
+                justify-content: center;
+                transform: translateX(-50%);
+                top: -65%;
+                left: 50%;
+                width: 2.5em;
+                height: 1.5em;
+                font-size: 11px;
+                background-color: rgb(19, 22, 24);
+                color: rgb(187, 229, 236);
+                border: none;
+                border-radius: 3px;
+                pointer-events: none;
+                opacity: 0;
+                white-space: nowrap;
+            }
+
+            .close-button:hover {
+                background-color: rgb(211, 21, 21);
+            }
+
+            .close-button:active {
+                background-color: rgb(130, 0, 0);
+            }
+
+            .close-button:hover > .close-label {
+                animation: closeAnim 0.2s forwards 0.25s;
+            }
+
+            @keyframes closeAnim {
+                100% {
+                    opacity: 1;
+                }
+            }
         </style>
     </x-slot>
 
     @include('layouts.sidebar')
 
-    <div class="prescription-container">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="pt-0 pb-2 sm:py-12">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
             <!-- Header -->
-            <div class="mb-6 flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center gap-3">
+            <div class="mb-6 flex items-center justify-between gap-6">
+                <div class="flex-1 text-center">
+                    <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100 flex items-center justify-center gap-3">
                         <i class='bx bx-file'></i> My Prescriptions
                     </h1>
                     <p class="text-gray-600 dark:text-gray-400 mt-1">Organize and manage your medical prescriptions</p>
                 </div>
-                <button class="btn-add-prescription" onclick="openAddModal()">
-                    <i class='bx bx-plus'></i>
-                    <span>New Prescription</span>
+                <!-- Custom Design Button - All Devices -->
+                <button class="Btn-Container" onclick="openAddModal()">
+                    <span class="text">Add Prescription</span>
+                    <span class="icon-Container">
+                        <svg
+                            width="18"
+                            height="20"
+                            viewBox="0 0 16 19"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <circle cx="1.61321" cy="1.61321" r="1.5" fill="white"></circle>
+                            <circle cx="5.73583" cy="1.61321" r="1.5" fill="white"></circle>
+                            <circle cx="5.73583" cy="5.5566" r="1.5" fill="white"></circle>
+                            <circle cx="9.85851" cy="5.5566" r="1.5" fill="white"></circle>
+                            <circle cx="9.85851" cy="9.5" r="1.5" fill="white"></circle>
+                            <circle cx="13.9811" cy="9.5" r="1.5" fill="white"></circle>
+                            <circle cx="5.73583" cy="13.4434" r="1.5" fill="white"></circle>
+                            <circle cx="9.85851" cy="13.4434" r="1.5" fill="white"></circle>
+                            <circle cx="1.61321" cy="17.3868" r="1.5" fill="white"></circle>
+                            <circle cx="5.73583" cy="17.3868" r="1.5" fill="white"></circle>
+                        </svg>
+                    </span>
                 </button>
             </div>
 
@@ -660,106 +848,142 @@
     </div>
 
     <!-- Add/Edit Modal -->
-    <div id="prescriptionModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div class="sticky top-0 bg-white dark:bg-gray-800 border-b dark:border-gray-700 p-6 flex justify-between items-center">
-                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100">Add New Prescription</h2>
-                <button onclick="closeModal()" class="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
-                    <i class='bx bx-x' style="font-size: 1.5rem;"></i>
+    <div id="prescriptionModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl shadow-2xl my-auto overflow-hidden flex flex-col">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 p-6 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                        <i class='bx bx-plus-circle'></i> Add New Prescription
+                    </h2>
+                    <p class="text-blue-100 text-sm mt-1">Organize your medical documents</p>
+                </div>
+                <button onclick="closeModal()" class="close-button">
+                    <span class="X"></span>
+                    <span class="Y"></span>
+                    <div class="close-label">Close</div>
                 </button>
             </div>
 
-            <form id="prescriptionForm" class="p-6 space-y-4">
+            <form id="prescriptionForm" class="p-6 space-y-3 overflow-y-auto max-h-[calc(100vh-220px)]">
                 @csrf
 
                 <!-- Title -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                        <i class='bx bx-file-blank' style="color: #3b82f6;"></i>
                         Prescription Title <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="title" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g., Eye Checkup Prescription">
+                    <input type="text" name="title" required class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm" placeholder="e.g., Eye Checkup Prescription">
                 </div>
 
                 <!-- Date -->
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-2">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                            <i class='bx bx-calendar' style="color: #3b82f6;"></i>
                             Prescription Date <span class="text-red-500">*</span>
                         </label>
-                        <input type="date" name="prescription_date" required class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="date" name="prescription_date" required class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                            <i class='bx bx-calendar-check' style="color: #10b981;"></i>
                             Next Visit Date
                         </label>
-                        <input type="date" name="next_visit_date" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
+                        <input type="date" name="next_visit_date" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm">
                     </div>
                 </div>
 
                 <!-- Doctor -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                        <i class='bx bx-user-md' style="color: #3b82f6;"></i>
                         Doctor / Hospital Name
                     </label>
-                    <input type="text" name="doctor_name" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="e.g., Dr. Smith / Eye Hospital">
+                    <input type="text" name="doctor_name" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm" placeholder="e.g., Dr. Smith / Eye Hospital">
                 </div>
 
                 <!-- Tags -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Tags
-                    </label>
-                    <div id="tagsContainer" class="flex flex-wrap gap-2">
+                    <div class="flex justify-between items-center mb-1">
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1">
+                            <i class='bx bx-tag' style="color: #3b82f6;"></i>
+                            Tags
+                        </label>
+                        <button type="button" onclick="toggleCreateTag()" class="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-0.5 px-2 py-0.5 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 rounded transition">
+                            <i class='bx bx-plus' style="font-size: 0.85rem;"></i> Create
+                        </button>
+                    </div>
+                    
+                    <!-- Create Custom Tag Section -->
+                    <div id="createTagSection" style="display: none;" class="mb-2 p-2 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded border border-blue-200 dark:border-blue-800">
+                        <input type="text" id="newTagName" placeholder="Tag name" class="w-full px-2 py-1 border border-blue-300 dark:border-blue-700 rounded dark:bg-gray-700 dark:text-white mb-1 text-xs" maxlength="20">
+                        <input type="color" id="newTagColor" value="#3b82f6" class="w-full h-7 rounded cursor-pointer mb-1 border border-blue-200 dark:border-blue-700">
+                        <div class="flex gap-1 text-xs">
+                            <button type="button" onclick="createNewTag()" class="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition">
+                                Add
+                            </button>
+                            <button type="button" onclick="toggleCreateTag()" class="flex-1 px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded text-xs font-medium transition">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="tagsContainer" class="flex flex-wrap gap-1">
                         @foreach($tags as $tag)
-                        <label class="flex items-center gap-2 px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600">
-                            <input type="checkbox" name="tags" value="{{ $tag->id }}" class="w-4 h-4">
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ $tag->name }}</span>
+                        <label class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full cursor-pointer hover:shadow transition duration-200 border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600">
+                            <input type="checkbox" name="tags" value="{{ $tag->id }}" class="w-3 h-3 cursor-pointer">
+                            <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $tag->name }}</span>
                         </label>
                         @endforeach
                     </div>
+                    <div id="dynamicTagsContainer" class="flex flex-wrap gap-1"></div>
                 </div>
 
                 <!-- Notes -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                        <i class='bx bx-note' style="color: #3b82f6;"></i>
                         Notes / Instructions
                     </label>
-                    <textarea name="notes" rows="3" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none resize-none" placeholder="Add any notes or instructions..."></textarea>
+                    <textarea name="notes" rows="1" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none resize-none transition duration-200 text-sm" placeholder="Add any notes or instructions..."></textarea>
                 </div>
 
                 <!-- File Upload -->
                 <div>
-                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
+                        <i class='bx bx-file-blank' style="color: #3b82f6;"></i>
                         Upload Files
                     </label>
-                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center cursor-pointer hover:border-blue-500" onclick="document.getElementById('fileInput').click()">
-                        <i class='bx bx-cloud-upload' style="font-size: 2rem; color: #9ca3af;"></i>
-                        <p class="text-gray-600 dark:text-gray-400 mt-2">Click to upload or drag and drop</p>
-                        <p class="text-xs text-gray-500 dark:text-gray-500">JPG, PNG, PDF up to 10MB</p>
+                    <div class="border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-3 text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 dark:hover:bg-opacity-40 transition duration-200" onclick="document.getElementById('fileInput').click()">
+                        <i class='bx bx-cloud-upload' style="font-size: 1.25rem; color: #3b82f6;"></i>
+                        <p class="text-gray-700 dark:text-gray-300 mt-1 font-medium text-xs">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-600 dark:text-gray-400">JPG, PNG, PDF up to 10MB</p>
                     </div>
                     <input type="file" id="fileInput" name="files" multiple accept=".jpg,.jpeg,.png,.pdf" style="display: none;" onchange="updateFileList()">
-                    <div id="fileList" class="mt-2 space-y-1"></div>
+                    <div id="fileList" class="mt-1 space-y-0.5"></div>
                 </div>
 
                 <!-- Reminder -->
                 <div>
-                    <label class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        <input type="checkbox" id="reminderToggle" onchange="toggleReminder()">
+                    <label class="flex items-center gap-2 text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 cursor-pointer">
+                        <input type="checkbox" id="reminderToggle" onchange="toggleReminder()" class="w-3.5 h-3.5 cursor-pointer">
+                        <i class='bx bx-bell' style="color: #3b82f6; font-size: 0.85rem;"></i>
                         Set a reminder for next visit
                     </label>
-                    <div id="reminderSection" style="display: none;" class="space-y-2">
-                        <input type="datetime-local" name="reminder_date" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none">
-                        <input type="text" name="reminder_note" class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none" placeholder="Reminder note (optional)">
+                    <div id="reminderSection" style="display: none;" class="space-y-1 p-2 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded border border-yellow-200 dark:border-yellow-800">
+                        <input type="datetime-local" name="reminder_date" class="w-full px-3 py-1.5 border-2 border-yellow-300 dark:border-yellow-700 rounded dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm">
+                        <input type="text" name="reminder_note" class="w-full px-3 py-1.5 border-2 border-yellow-300 dark:border-yellow-700 rounded dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm" placeholder="Reminder note (optional)">
                     </div>
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex gap-3 pt-4 border-t dark:border-gray-700">
-                    <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 font-medium transition">
+                <div class="flex gap-2 pt-3 border-t-2 dark:border-gray-700">
+                    <button type="button" onclick="closeModal()" class="flex-1 px-3 py-1.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold transition duration-200 text-xs">
                         Cancel
                     </button>
-                    <button type="submit" class="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition">
-                        Save Prescription
+                    <button type="submit" class="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-1 shadow-lg hover:shadow-xl text-xs">
+                        <i class='bx bx-save' style="font-size: 0.9rem;"></i> Save
                     </button>
                 </div>
             </form>
@@ -790,14 +1014,52 @@
 
             Array.from(fileInput.files).forEach(file => {
                 const fileItem = document.createElement('div');
-                fileItem.className = 'flex items-center gap-2 px-3 py-2 bg-gray-100 dark:bg-gray-700 rounded-lg text-sm';
+                fileItem.className = 'flex items-center gap-2 px-2 py-1 bg-green-50 dark:bg-green-900 dark:bg-opacity-20 rounded text-xs border border-green-200 dark:border-green-800';
                 fileItem.innerHTML = `
-                    <i class='bx bx-file'></i>
-                    <span class="text-gray-700 dark:text-gray-300">${file.name}</span>
-                    <span class="text-xs text-gray-500 dark:text-gray-400">(${(file.size / 1024).toFixed(2)} KB)</span>
+                    <i class='bx bx-file' style="color: #10b981; font-size: 1rem;"></i>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-gray-700 dark:text-gray-300 font-medium truncate text-xs">${file.name}</p>
+                        <p class="text-xs text-gray-500 dark:text-gray-400">${(file.size / 1024).toFixed(2)} KB</p>
+                    </div>
+                    <span class="text-green-600 dark:text-green-400 text-sm"><i class='bx bx-check-circle'></i></span>
                 `;
                 fileList.appendChild(fileItem);
             });
+        }
+
+        function toggleCreateTag() {
+            const section = document.getElementById('createTagSection');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function createNewTag() {
+            const name = document.getElementById('newTagName').value.trim();
+            const color = document.getElementById('newTagColor').value;
+
+            if (!name) {
+                showToast('Please enter a tag name', 'error');
+                return;
+            }
+
+            const dynamicContainer = document.getElementById('dynamicTagsContainer');
+
+            // Create a temporary ID for frontend display
+            const tempId = 'temp_' + Date.now();
+
+            // Create tag label element
+            const label = document.createElement('label');
+            label.className = 'flex items-center gap-1 px-2 py-1 rounded-full cursor-pointer hover:shadow transition duration-200 border-2 border-blue-300 text-xs';
+            label.style.backgroundColor = color + '20';
+            label.style.borderColor = color;
+            label.innerHTML = `
+                <input type="checkbox" name="tags" value="${tempId}" class="w-3 h-3 cursor-pointer">
+                <span class="text-xs font-medium" style="color: ${color}">${name}</span>
+            `;
+
+            dynamicContainer.appendChild(label);
+            document.getElementById('newTagName').value = '';
+            toggleCreateTag();
+            showToast('Tag created!', 'success');
         }
 
         document.getElementById('prescriptionForm').addEventListener('submit', async (e) => {
@@ -1018,4 +1280,7 @@
             }
         });
     </script>
+            </div>
+        </div>
+    </div>
 </x-app-layout>
