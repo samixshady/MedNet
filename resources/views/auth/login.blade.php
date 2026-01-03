@@ -9,6 +9,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Vanta.js Libraries sssss-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.cells.min.js"></script>
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -41,7 +44,8 @@
         }
     </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-purple-600 via-indigo-600 to-blue-700 flex items-center justify-center p-2 md:p-4">
+<body class="min-h-screen flex items-center justify-center p-2 md:p-4">
+    <div id="vanta-bg" class="fixed inset-0 -z-10"></div>
     
     <!-- Home Button -->
     <a href="{{ url('/') }}" class="fixed top-4 left-4 z-50 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-md text-white rounded-full shadow-lg hover:shadow-xl flex items-center justify-center transition-all duration-300 hover:scale-110 group" title="Back to Home">
@@ -294,5 +298,20 @@
         }
     }
 </script>
+<script>
+            VANTA.CELLS({
+                el: "#vanta-bg",
+                mouseControls: true,
+                touchControls: true,
+                gyroControls: false,
+                minHeight: 200.00,
+                minWidth: 200.00,
+                scale: 1.00,
+                color1: 0x95209,
+                color2: 0xb8b570,
+                size: 1.90,
+                speed: 0.50
+            });
+        </script>
 </body>
 </html>
