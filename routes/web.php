@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AddressController;
+use App\Http\Controllers\PrescriptionController;
 use App\Http\Controllers\Admin\AdminAuthenticatedSessionController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AnalyticsController;
@@ -90,6 +91,20 @@ Route::middleware('auth')->group(function () {
     Route::post('/addresses', [AddressController::class, 'store'])->name('addresses.store');
     Route::patch('/addresses/{address}', [AddressController::class, 'update'])->name('addresses.update');
     Route::delete('/addresses/{address}', [AddressController::class, 'destroy'])->name('addresses.destroy');
+
+    // Prescription routes
+    Route::prefix('prescriptions')->name('prescription.')->group(function () {
+        Route::get('/', [PrescriptionController::class, 'index'])->name('index');
+        Route::post('/', [PrescriptionController::class, 'store'])->name('store');
+        Route::get('/search', [PrescriptionController::class, 'search'])->name('search');
+        Route::get('/timeline/{tag}', [PrescriptionController::class, 'timeline'])->name('timeline');
+        Route::get('/{prescription}', [PrescriptionController::class, 'show'])->name('show');
+        Route::patch('/{prescription}', [PrescriptionController::class, 'update'])->name('update');
+        Route::delete('/{prescription}', [PrescriptionController::class, 'destroy'])->name('destroy');
+        Route::patch('/{prescription}/archive', [PrescriptionController::class, 'archive'])->name('archive');
+        Route::patch('/{prescription}/restore', [PrescriptionController::class, 'restore'])->name('restore');
+        Route::post('/{prescription}/upload-file', [PrescriptionController::class, 'uploadFile'])->name('upload-file');
+    });
 });
 
 Route::prefix('admin')->name('admin.')->group(function () {

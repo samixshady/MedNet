@@ -59,5 +59,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(Order::class);
     }
+
+    public function prescriptions()
+    {
+        return $this->hasMany(Prescription::class);
+    }
+
+    public function prescriptionTags()
+    {
+        return $this->hasMany(PrescriptionTag::class);
+    }
 }
 

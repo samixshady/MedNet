@@ -16,9 +16,11 @@
                 <!-- MedNet Logo -->
                 <a href="{{ route('dashboard') }}" class="flex items-center gap-1 sm:gap-2 group flex-shrink-0 overflow-hidden">
                     <div class="bg-gradient-to-br from-blue-500 to-blue-600 dark:from-purple-500 dark:to-purple-600 p-1 sm:p-2 rounded-lg sm:rounded-xl shadow-lg group-hover:shadow-blue-500/50 dark:group-hover:shadow-purple-500/50 transition-shadow duration-300 flex-shrink-0">
-                        <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-                        </svg>
+                        <a href="{{ route('prescription.index') }}" title="My Prescriptions">
+                            <svg class="w-4 h-4 sm:w-6 sm:h-6 text-white transition-transform duration-300 group-hover:rotate-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
+                            </svg>
+                        </a>
                     </div>
                     <h2 class="hidden xs:block font-bold text-xs xs:text-sm sm:text-2xl bg-gradient-to-r from-blue-400 via-blue-300 to-blue-400 dark:from-purple-400 dark:via-purple-300 dark:to-purple-400 bg-clip-text text-transparent leading-none tracking-tight group-hover:opacity-90 transition-opacity duration-300 whitespace-nowrap mednet-mobile-mobile">
                         {{ __('MedNet') }}
@@ -91,6 +93,10 @@
 
                             <x-dropdown-link :href="route('profile.orders')">
                                 {{ __('View Orders') }}
+                            </x-dropdown-link>
+
+                            <x-dropdown-link :href="route('prescription.index')">
+                                {{ __('My Prescriptions') }}
                             </x-dropdown-link>
 
                             <form method="POST" action="{{ route('logout') }}">
