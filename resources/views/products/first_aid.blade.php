@@ -129,7 +129,7 @@
             }
 
             .product-info {
-                padding: 16px;
+                padding: 12px;
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
@@ -140,29 +140,29 @@
             }
 
             .product-name {
-                font-size: 16px;
+                font-size: 15px;
                 font-weight: 700;
                 color: #11101D;
-                margin-bottom: 4px;
-                line-height: 1.3;
-                min-height: 38px;
+                margin-bottom: 3px;
+                line-height: 1.2;
+                min-height: 30px;
             }
 
             .product-dosage {
-                font-size: 13px;
+                font-size: 12px;
                 color: #666;
-                margin-bottom: 4px;
+                margin-bottom: 2px;
             }
 
             .product-manufacturer {
-                font-size: 12px;
+                font-size: 11px;
                 color: #999;
-                margin-bottom: 12px;
+                margin-bottom: 8px;
             }
 
             .pricing-section {
-                margin-bottom: 12px;
-                padding: 12px;
+                margin-bottom: 8px;
+                padding: 10px;
                 background: #f8f9fa;
                 border-radius: 8px;
             }
@@ -404,11 +404,6 @@
                                             @endif
                                         </span>
                                     </div>
-
-                                    <!-- Add to Cart Button -->
-                                    <button class="add-to-cart-btn" onclick="event.preventDefault(); event.stopPropagation(); openQuantityModal({{ $product->id }}, '{{ $product->name }}')" @if($product->stock_status === 'out_of_stock') disabled @endif>
-                                        <i class='bx bx-cart-add'></i> Add to Cart
-                                    </button>
                                 </div>
                             </div>
                             </a>
