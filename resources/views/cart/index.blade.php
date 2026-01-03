@@ -1094,7 +1094,8 @@
             let subtotal = 0;
             document.querySelectorAll('.cart-item').forEach(item => {
                 const quantity = parseInt(item.querySelector('.qty-input').value);
-                const price = parseFloat(item.querySelector('.item-price').textContent.replace('৳', ''));
+                const priceText = item.querySelector('.item-price').textContent.replace('৳', '').replace(/,/g, '').trim();
+                const price = parseFloat(priceText);
                 subtotal += quantity * price;
             });
 

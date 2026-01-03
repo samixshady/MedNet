@@ -79,9 +79,15 @@ class CartController extends Controller
 
         $cartItem->update(['quantity' => $validated['quantity']]);
 
+        // Calculate total subtotal of all items in cart
+        $cartSubtotal = Cart::where('user_id', auth()->id())
+            ->with('product')
+            ->get()
+            ->sum(fn($item) => ($item->product->updated_price ?? $item->product->price) * $item->quantity);
+
         return response()->json([
             'success' => true,
-            'subtotal' => $cartItem->subtotal,
+            'subtotal' => $cartSubtotal,
             'total' => $this->getCartTotal(),
         ]);
     }
