@@ -179,7 +179,28 @@
                         @endif
                         <p class="text-xs text-gray-600 mt-3">
                             <strong>Estimated Delivery:</strong><br>
-                            {{ $order->created_at->addDays(2)->format('M d') }} - {{ $order->created_at->addDays(3)->format('M d, Y') }}
+                            @php
+                                $deliveryEstimates = [
+                                    'express' => '1-2 business days',
+                                    'overnight' => 'Next business day',
+                                    'standard' => '3-5 business days',
+                                ];
+                                $estimate = $deliveryEstimates[$order->delivery_option] ?? '3-5 business days';
+                                
+                                $days = match($order->delivery_option) {
+                                    'express' => 1,
+                                    'overnight' => 1,
+                                    default => 3,
+                                };
+                                $maxDays = match($order->delivery_option) {
+                                    'express' => 2,
+                                    'overnight' => 1,
+                                    default => 5,
+                                };
+                                $minDate = $order->created_at->addDays($days);
+                                $maxDate = $order->created_at->addDays($maxDays);
+                            @endphp
+                            {{ $minDate->format('M d') }} - {{ $maxDate->format('M d, Y') }} ({{ $estimate }})
                         </p>
                     </div>
 

@@ -66,14 +66,22 @@
                     <div class="bg-white rounded-lg sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 border-l-4 border-purple-500">
                         <p class="text-gray-600 text-xs sm:text-sm font-bold uppercase mb-2">Delivery Address</p>
                         <p class="text-base sm:text-lg lg:text-xl font-bold text-gray-900 mb-2 line-clamp-2">{{ $order->delivery_address }}</p>
-                        <p class="text-xs sm:text-sm text-gray-500">Standard Delivery</p>
+                        @php
+                            $deliveryLabels = [
+                                'express' => 'Express (1-2 Business Days)',
+                                'overnight' => 'Overnight (Next Business Day)',
+                                'standard' => 'Standard (3-5 Business Days)',
+                            ];
+                            $label = $deliveryLabels[$order->delivery_option] ?? 'Standard Delivery';
+                        @endphp
+                        <p class="text-xs sm:text-sm text-gray-500">{{ $label }}</p>
                     </div>
 
                     <!-- Payment Method -->
                     <div class="bg-white rounded-lg sm:rounded-2xl shadow-lg p-4 sm:p-6 lg:p-8 border-l-4 border-orange-500">
                         <p class="text-gray-600 text-xs sm:text-sm font-bold uppercase mb-2">Payment Method</p>
                         <div class="flex items-center gap-2 mb-2">
-                            @if($order->payment_method === 'card')
+                            @if($order->payment_method === 'visa')
                                 <svg class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M20 8H4V6h16m0 10H4v-6h16m0-4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/>
                                 </svg>
@@ -83,9 +91,50 @@
                                     <path d="M9 3H3v18h6c3.31 0 6-2.69 6-6s-2.69-6-6-6zm0 10H5v-4h4c1.66 0 3 1.34 3 3s-1.34 3-3 3zm11-8H11v10h9c3.31 0 6-2.69 6-6s-2.69-6-6-6z"/>
                                 </svg>
                                 <span class="font-bold text-gray-900 text-sm sm:text-base">PayPal</span>
+                            @else
+                                <span class="font-bold text-gray-900 text-sm sm:text-base">{{ ucfirst($order->payment_method) }}</span>
                             @endif
                         </div>
                         <p class="text-xs sm:text-sm text-gray-500">{{ ucfirst($order->payment_status) }}</p>
+                    </div>
+                </div>
+
+                <!-- Estimated Delivery Info -->
+                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg sm:rounded-2xl border-2 border-blue-200 p-4 sm:p-6 lg:p-8 mb-8 sm:mb-10">
+                    <div class="flex items-start gap-3 sm:gap-4">
+                        <div class="flex-shrink-0">
+                            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg sm:text-xl font-bold text-blue-900 mb-2">Estimated Delivery</h3>
+                            @php
+                                $days = match($order->delivery_option) {
+                                    'express' => 1,
+                                    'overnight' => 1,
+                                    default => 3,
+                                };
+                                $maxDays = match($order->delivery_option) {
+                                    'express' => 2,
+                                    'overnight' => 1,
+                                    default => 5,
+                                };
+                                $minDate = $order->created_at->addDays($days);
+                                $maxDate = $order->created_at->addDays($maxDays);
+                                
+                                $deliveryLabels = [
+                                    'express' => 'Express Delivery - 1-2 Business Days',
+                                    'overnight' => 'Overnight Delivery - Next Business Day',
+                                    'standard' => 'Standard Delivery - 3-5 Business Days',
+                                ];
+                                $label = $deliveryLabels[$order->delivery_option] ?? 'Standard Delivery - 3-5 Business Days';
+                            @endphp
+                            <p class="text-blue-800 text-base sm:text-lg font-semibold">{{ $label }}</p>
+                            <p class="text-blue-700 text-sm sm:text-base mt-1">
+                                Expected arrival: {{ $minDate->format('M d') }} - {{ $maxDate->format('M d, Y') }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 

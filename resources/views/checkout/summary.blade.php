@@ -190,7 +190,7 @@
 
                     <div class="mt-6 text-xs text-gray-600 text-center">
                         <p>Items: {{ $cartItems->count() }}</p>
-                        <p>Estimated delivery: 2-3 days</p>
+                        <p id="estimatedDeliveryDisplay">Estimated delivery: 2-3 days</p>
                     </div>
                 </div>
             </div>
@@ -226,6 +226,13 @@ const deliveryPricing = {
     }
 };
 
+// Delivery time estimates
+const deliveryTimes = {
+    standard: '3-5 business days',
+    express: '1-2 business days',
+    overnight: 'Next business day'
+};
+
 document.addEventListener('DOMContentLoaded', function() {
     // Handle payment method selection
     const paymentMethodRadios = document.querySelectorAll('input[name="payment_method"]');
@@ -239,6 +246,17 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
+    // Update estimated delivery time
+    function updateEstimatedDelivery() {
+        const methodInput = document.querySelector('input[name="delivery_option"]');
+        const deliveryOption = methodInput ? methodInput.value : 'standard';
+        const estimate = deliveryTimes[deliveryOption] || '2-3 days';
+        const display = document.getElementById('estimatedDeliveryDisplay');
+        if (display) {
+            display.textContent = 'Estimated delivery: ' + estimate;
+        }
+    }
+    
     // Get stored delivery information from localStorage
     const savedAddress = localStorage.getItem('mednet_delivery_location');
     const savedLocationType = localStorage.getItem('mednet_delivery_location_type') || 'inside_dhaka';
@@ -247,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Update form hidden inputs - find them by name instead of ID
     const addressInput = document.querySelector('input[name="delivery_address"]');
     const locationInput = document.querySelector('input[name="delivery_location"]');
-    const methodInput = document.querySelector('input[name="delivery_method"]');
+    const methodInput = document.querySelector('input[name="delivery_option"]');
     const feeInput = document.querySelector('input[name="delivery_fee"]');
     
     if (savedAddress && addressInput) {
@@ -278,6 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const total = subtotal + deliveryFee;
         document.getElementById('totalDisplay').textContent = '৳' + total.toFixed(2);
     }
+    
+    // Update estimated delivery
+    updateEstimatedDelivery();
     
     // Function to use saved address
     window.useSavedAddress = function(addressId) {
