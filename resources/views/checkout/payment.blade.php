@@ -56,13 +56,13 @@
                 }
             </style>
 
-            <form id="paymentForm" method="POST" action="{{ route('checkout.process-payment') }}" class="space-y-6">
+            <form id="paymentForm" method="POST" action="{{ route('checkout.confirm-payment') }}" class="space-y-6">
                 @csrf
-                <input type="hidden" name="payment_method" value="test">
+                <input type="hidden" name="payment_method_field" value="card">
                 <input type="hidden" name="delivery_address" value="{{ $deliveryAddress }}">
                 <input type="hidden" name="delivery_fee" value="{{ $deliveryFee }}">
                 <input type="hidden" name="delivery_location" value="{{ $deliveryLocation }}">
-                <input type="hidden" name="delivery_method" value="{{ $deliveryMethod }}">
+                <input type="hidden" name="delivery_option" value="standard">
 
                 <div class="bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-200 rounded-xl p-6">
                     <p class="text-gray-700 mb-4">Your order is ready to be placed. Click the button below to confirm and receive your tracking number.</p>

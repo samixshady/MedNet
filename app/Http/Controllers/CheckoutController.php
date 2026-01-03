@@ -39,6 +39,7 @@ class CheckoutController extends Controller
 
     /**
      * Process payment and create order
+     * Works identically for both card and paypal
      */
     public function processPayment(Request $request)
     {
@@ -49,6 +50,15 @@ class CheckoutController extends Controller
             'delivery_option' => 'nullable|in:standard,express,overnight',
         ]);
 
+        // Create order immediately for both card and paypal
+        return $this->createOrder($request);
+    }
+
+    /**
+     * Create order from validated request
+     */
+    private function createOrder(Request $request)
+    {
         $user = auth()->user();
         $cartItems = Cart::where('user_id', $user->id)
             ->with('product')
@@ -88,6 +98,8 @@ class CheckoutController extends Controller
             });
 
             // Create order
+            $paymentMethod = $request->payment_method_field === 'card' ? 'visa' : $request->payment_method_field;
+            
             $order = Order::create([
                 'user_id' => $user->id,
                 'tracking_number' => $trackingNumber,
@@ -96,7 +108,7 @@ class CheckoutController extends Controller
                 'delivery_latitude' => session('delivery_coords.lat'),
                 'delivery_longitude' => session('delivery_coords.lng'),
                 'delivery_option' => $request->delivery_option ?? 'standard',
-                'payment_method' => $request->payment_method_field,
+                'payment_method' => $paymentMethod,
                 'payment_status' => 'completed',
                 'order_status' => 'pending',
                 'prescription_required' => $requiresPrescription,
@@ -132,6 +144,7 @@ class CheckoutController extends Controller
             DB::rollBack();
             return back()->with('error', 'Payment processing failed: ' . $e->getMessage());
         }
+
     }
 
     /**

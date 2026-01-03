@@ -142,6 +142,8 @@
                         <input type="hidden" name="payment_method_field" id="payment_method_field" value="card">
                         <input type="hidden" name="delivery_address" value="{{ $deliveryAddress }}">
                         <input type="hidden" name="delivery_fee" value="40">
+                        <input type="hidden" name="delivery_location" value="inside_dhaka">
+                        <input type="hidden" name="delivery_option" value="standard">
 
                         <button type="submit" class="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-700 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-xl">
                             Proceed to Payment
