@@ -112,12 +112,13 @@
 
                 <!-- Mobile Hamburger Menu -->
                 <div class="sm:hidden">
-                    <button @click="open = ! open" class="p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-all duration-200">
-                        <svg class="w-6 h-6 text-white transition-all duration-300" :class="{'rotate-90': open}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path :class="{'hidden': open, 'block': ! open}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
-                            <path :class="{'block': open, 'hidden': ! open}" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    <label class="hamburger">
+                        <input type="checkbox" @change="open = $event.target.checked">
+                        <svg viewBox="0 0 32 32">
+                            <path class="line line-top-bottom" d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"></path>
+                            <path class="line" d="M7 16 27 16"></path>
                         </svg>
-                    </button>
+                    </label>
                 </div>
             </div>
         </div>
@@ -274,6 +275,51 @@
     </script>
 
     <style>
+                /* SVG Hamburger Menu */
+                .hamburger {
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0.5rem;
+                }
+
+                .hamburger input {
+                    display: none;
+                }
+
+                .hamburger svg {
+                    /* The size of the SVG defines the overall size */
+                    height: 2rem;
+                    width: 2rem;
+                    /* Define the transition for transforming the SVG */
+                    transition: transform 600ms cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .line {
+                    fill: none;
+                    stroke: white;
+                    stroke-linecap: round;
+                    stroke-linejoin: round;
+                    stroke-width: 3;
+                    /* Define the transition for transforming the Stroke */
+                    transition: stroke-dasharray 600ms cubic-bezier(0.4, 0, 0.2, 1),
+                                stroke-dashoffset 600ms cubic-bezier(0.4, 0, 0.2, 1);
+                }
+
+                .line-top-bottom {
+                    stroke-dasharray: 12 63;
+                }
+
+                .hamburger input:checked + svg {
+                    transform: rotate(-45deg);
+                }
+
+                .hamburger input:checked + svg .line-top-bottom {
+                    stroke-dasharray: 20 300;
+                    stroke-dashoffset: -32.42;
+                }
+
                 /* Responsive dropdown for mobile profile menu */
                 @media (max-width: 639px) {
                     .dropdown-menu-mobile {
