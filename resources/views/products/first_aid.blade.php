@@ -50,6 +50,7 @@
                     gap: 10px;
                     margin-left: 0;
                     margin-right: 0;
+                    padding: 0 8px;
                 }
             }
 
@@ -59,6 +60,7 @@
                     gap: 8px;
                     margin-left: 0;
                     margin-right: 0;
+                    padding: 0 8px;
                 }
             }
 
@@ -348,6 +350,20 @@
                                     <h3 class="product-name">{{ $product->name }}</h3>
                                     <p class="product-dosage">{{ $product->dosage }}</p>
                                     <p class="product-manufacturer">{{ $product->manufacturer }}</p>
+                                    
+                                    <!-- Prescription Required Tag -->
+                                    <div style="margin-top: 8px; margin-bottom: 12px;">
+                                        <p style="color: #111; font-size: 12px; font-weight: 600; margin: 0 0 4px 0;">Prescription Required:</p>
+                                        @if($product->prescription_required)
+                                            <span style="display: inline-block; background-color: #fee2e2; color: #991b1b; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600;">
+                                                Yes
+                                            </span>
+                                        @else
+                                            <span style="display: inline-block; background-color: #f3f4f6; color: #1f2937; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600;">
+                                                No
+                                            </span>
+                                        @endif
+                                    </div>
 
                                     <!-- Pricing -->
                                     <div class="pricing-section">
