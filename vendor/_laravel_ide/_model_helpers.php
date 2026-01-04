@@ -1974,7 +1974,7 @@ namespace App\Models {
      * @property \Illuminate\Support\Carbon|null $created_at
      * @property boolean $is_archived
      * @property \Illuminate\Support\Carbon|null $next_visit_date
-     * @property \Illuminate\Support\Carbon $prescription_date
+     * @property \Illuminate\Support\Carbon|null $prescription_date
      * @property string|null $doctor_name
      * @property string|null $notes
      * @property string $title

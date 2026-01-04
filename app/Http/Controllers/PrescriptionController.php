@@ -139,6 +139,7 @@ class PrescriptionController extends Controller
                 'prescription_date' => 'required|date',
                 'next_visit_date' => 'nullable|date|after_or_equal:prescription_date',
                 'tags.*' => 'sometimes|exists:prescription_tags,id',
+                'files.*' => 'file|mimes:jpg,jpeg,png,pdf|max:10240',
             ]);
 
             $prescription->update([
@@ -148,6 +149,37 @@ class PrescriptionController extends Controller
                 'prescription_date' => $validated['prescription_date'],
                 'next_visit_date' => $validated['next_visit_date'] ?? null,
             ]);
+
+            // Handle file deletions
+            $deleteFiles = $request->input('delete_files', []);
+            if (!empty($deleteFiles) && is_array($deleteFiles)) {
+                foreach ($deleteFiles as $fileId) {
+                    $file = PrescriptionFile::where('id', $fileId)
+                        ->where('prescription_id', $prescription->id)
+                        ->first();
+                    
+                    if ($file) {
+                        // Delete the file from storage
+                        Storage::disk('public')->delete($file->file_path);
+                        // Delete the database record
+                        $file->delete();
+                    }
+                }
+            }
+
+            // Handle new file uploads
+            if ($request->hasFile('files')) {
+                foreach ($request->file('files') as $file) {
+                    $path = $file->store('prescriptions/' . auth()->id(), 'public');
+                    PrescriptionFile::create([
+                        'prescription_id' => $prescription->id,
+                        'file_path' => $path,
+                        'file_type' => $file->getClientOriginalExtension(),
+                        'original_name' => $file->getClientOriginalName(),
+                        'file_size' => $file->getSize(),
+                    ]);
+                }
+            }
 
             // Update tags
             $tags = $request->input('tags', []);
@@ -335,6 +367,10 @@ class PrescriptionController extends Controller
                     $file->file_url = asset('storage/' . $file->file_path);
                 });
             }
+
+            // Format dates to Y-m-d format for input fields
+            $prescription->prescription_date = $prescription->prescription_date ? $prescription->prescription_date->format('Y-m-d') : null;
+            $prescription->next_visit_date = $prescription->next_visit_date ? $prescription->next_visit_date->format('Y-m-d') : null;
 
             return response()->json([
                 'success' => true,

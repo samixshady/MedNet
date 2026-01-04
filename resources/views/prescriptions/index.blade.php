@@ -1245,7 +1245,8 @@
                     <!-- Sort -->
                     <div class="filter-section">
                         <h3><i class='bx bx-sort'></i> Sort By</h3>
-                        <select class="sort-select" onchange="sortPrescriptions(this.value)">
+                        <select class="sort-select" onchange="handleSortChange(this.value)">
+                            <option value="all">Show All</option>
                             <option value="newest">Newest First</option>
                             <option value="oldest">Oldest First</option>
                             <option value="upcoming">Upcoming Visit</option>
@@ -1275,6 +1276,7 @@
                             data-prescription-id="{{ $prescription->id }}"
                             data-prescription-date="{{ $prescription->prescription_date }}"
                             data-next-visit-date="{{ $prescription->next_visit_date ?? '9999-12-31' }}"
+                            data-tag-ids="{{ $prescription->tags->pluck('id')->join(',') }}"
                         >
                             <div class="prescription-card-title">
                                 {{ $prescription->title }}
@@ -1320,7 +1322,7 @@
     </div>
 
     <!-- File Preview Modal -->
-    <div id="filePreviewModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4" style="display: none;">
+    <div id="filePreviewModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] hidden flex items-center justify-center p-4" style="display: none;">
         <div class="bg-white dark:bg-slate-800 rounded-20 shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto transform transition-all duration-300" style="animation: scaleIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);">
             <!-- Header -->
             <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-slate-700 sticky top-0 bg-white dark:bg-slate-800">
@@ -1459,142 +1461,143 @@
     </style>
 
     <!-- Add/Edit Modal -->
-    <div id="prescriptionModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 backdrop-blur-sm overflow-y-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl shadow-2xl my-auto overflow-hidden flex flex-col">
-            <div class="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 p-6 flex justify-between items-center">
-                <div>
-                    <h2 class="prescription-modal-title text-2xl font-bold text-white flex items-center gap-2">
-                        <i class='bx bx-plus-circle'></i> Add New Prescription
+    <div id="prescriptionModal" style="display: none;" class="fixed inset-0 bg-black bg-opacity-50 z-[1000] flex items-center justify-center p-3 sm:p-4 backdrop-blur-sm overflow-y-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-2xl shadow-2xl my-auto overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
+            <div class="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-900 dark:to-blue-800 p-4 sm:p-6 flex justify-between items-start sm:items-center gap-3">
+                <div class="flex-1 min-w-0">
+                    <h2 class="prescription-modal-title text-xl sm:text-2xl font-bold text-white flex items-center gap-2 truncate">
+                        <i class='bx bx-plus-circle flex-shrink-0'></i> <span class="truncate">Add New Prescription</span>
                     </h2>
-                    <p class="text-blue-100 text-sm mt-1">Organize your medical documents</p>
+                    <p class="text-blue-100 text-xs sm:text-sm mt-1">Organize your medical documents</p>
                 </div>
-                <button onclick="closeModal()" class="close-button">
+                <button onclick="closeModal()" class="close-button flex-shrink-0">
                     <span class="X"></span>
                     <span class="Y"></span>
                     <div class="close-label">Close</div>
                 </button>
             </div>
 
-            <form id="prescriptionForm" class="p-6 space-y-3 overflow-y-auto max-h-[calc(100vh-220px)]">
+            <form id="prescriptionForm" class="p-4 sm:p-6 space-y-3 sm:space-y-4 overflow-y-auto" style="max-height: calc(95vh - 150px);"
                 @csrf
 
                 <!-- Title -->
+                <!-- Title -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                        <i class='bx bx-file-blank' style="color: #3b82f6;"></i>
-                        Prescription Title <span class="text-red-500">*</span>
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                        <i class='bx bx-file-blank text-blue-500 flex-shrink-0'></i>
+                        <span>Prescription Title</span> <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" name="title" required class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm" placeholder="e.g., Eye Checkup Prescription">
+                    <input type="text" name="title" required class="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm hover:border-gray-300 dark:hover:border-gray-500" placeholder="e.g., Eye Checkup Prescription">
                 </div>
 
                 <!-- Date -->
-                <div class="grid grid-cols-2 gap-2">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                            <i class='bx bx-calendar' style="color: #3b82f6;"></i>
-                            Prescription Date <span class="text-red-500">*</span>
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                            <i class='bx bx-calendar text-blue-500 flex-shrink-0'></i>
+                            <span>Prescription Date</span> <span class="text-red-500">*</span>
                         </label>
-                        <input type="date" name="prescription_date" required class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm">
+                        <input type="date" name="prescription_date" required class="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm hover:border-gray-300 dark:hover:border-gray-500">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                            <i class='bx bx-calendar-check' style="color: #10b981;"></i>
-                            Next Visit Date
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                            <i class='bx bx-calendar-check text-green-500 flex-shrink-0'></i>
+                            <span>Next Visit Date</span>
                         </label>
-                        <input type="date" name="next_visit_date" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm">
+                        <input type="date" name="next_visit_date" class="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm hover:border-gray-300 dark:hover:border-gray-500">
                     </div>
                 </div>
 
                 <!-- Doctor -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                        <i class='bx bx-user-md' style="color: #3b82f6;"></i>
-                        Doctor / Hospital Name
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                        <i class='bx bx-user-md text-blue-500 flex-shrink-0'></i>
+                        <span>Doctor / Hospital Name</span>
                     </label>
-                    <input type="text" name="doctor_name" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm" placeholder="e.g., Dr. Smith / Eye Hospital">
+                    <input type="text" name="doctor_name" class="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200 text-sm hover:border-gray-300 dark:hover:border-gray-500" placeholder="e.g., Dr. Smith / Eye Hospital">
                 </div>
 
                 <!-- Tags -->
                 <div>
-                    <div class="flex justify-between items-center mb-1">
-                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-1">
-                            <i class='bx bx-tag' style="color: #3b82f6;"></i>
+                    <div class="flex justify-between items-center mb-2 flex-wrap gap-2">
+                        <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                            <i class='bx bx-tag text-blue-500 flex-shrink-0'></i>
                             Tags
                         </label>
-                        <button type="button" onclick="toggleCreateTag()" class="text-xs font-semibold text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-0.5 px-2 py-0.5 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-30 rounded transition">
-                            <i class='bx bx-plus' style="font-size: 0.85rem;"></i> Create
+                        <button type="button" onclick="toggleCreateTag()" class="text-xs font-semibold text-white bg-blue-600 hover:bg-blue-700 active:bg-blue-800 flex items-center gap-1 px-3 py-1.5 rounded-lg transition duration-150 transform hover:scale-105">
+                            <i class='bx bx-plus text-lg'></i> <span class="hidden sm:inline">Create</span>
                         </button>
                     </div>
                     
                     <!-- Create Custom Tag Section -->
-                    <div id="createTagSection" style="display: none;" class="mb-2 p-2 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded border border-blue-200 dark:border-blue-800">
-                        <input type="text" id="newTagName" placeholder="Tag name" class="w-full px-2 py-1 border border-blue-300 dark:border-blue-700 rounded dark:bg-gray-700 dark:text-white mb-1 text-xs" maxlength="20">
-                        <input type="color" id="newTagColor" value="#3b82f6" class="w-full h-7 rounded cursor-pointer mb-1 border border-blue-200 dark:border-blue-700">
-                        <div class="flex gap-1 text-xs">
-                            <button type="button" onclick="createNewTag()" class="flex-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded text-xs font-medium transition">
-                                Add
+                    <div id="createTagSection" style="display: none;" class="mb-3 p-3 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-xl border-2 border-blue-200 dark:border-blue-800 space-y-2">
+                        <input type="text" id="newTagName" placeholder="Tag name" class="w-full px-3 py-2 border-2 border-blue-300 dark:border-blue-700 rounded-lg dark:bg-gray-700 dark:text-white text-xs font-medium focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none transition duration-200" maxlength="20">
+                        <input type="color" id="newTagColor" value="#3b82f6" class="w-full h-10 rounded-lg cursor-pointer border-2 border-blue-200 dark:border-blue-700 transition duration-200">
+                        <div class="flex gap-2 text-xs">
+                            <button type="button" onclick="createNewTag()" class="flex-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white rounded-lg font-semibold transition duration-150 transform hover:scale-105">
+                                Add Tag
                             </button>
-                            <button type="button" onclick="toggleCreateTag()" class="flex-1 px-2 py-1 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded text-xs font-medium transition">
+                            <button type="button" onclick="toggleCreateTag()" class="flex-1 px-3 py-2 bg-gray-300 dark:bg-gray-600 hover:bg-gray-400 dark:hover:bg-gray-500 text-gray-800 dark:text-white rounded-lg font-semibold transition duration-150">
                                 Cancel
                             </button>
                         </div>
                     </div>
                     
-                    <div id="tagsContainer" class="flex flex-wrap gap-1">
+                    <div id="tagsContainer" class="flex flex-wrap gap-2 p-2 bg-gray-50 dark:bg-gray-700 rounded-lg min-h-[2.5rem] items-center">
                         @foreach($tags as $tag)
-                        <label class="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full cursor-pointer hover:shadow transition duration-200 border-2 border-transparent hover:border-blue-300 dark:hover:border-blue-600">
-                            <input type="checkbox" name="tags" value="{{ $tag->id }}" class="w-3 h-3 cursor-pointer">
-                            <span class="text-xs font-medium text-gray-700 dark:text-gray-300">{{ $tag->name }}</span>
+                        <label class="flex items-center gap-2 px-3 py-1.5 bg-white dark:bg-gray-600 rounded-full cursor-pointer hover:shadow-md transition duration-200 border-2 border-gray-200 dark:border-gray-500 hover:border-blue-300 dark:hover:border-blue-600">
+                            <input type="checkbox" name="tags" value="{{ $tag->id }}" class="w-4 h-4 cursor-pointer rounded accent-blue-600">
+                            <span class="text-xs font-medium text-gray-700 dark:text-gray-200">{{ $tag->name }}</span>
                         </label>
                         @endforeach
                     </div>
-                    <div id="dynamicTagsContainer" class="flex flex-wrap gap-1"></div>
+                    <div id="dynamicTagsContainer" class="flex flex-wrap gap-2"></div>
                 </div>
 
                 <!-- Notes -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                        <i class='bx bx-note' style="color: #3b82f6;"></i>
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                        <i class='bx bx-note text-blue-500 flex-shrink-0'></i>
                         Notes / Instructions
                     </label>
-                    <textarea name="notes" rows="1" class="w-full px-3 py-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-1 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none resize-none transition duration-200 text-sm" placeholder="Add any notes or instructions..."></textarea>
+                    <textarea name="notes" rows="2" class="w-full px-4 py-2.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl dark:bg-gray-700 dark:text-white focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-900 outline-none resize-none transition duration-200 text-sm hover:border-gray-300 dark:hover:border-gray-500" placeholder="Add any notes or instructions..."></textarea>
                 </div>
 
                 <!-- File Upload -->
                 <div>
-                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 flex items-center gap-1">
-                        <i class='bx bx-file-blank' style="color: #3b82f6;"></i>
+                    <label class="block text-xs font-semibold text-gray-800 dark:text-gray-200 mb-2 flex items-center gap-2">
+                        <i class='bx bx-cloud-upload text-blue-500 flex-shrink-0'></i>
                         Upload Files
                     </label>
-                    <div class="border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-lg p-3 text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 dark:hover:bg-opacity-40 transition duration-200" onclick="document.getElementById('fileInput').click()">
-                        <i class='bx bx-cloud-upload' style="font-size: 1.25rem; color: #3b82f6;"></i>
-                        <p class="text-gray-700 dark:text-gray-300 mt-1 font-medium text-xs">Click to upload or drag and drop</p>
+                    <div class="border-2 border-dashed border-blue-300 dark:border-blue-700 bg-blue-50 dark:bg-blue-900 dark:bg-opacity-20 rounded-xl p-4 sm:p-6 text-center cursor-pointer hover:bg-blue-100 dark:hover:bg-blue-900 dark:hover:bg-opacity-40 transition duration-200 hover:border-blue-400 dark:hover:border-blue-600" onclick="document.getElementById('fileInput').click()">
+                        <i class='bx bx-cloud-upload text-4xl text-blue-500 mb-2'></i>
+                        <p class="text-gray-700 dark:text-gray-300 font-semibold text-sm mb-1">Click to upload or drag and drop</p>
                         <p class="text-xs text-gray-600 dark:text-gray-400">JPG, PNG, PDF up to 10MB</p>
                     </div>
                     <input type="file" id="fileInput" name="files" multiple accept=".jpg,.jpeg,.png,.pdf" style="display: none;" onchange="addFilesToList()">
-                    <div id="fileList" class="mt-1 space-y-0.5"></div>
+                    <div id="fileList" class="mt-3 space-y-2"></div>
                 </div>
 
                 <!-- Reminder -->
-                <div>
-                    <label class="flex items-center gap-2 text-xs font-semibold text-gray-800 dark:text-gray-200 mb-1 cursor-pointer">
-                        <input type="checkbox" id="reminderToggle" onchange="toggleReminder()" class="w-3.5 h-3.5 cursor-pointer">
-                        <i class='bx bx-bell' style="color: #3b82f6; font-size: 0.85rem;"></i>
-                        Set a reminder for next visit
+                <div class="p-3 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded-xl border-2 border-yellow-200 dark:border-yellow-800">
+                    <label class="flex items-center gap-2 text-xs font-semibold text-gray-800 dark:text-gray-200 mb-3 cursor-pointer">
+                        <input type="checkbox" id="reminderToggle" onchange="toggleReminder()" class="w-4 h-4 cursor-pointer rounded accent-yellow-600">
+                        <i class='bx bx-bell text-yellow-600 flex-shrink-0 text-lg'></i>
+                        <span>Set reminder for next visit</span>
                     </label>
-                    <div id="reminderSection" style="display: none;" class="space-y-1 p-2 bg-yellow-50 dark:bg-yellow-900 dark:bg-opacity-20 rounded border border-yellow-200 dark:border-yellow-800">
-                        <input type="datetime-local" name="reminder_date" class="w-full px-3 py-1.5 border-2 border-yellow-300 dark:border-yellow-700 rounded dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm">
-                        <input type="text" name="reminder_note" class="w-full px-3 py-1.5 border-2 border-yellow-300 dark:border-yellow-700 rounded dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-1 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm" placeholder="Reminder note (optional)">
+                    <div id="reminderSection" style="display: none;" class="space-y-2">
+                        <input type="datetime-local" name="reminder_date" class="w-full px-4 py-2.5 border-2 border-yellow-300 dark:border-yellow-700 rounded-lg dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm hover:border-yellow-400 dark:hover:border-yellow-600">
+                        <input type="text" name="reminder_note" class="w-full px-4 py-2.5 border-2 border-yellow-300 dark:border-yellow-700 rounded-lg dark:bg-gray-700 dark:text-white focus:border-yellow-500 focus:ring-2 focus:ring-yellow-200 dark:focus:ring-yellow-900 outline-none transition duration-200 text-sm hover:border-yellow-400 dark:hover:border-yellow-600" placeholder="Reminder note (optional)">
                     </div>
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex gap-2 pt-3 border-t-2 dark:border-gray-700">
-                    <button type="button" onclick="closeModal()" class="flex-1 px-3 py-1.5 border-2 border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 font-semibold transition duration-200 text-xs">
+                <div class="flex gap-3 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
+                    <button type="button" onclick="closeModal()" class="flex-1 px-4 py-2.5 border-2 border-gray-300 dark:border-gray-600 rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 active:bg-gray-200 dark:active:bg-gray-600 font-semibold transition duration-150 text-sm transform hover:scale-105">
                         Cancel
                     </button>
-                    <button type="submit" class="flex-1 px-3 py-1.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg font-semibold transition duration-200 flex items-center justify-center gap-1 shadow-lg hover:shadow-xl text-xs">
-                        <i class='bx bx-save' style="font-size: 0.9rem;"></i> Save
+                    <button type="submit" class="flex-1 px-4 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 active:from-blue-800 active:to-blue-900 text-white rounded-xl font-semibold transition duration-150 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl transform hover:scale-105 text-sm">
+                        <i class='bx bx-save text-lg'></i> <span>Save</span>
                     </button>
                 </div>
             </form>
@@ -2273,6 +2276,7 @@
         }
 
         let currentEditingId = null;
+        let existingFilesToDelete = [];
 
         async function editPrescription(id) {
             try {
@@ -2287,6 +2291,7 @@
 
                 const prescription = data.prescription;
                 currentEditingId = id;
+                existingFilesToDelete = [];
 
                 // Update modal title
                 document.querySelector('.prescription-modal-title').textContent = 'Edit Prescription';
@@ -2311,9 +2316,47 @@
                     });
                 }
 
-                // Clear files list
+                // Load existing files with delete option
                 selectedFiles = [];
-                renderFileList();
+                if (prescription.files && prescription.files.length > 0) {
+                    const fileList = document.getElementById('fileList');
+                    fileList.innerHTML = '';
+                    
+                    prescription.files.forEach((file, index) => {
+                        const fileItem = document.createElement('div');
+                        fileItem.className = 'flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 px-3 sm:px-4 py-2.5 sm:py-3 bg-slate-100 dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-xl hover:shadow-lg hover:bg-slate-150 dark:hover:bg-slate-650 transition duration-200 group';
+                        fileItem.setAttribute('data-file-id', file.id);
+                        
+                        const fileExt = file.file_path.split('.').pop().toLowerCase();
+                        const fileIcon = ['pdf'].includes(fileExt) ? '<i class="bx bxs-file-pdf text-red-500 text-lg"></i>' : '<i class="bx bxs-file-image text-blue-500 text-lg"></i>';
+                        const fileName = file.original_name || file.file_path.split('/').pop();
+                        
+                        fileItem.innerHTML = `
+                            <div class="flex items-center gap-3 flex-1 min-w-0">
+                                <div class="flex-shrink-0">
+                                    ${fileIcon}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <span class="text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-100 truncate block" title="${fileName}">${fileName}</span>
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">${fileExt.toUpperCase()} file</span>
+                                </div>
+                            </div>
+                            <div class="flex gap-2 flex-shrink-0 justify-end w-full sm:w-auto">
+                                <button type="button" onclick="openFilePreview('${file.file_url || ''}', '${fileName}', '${fileExt}')" class="px-3 py-1.5 bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white rounded-lg text-xs font-semibold transition duration-150 transform hover:scale-105 flex items-center gap-1 flex-1 sm:flex-none justify-center">
+                                    <i class="bx bx-show text-sm"></i>
+                                    <span>View</span>
+                                </button>
+                                <button type="button" onclick="deleteExistingFile(${file.id}, this)" class="px-3 py-1.5 bg-red-500 hover:bg-red-600 active:bg-red-700 text-white rounded-lg text-xs font-semibold transition duration-150 transform hover:scale-105 flex items-center gap-1 flex-1 sm:flex-none justify-center">
+                                    <i class="bx bx-trash text-sm"></i>
+                                    <span>Delete</span>
+                                </button>
+                            </div>
+                        `;
+                        fileList.appendChild(fileItem);
+                    });
+                } else {
+                    renderFileList();
+                }
 
                 // Update form submission to edit instead of create
                 const form = document.getElementById('prescriptionForm');
@@ -2328,6 +2371,18 @@
                 console.error('Error loading prescription for edit:', error);
                 showToast('Error loading prescription for edit', 'error');
             }
+        }
+
+        function deleteExistingFile(fileId, buttonElement) {
+            if (!confirm('Are you sure you want to delete this file?')) return;
+            
+            existingFilesToDelete.push(fileId);
+            const fileItem = buttonElement.closest('[data-file-id]');
+            if (fileItem) {
+                fileItem.style.opacity = '0.5';
+                fileItem.style.textDecoration = 'line-through';
+            }
+            showToast('File marked for deletion', 'info');
         }
 
         async function updatePrescription(id) {
@@ -2362,6 +2417,13 @@
             selectedFiles.forEach((file) => {
                 formData.append('files[]', file);
             });
+
+            // Add files to delete
+            if (existingFilesToDelete && existingFilesToDelete.length > 0) {
+                existingFilesToDelete.forEach(fileId => {
+                    formData.append('delete_files[]', fileId);
+                });
+            }
             
             try {
                 const response = await fetch(`/prescriptions/${id}`, {
@@ -2378,6 +2440,7 @@
                     showToast('Prescription updated successfully!', 'success');
                     closeModal();
                     currentEditingId = null;
+                    existingFilesToDelete = [];
                     location.reload();
                 } else {
                     if (data.errors) {
@@ -2430,6 +2493,15 @@
             });
         }
 
+        function handleSortChange(sortBy) {
+            // If Show All is selected, clear all tag filters first
+            if (sortBy === 'all') {
+                const tagChips = document.querySelectorAll('.tag-chip.active');
+                tagChips.forEach(chip => chip.classList.remove('active'));
+            }
+            sortPrescriptions(sortBy);
+        }
+
         function filterByTag(tagId, button) {
             button.classList.toggle('active');
             applyFilters();
@@ -2440,15 +2512,12 @@
             const cards = document.querySelectorAll('.prescription-card');
 
             cards.forEach(card => {
-                const cardTags = Array.from(card.querySelectorAll('.prescription-card-tag')).map((tag, idx) => {
-                    // Get the tag ID from the data attribute or by matching tag names
-                    return card.dataset.prescriptionId + '-' + idx;
-                });
+                const cardTagIds = (card.dataset.tagIds || '').split(',').filter(id => id.trim() !== '');
 
                 if (activeTags.length === 0) {
                     card.style.display = '';
                 } else {
-                    const hasActiveTag = cardTags.some(tag => activeTags.includes(tag));
+                    const hasActiveTag = activeTags.some(tagId => cardTagIds.includes(tagId));
                     card.style.display = hasActiveTag ? '' : 'none';
                 }
             });
@@ -2458,25 +2527,27 @@
             const prescriptionList = document.getElementById('prescriptionList');
             const cards = Array.from(prescriptionList.querySelectorAll('.prescription-card'));
 
-            // Sort cards based on selected option
-            cards.sort((a, b) => {
-                const dateA = new Date(a.dataset.prescriptionDate || 0);
-                const dateB = new Date(b.dataset.prescriptionDate || 0);
+            // Sort cards based on selected option (skip sorting for 'all' option)
+            if (sortBy !== 'all') {
+                cards.sort((a, b) => {
+                    const dateA = new Date(a.dataset.prescriptionDate || 0);
+                    const dateB = new Date(b.dataset.prescriptionDate || 0);
 
-                switch(sortBy) {
-                    case 'newest':
-                        return dateB - dateA;
-                    case 'oldest':
-                        return dateA - dateB;
-                    case 'upcoming':
-                        // Sort by next visit date (closest upcoming first)
-                        const nextVisitA = new Date(a.dataset.nextVisitDate || '9999-12-31');
-                        const nextVisitB = new Date(b.dataset.nextVisitDate || '9999-12-31');
-                        return nextVisitA - nextVisitB;
-                    default:
-                        return 0;
-                }
-            });
+                    switch(sortBy) {
+                        case 'newest':
+                            return dateB - dateA;
+                        case 'oldest':
+                            return dateA - dateB;
+                        case 'upcoming':
+                            // Sort by next visit date (closest upcoming first)
+                            const nextVisitA = new Date(a.dataset.nextVisitDate || '9999-12-31');
+                            const nextVisitB = new Date(b.dataset.nextVisitDate || '9999-12-31');
+                            return nextVisitA - nextVisitB;
+                        default:
+                            return 0;
+                    }
+                });
+            }
 
             // Clear and re-append sorted cards with smooth animation
             cards.forEach((card, index) => {

@@ -193,6 +193,13 @@
                 <span class="font-medium">{{ __('View Orders') }}</span>
             </a>
 
+            <a href="{{ route('prescription.index') }}" class="flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-white hover:bg-white/10 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-200 group">
+                <svg class="w-5 h-5 text-blue-400 dark:text-purple-400 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span class="font-medium">{{ __('My Prescriptions') }}</span>
+            </a>
+
             <form method="POST" action="{{ route('logout') }}" class="mt-2">
                 @csrf
                 <button type="submit" class="w-full flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-2.5 sm:py-3 text-red-300 hover:bg-red-500/10 dark:hover:bg-pink-500/10 rounded-xl transition-all duration-200 group">
