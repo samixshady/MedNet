@@ -756,6 +756,17 @@
                 }
             }
 
+            @keyframes slideInTag {
+                from {
+                    opacity: 0;
+                    transform: translateX(-20px) scale(0.8);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0) scale(1);
+                }
+            }
+
             @keyframes scaleOut {
                 from {
                     opacity: 1;
@@ -1223,6 +1234,18 @@
                         >
                     </div>
 
+                    <!-- Selected Tags Display -->
+                    <div id="selectedTagsContainer" class="filter-section hidden mb-2 opacity-0 transform -translate-y-2 transition-all duration-300">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3><i class='bx bx-filter-alt'></i> Active Filters</h3>
+                            <button type="button" onclick="clearAllFilters()" class="text-xs font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 px-2 py-1 hover:bg-red-50 dark:hover:bg-red-900/20 rounded transition-colors duration-200">
+                                Clear All
+                            </button>
+                        </div>
+                        <div class="flex flex-wrap gap-2" id="selectedTagsList">
+                        </div>
+                    </div>
+
                     <!-- Tags Filter -->
                     @if($tags->count() > 0)
                     <div class="filter-section">
@@ -1234,6 +1257,8 @@
                                 onclick="filterByTag({{ $tag->id }}, this)"
                                 style="background-color: {{ $tag->color }}20; color: {{ $tag->color }}; border-color: {{ $tag->color }}"
                                 data-tag-id="{{ $tag->id }}"
+                                data-tag-name="{{ $tag->name }}"
+                                data-tag-color="{{ $tag->color }}"
                             >
                                 {{ $tag->name }}
                             </button>
@@ -2497,15 +2522,92 @@
             // If Show All is selected, clear all tag filters first
             if (sortBy === 'all') {
                 const tagChips = document.querySelectorAll('.tag-chip.active');
-                tagChips.forEach(chip => chip.classList.remove('active'));
+                tagChips.forEach(chip => {
+                    chip.classList.remove('active');
+                    chip.style.display = '';
+                });
+                updateSelectedTagsDisplay();
             }
             sortPrescriptions(sortBy);
         }
 
         function filterByTag(tagId, button) {
             button.classList.toggle('active');
+            // Hide the tag chip if active, show if not
+            button.style.display = button.classList.contains('active') ? 'none' : '';
+            updateSelectedTagsDisplay();
             applyFilters();
         }
+
+        function clearAllFilters() {
+            const tagChips = document.querySelectorAll('.tag-chip.active');
+            tagChips.forEach(chip => {
+                chip.classList.remove('active');
+                chip.style.display = '';
+            });
+            updateSelectedTagsDisplay();
+            applyFilters();
+        }
+
+        function updateSelectedTagsDisplay() {
+            const container = document.getElementById('selectedTagsContainer');
+            const list = document.getElementById('selectedTagsList');
+            const activeTags = document.querySelectorAll('.tag-chip.active');
+            
+            list.innerHTML = '';
+            
+            if (activeTags.length > 0) {
+                container.classList.remove('hidden');
+                setTimeout(() => {
+                    container.classList.add('opacity-100');
+                    container.classList.remove('opacity-0', '-translate-y-2');
+                }, 10);
+
+                activeTags.forEach((tagChip, index) => {
+                    const tagId = tagChip.dataset.tagId;
+                    const tagName = tagChip.dataset.tagName;
+                    const tagColor = tagChip.dataset.tagColor;
+                    
+                    const tagElement = document.createElement('div');
+                    tagElement.className = 'inline-flex items-center gap-2 px-3 py-2 rounded-full font-semibold text-sm transition-all duration-300 transform cursor-pointer hover:scale-105 hover:shadow-md';
+                    tagElement.style.cssText = `
+                        background-color: ${tagColor}20;
+                        color: ${tagColor};
+                        border: 2px solid ${tagColor};
+                        animation: slideInTag 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) ${index * 50}ms both;
+                    `;
+                    
+                    // Make entire tag clickable to remove
+                    tagElement.onclick = () => removeSelectedTag(tagId);
+                    
+                    tagElement.innerHTML = `
+                        <span>${tagName}</span>
+                        <button type="button" onclick="event.stopPropagation(); removeSelectedTag(${tagId})" class="ml-1 hover:scale-110 transition-transform duration-200 hover:opacity-70">
+                            <i class='bx bx-x text-lg'></i>
+                        </button>
+                    `;
+                    
+                    list.appendChild(tagElement);
+                });
+            } else {
+                container.classList.add('opacity-0', '-translate-y-2');
+                container.classList.remove('opacity-100');
+                setTimeout(() => {
+                    container.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        function removeSelectedTag(tagId) {
+            const tagChip = document.querySelector(`.tag-chip[data-tag-id="${tagId}"]`);
+            if (tagChip) {
+                tagChip.classList.remove('active');
+                tagChip.style.display = '';
+                updateSelectedTagsDisplay();
+                applyFilters();
+            }
+        }
+
 
         function applyFilters() {
             const activeTags = Array.from(document.querySelectorAll('.tag-chip.active')).map(btn => btn.dataset.tagId);
